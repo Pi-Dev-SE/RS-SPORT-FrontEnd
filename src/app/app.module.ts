@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http'; // ✅ Import pour les requêtes HTTP
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -12,6 +13,12 @@ import { NavbarBackComponent } from './BackOffice/navbar-back/navbar-back.compon
 import { SidebarBackComponent } from './BackOffice/sidebar-back/sidebar-back.component';
 import { HomeFrontComponent } from './FrontOffice/home-front/home-front.component';
 import { HomeBackComponent } from './BackOffice/home-back/home-back.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Exercise } from './Models/exercise';
+import { ExerciseDetailComponent } from './components/exercise-detail/exercise-detail.component';
+import { ExerciseListComponent } from './components/exercise-list/exercise-list.component';
+import { FormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
@@ -24,11 +31,17 @@ import { HomeBackComponent } from './BackOffice/home-back/home-back.component';
     NavbarBackComponent,
     SidebarBackComponent,
     HomeFrontComponent,
-    HomeBackComponent
+    HomeBackComponent,
+    ExerciseListComponent,
+    ExerciseDetailComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    FormsModule,
+    AppRoutingModule,
+    HttpClientModule ,
+    BrowserAnimationsModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]

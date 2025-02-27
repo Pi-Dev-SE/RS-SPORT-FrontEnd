@@ -1,0 +1,52 @@
+
+
+<div class="exercise-list-container">
+    <h2>Liste des Exercices</h2>
+  
+    <button class="add-btn" (click)="openDialog()">Ajouter un Exercice</button>
+  
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Description</th>
+          <th>Image</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let exercise of exercises">
+          <td>{{ exercise.id }}</td>
+          <td>{{ exercise.name }}</td>
+          <td>{{ exercise.description }}</td>
+          <td>
+            <img *ngIf="exercise.image" [src]="exercise.image" alt="Exercice Image" class="exercise-image">
+            <span *ngIf="!exercise.image">Pas d'image</span>
+          </td>
+          <td>
+            <button (click)="redirectToComponent(exercise.id)">Détails</button>
+            <button (click)="onDeleteExercise(exercise.id)" class="delete-btn">Supprimer</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- Formulaire d'ajout d'exercice -->
+    <div *ngIf="displayDialog" class="dialog">
+      <h3>Ajouter un Exercice</h3>
+      <form #editForm="ngForm" (ngSubmit)="saveExercise(editForm)">
+        <label for="exerciseName">Nom:</label>
+        <input id="exerciseName" type="text" [(ngModel)]="exercise.name" name="name" required>  
+        
+        <label for="exerciseDescription">Description:</label>
+        <input id="exerciseDescription" type="text" [(ngModel)]="exercise.description" name="description" required>
+  
+        <label for="exerciseImage">Image:</label>
+        <input id="exerciseImage" type="file" (change)="onFileSelected($event)">
+  
+        <button type="submit">Ajouter</button>
+        <button type="button" (click)="displayDialog = false" class="cancel-btn">Annuler</button>
+      </form>
+    </div>
+</div>

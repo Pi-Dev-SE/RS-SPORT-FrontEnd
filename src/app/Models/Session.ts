@@ -1,8 +1,11 @@
-import { SessionStatus } from "./session-status";
-export class Session {
-    id!: number;
-    date!: string;  // Format YYYY-MM-DD
-    time!: string;  // Format HH:mm:ss
-    duration!: number; // Durée en minutes
-    status!: SessionStatus;
-}
+import { SessionStatus } from "./Enum/SessionStatus";
+
+export class TrainingSession {
+    sessionId!: number;
+    startDate!: string;  // Format: YYYY-MM-DD
+    endDate!: string;
+    time!: string;  // Format: HH:mm:ss
+    objective!: string;
+    sessionStatus!: SessionStatus;
+  }
+  
