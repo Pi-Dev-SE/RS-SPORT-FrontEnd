@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class ScreenRecordingService {
   private mediaRecorder: MediaRecorder | null = null;
-  private recordedChunks: Blob[] = [];
+  private recordedChunks: Blob[] = []; 
   private isRecordingSubject = new BehaviorSubject<boolean>(false);
   isRecording$ = this.isRecordingSubject.asObservable();
 
@@ -13,7 +13,7 @@ export class ScreenRecordingService {
   async startRecording(element: HTMLCanvasElement): Promise<void> {
     try {
       this.recordedChunks = [];
-      const stream = element.captureStream(100); // Increase to 60 FPS for smoother animation
+      const stream = element.captureStream(60); // Increase to 60 FPS for smoother animation
 
       // Set up MediaRecorder with optimized settings for animation recording
       const options = {

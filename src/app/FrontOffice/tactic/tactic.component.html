@@ -4,6 +4,17 @@
     <div class="header-banner">
       <div class="header-content">
         <h1 class="page-title">ALL TACTICS BOARDS</h1>
+        <div class="search-sort-container">
+          <div class="search-box">
+            <input type="text" [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" placeholder="Search by name..." class="search-input">
+          </div>
+          <div class="sort-box">
+            <select [(ngModel)]="sortOption" (ngModelChange)="onSortChange()" class="sort-select">
+              <option value="newest">Date (Most Recent)</option>
+              <option value="oldest">Date (Oldest)</option>
+            </select>
+          </div>
+        </div>
         <div class="header-actions">
           <button class="btn btn-create" (click)="showAddTacticsBoardForm = true">
             <i >+</i> CREATE TACTICS BOARD
@@ -26,7 +37,8 @@
       }
 
       <div class="tactics-grid">
-        @for (tactic of tacticsBoards; track tactic.idTactic) {
+        @for (tactic of paginatedTacticsBoards; track tactic.idTactic) {
+
         <div class="tactic-card">
           <div class="card-image">
             <img src="assets/FrontOffice/images/dark-board-background-with-football-tactics-vector.jpg" alt="Tactics Board">
@@ -43,7 +55,13 @@
             </div>
           </div>
         </div>
-        }
+
+      }
+      </div>
+      <div class="pagination-controls">
+        <button class="btn" (click)="currentPage = currentPage - 1" [disabled]="currentPage === 1">Previous</button>
+        <span>Page {{ currentPage }} of {{ totalPages }}</span>
+        <button class="btn" (click)="currentPage = currentPage + 1" [disabled]="currentPage === totalPages">Next</button>
       </div>
     </div>
   </div>
@@ -315,6 +333,21 @@
           </div>
           }
         </div>
+          <div class="control-section">
+            <div class="recording-controls">
+              <button *ngIf="!isRecording" (click)="startRecording()" class="control-btn">
+                <i class="fas fa-circle"></i> Start Recording
+              </button>
+
+              <div *ngIf="isRecording" class="recording-active-wrapper">
+                <button (click)="stopRecording()" class="control-btn btn-danger">
+                  <i class="fas fa-stop"></i> Stop Recording
+                </button>
+                <span class="record-indicator" title="Recording"></span>
+              </div>
+            </div>
+          </div>
+
         }
       </div>
 

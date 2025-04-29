@@ -49,14 +49,60 @@ body {
   z-index: 1;
 }
 
+/* Search and Sort Styles */
+.search-sort-container {
+  display: flex;
+  margin-bottom: 15px;
+  gap: 10px;
+  justify-content: flex-end;
+  position: relative;
+  z-index: 2;
+}
+
+.search-box, .sort-box {
+  position: relative;
+}
+
+.search-input {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 220px;
+  font-size: 14px;
+}
+
+.sort-select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 14px;
+  min-width: 180px;
+}
+
+.search-input:focus, .sort-select:focus {
+  outline: none;
+  border-color: #fbc02d;
+  box-shadow: 0 0 0 2px rgba(251, 192, 45, 0.2);
+}
+
 .header-content {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   max-width: 1200px;
   margin: 0 auto;
   position: relative;
   z-index: 2;
+}
+
+.header-content h1 {
+  margin-bottom: 15px;
+}
+
+.header-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
 }
 
 .page-title {
@@ -257,6 +303,7 @@ body {
 
 /* DETAIL VIEW STYLES */
 .detail-view-container {
+
   padding: 0; /* Supprimer le padding */
   max-width: 100%;
   margin: 0;
@@ -317,6 +364,7 @@ body {
 }
 
 .main-content {
+
   margin-left: var(--sidebar-width);
   padding-top: 200px; /* Compensation pour le header */
   height: calc(100vh - 200px);
@@ -1220,4 +1268,57 @@ input[type="radio"]:checked + .radio-indicator {
   .btn-save, .btn-cancel {
     width: 100%;
   }
+
+  .pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+
+
+
+.record-btn {
+  background: linear-gradient(45deg, #ff0000, #ff4d4d);
+  color: white;
+  &::before {
+    content: '⏺';
+    font-size: 18px;
+  }
+}
+
+.stop-btn {
+  background: linear-gradient(45deg, #00c851, #007e33);
+  color: white;
+  &::before {
+    content: '⏹';
+    font-size: 18px;
+  }
+}
+
+.recording-active-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.record-indicator {
+  width: 12px;
+  height: 12px;
+  background-color: red;
+  border-radius: 50%;
+  animation: blink 1s infinite;
+  box-shadow: 0 0 6px rgba(255, 0, 0, 0.8);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+
+
+
 }

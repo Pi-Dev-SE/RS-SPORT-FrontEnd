@@ -44,13 +44,27 @@ export class TacticsBoardService {
 
   createTacticsBoard(board: TacticsBoard): Observable<TacticsBoard> {
     return this.http.post<TacticsBoard>(`${this.apiUrl}/addBoard`, board).pipe(
-      catchError(this.handleError)
+      catchError((error: HttpErrorResponse) => {
+        if (error.error && typeof error.error === 'object') {
+          if (error.error.message && error.error.message.includes('name already exists')) {
+            return throwError(() => new Error('Ce nom de tableau tactique existe déjà. Veuillez choisir un nom unique.'));
+          }
+        }
+        return this.handleError(error);
+      })
     );
   }
 
   updateTacticsBoard(id: number, board: TacticsBoard): Observable<TacticsBoard> {
     return this.http.put<TacticsBoard>(`${this.apiUrl}/updateBoard/${id}`, board).pipe(
-      catchError(this.handleError)
+      catchError((error: HttpErrorResponse) => {
+        if (error.error && typeof error.error === 'object') {
+          if (error.error.message && error.error.message.includes('name already exists')) {
+            return throwError(() => new Error('Ce nom de tableau tactique existe déjà. Veuillez choisir un nom unique.'));
+          }
+        }
+        return this.handleError(error);
+      })
     );
   }
 
@@ -78,13 +92,30 @@ export class TacticsBoardService {
   }
 
   addPlayer(player: PlayerIcon, tacticsBoardId: number): Observable<PlayerIcon> {
+    // Validation côté frontend pour le numéro de maillot
+    if (player.jerseyNumber < 1) {
+      return throwError(() => new Error('Le numéro de maillot doit être supérieur ou égal à 1.'));
+    }
+
     return this.http.post<PlayerIcon>(`${this.apiUrl}/players/add/${tacticsBoardId}`, player).pipe(
-      catchError(this.handleError)
+      catchError((error: HttpErrorResponse) => {
+        if (error.error && typeof error.error === 'object') {
+          if (error.error.message && error.error.message.includes('jersey number')) {
+            return throwError(() => new Error('Le numéro de maillot doit être supérieur ou égal à 1.'));
+          }
+        }
+        return this.handleError(error);
+      })
     );
   }
 
 
   updatePlayer(player: PlayerIcon, tacticsBoardId: number): Observable<PlayerIcon> {
+    // Validation côté frontend pour le numéro de maillot
+    if (player.jerseyNumber < 1) {
+      return throwError(() => new Error('Le numéro de maillot doit être supérieur ou égal à 1.'));
+    }
+
     const formattedPlayer = {
       id: player.id,
       jerseyNumber: player.jerseyNumber,
@@ -94,7 +125,14 @@ export class TacticsBoardService {
       role: player.role
     };
     return this.http.put<PlayerIcon>(`${this.apiUrl}/players/update/${tacticsBoardId}`, formattedPlayer).pipe(
-      catchError(this.handleError)
+      catchError((error: HttpErrorResponse) => {
+        if (error.error && typeof error.error === 'object') {
+          if (error.error.message && error.error.message.includes('jersey number')) {
+            return throwError(() => new Error('Le numéro de maillot doit être supérieur ou égal à 1.'));
+          }
+        }
+        return this.handleError(error);
+      })
     );
   }
   deletePlayer(playerId: number, tacticsBoardId: number): Observable<void> {

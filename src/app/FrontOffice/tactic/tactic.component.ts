@@ -124,10 +124,13 @@ export class TacticComponent implements OnInit, AfterViewInit {
   private offsetX = 0;
   private offsetY = 0;
 
+  isRecording = false;
+
   constructor(
     private tacticsService: TacticsBoardService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private screenRecordingService: ScreenRecordingService
   ) {}
 
   ngOnInit(): void {
@@ -194,6 +197,16 @@ export class TacticComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    // Vérifier si le nom du tableau tactique est unique
+    const nameExists = this.tacticsBoards.some(board =>
+      board.name.toLowerCase() === this.newTacticsBoard.name.toLowerCase()
+    );
+
+    if (nameExists) {
+      alert('This name already exists. Please choose another name.');
+      return;
+    }
+
     const newBoard: TacticsBoard = {
       name: this.newTacticsBoard.name,
       formation: {},
@@ -208,7 +221,14 @@ export class TacticComponent implements OnInit, AfterViewInit {
         this.showAddTacticsBoardForm = false;
         this.viewBoardDetails(board.idTactic!);
       },
-      error: (err) => console.error('Failed to create board:', err)
+      error: (err) => {
+        if (err.error && err.error.message && err.error.message.includes('name already exists')) {
+          alert('This name already exists. Please choose another name..');
+        } else {
+          console.error('Failed to create board:', err);
+          alert('Échec de la création du tableau tactique.');
+        }
+      }
     });
   }
 
@@ -258,6 +278,12 @@ export class TacticComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    // Vérifier que le numéro de maillot est supérieur ou égal à 1
+    if (this.newPlayer.jerseyNumber < 1) {
+      alert('Jersey number must be greater than or equal to 1.');
+      return;
+    }
+
     if (!this.newPlayer.jerseyColor) {
       alert('Please select a jersey color.');
       return;
@@ -304,6 +330,12 @@ export class TacticComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    // Vérifier que le numéro de maillot est supérieur ou égal à 1
+    if (this.playerToUpdate.jerseyNumber < 1) {
+      alert('Jersey number must be greater than or equal to 1.');
+      return;
+    }
+
     const playerIndex = this.players.findIndex(p => p.jerseyNumber === this.playerToUpdate.jerseyNumber);
     if (playerIndex !== -1) {
       const updatedPlayer = {
@@ -330,6 +362,12 @@ export class TacticComponent implements OnInit, AfterViewInit {
   deletePlayer(): void {
     const number = this.playerToDelete.jerseyNumber;
     if (!number || !this.selectedBoard?.idTactic) {
+      return;
+    }
+
+    // Vérifier que le numéro de maillot est supérieur ou égal à 1
+    if (number < 1) {
+      alert('Jersey number must be greater than or equal to 1.');
       return;
     }
 
@@ -386,6 +424,17 @@ export class TacticComponent implements OnInit, AfterViewInit {
 
     if (!this.updateTacticsBoardName) {
       alert('Please enter a new name for the tactics board.');
+      return;
+    }
+
+    // Vérifier si le nouveau nom est unique (sauf s'il s'agit du même tableau)
+    const nameExists = this.tacticsBoards.some(board =>
+      board.name.toLowerCase() === this.updateTacticsBoardName.toLowerCase() &&
+      board.idTactic !== this.selectedBoard?.idTactic
+    );
+
+    if (nameExists) {
+      alert('This name already exists. Please choose another name.');
       return;
     }
 
@@ -570,7 +619,7 @@ export class TacticComponent implements OnInit, AfterViewInit {
   addBall(): void {
     const newBall = {
       id: this.balls.length + 1,
-      position: { x: 290, y: 190 }
+      position: { x: 390, y: 255 }
     };
     this.balls.push(newBall);
   }
@@ -614,8 +663,8 @@ export class TacticComponent implements OnInit, AfterViewInit {
 
   private drag = (event: MouseEvent): void => {
     if (this.selectedPlayer && this.selectedBoard) {
-      const fieldWidth = 600;
-      const fieldHeight = 400;
+      const fieldWidth = 1000;
+      const fieldHeight = 600;
       const margin = 30;
 
       const newX = Math.max(margin, Math.min(event.clientX - this.offsetX, fieldWidth - margin));
@@ -821,4 +870,102 @@ export class TacticComponent implements OnInit, AfterViewInit {
     this.balls = [];
     this.router.navigate(['/list']);
   }
+
+  // ========== PAGINATION, SEARCH & SORT ==========
+  currentPage: number = 1;
+  pageSize: number = 6; // nombre de cartes par page
+  searchQuery: string = '';
+  sortOption: string = 'newest';
+
+  // Réinitialiser la pagination lorsque la recherche ou le tri change
+  onSearchChange(): void {
+    this.currentPage = 1;
+  }
+
+  onSortChange(): void {
+    this.currentPage = 1;
+  }
+
+  get filteredTacticsBoards() {
+    return this.tacticsBoards
+      .filter(board => {
+        if (!this.searchQuery) return true;
+        return board.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+      })
+      .sort((a, b) => {
+        if (this.sortOption === 'newest') {
+          return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
+        } else {
+          return new Date(a.createdAt|| 0).getTime() - new Date(b.createdAt|| 0).getTime();
+        }
+      });
+  }
+
+  get paginatedTacticsBoards() {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return this.filteredTacticsBoards.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredTacticsBoards.length / this.pageSize);
+  }
+
+  // ========== RECORD VIDEO ==========
+
+  async startRecording() {
+    try {
+      const fieldElement = document.querySelector('.football-field') as HTMLElement;
+      if (!fieldElement) throw new Error('Field element not found');
+
+      const canvas = document.createElement('canvas');
+      canvas.width = fieldElement.offsetWidth;
+      canvas.height = fieldElement.offsetHeight;
+      const context = canvas.getContext('2d');
+      if (!context) throw new Error('Could not get canvas context');
+
+      await this.screenRecordingService.startRecording(canvas);
+      this.isRecording = true;
+
+      const captureFrame = async () => {
+        if (!this.isRecording) return;
+        const html2canvas = (await import('html2canvas')).default;
+        const fieldCanvas = await html2canvas(fieldElement, {
+          logging: false,
+          useCORS: true,
+          allowTaint: true,
+          background: false,
+          ignoreElements: (el: Element) => el.classList.contains('coordinate-axis')
+        } as any);
+        context.drawImage(fieldCanvas, 0, 0);
+        requestAnimationFrame(captureFrame);
+      };
+
+      captureFrame();
+    } catch (error) {
+      console.error('Error starting recording:', error);
+      this.isRecording = false;
+    }
+  }
+
+  async stopRecording() {
+    try {
+      const recordedBlob = await this.screenRecordingService.stopRecording();
+      // this.screenRecordingService.downloadRecording(recordedBlob);
+
+      if (this.selectedBoard && this.selectedBoard.idTactic) {
+        await this.screenRecordingService.uploadRecording(
+          recordedBlob,
+          this.selectedBoard.idTactic,
+          this.players
+        );
+      }
+      this.isRecording = false;
+    } catch (error) {
+      console.error('Error stopping recording:', error);
+      this.isRecording = false;
+    }
+  }
+
+
+
 }
