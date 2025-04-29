@@ -1,0 +1,64 @@
+<div class="contact-page-section sec-spacer">
+    <div class="container">
+        <div class="contact-comment-section">
+            <h3>ADD POSTE</h3>
+            <div id="form-message"></div>
+            <form [formGroup]="postForm">
+                <fieldset>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Club Name</label>
+                                <input formControlName="clubName" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Posted By</label>
+                                <input formControlName="postedBy" class="form-control" type="text">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Image</label>
+                                <input formControlName="img" class="form-control">
+                            </div>
+                        </div>
+                        <!--
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label>Tags</label>
+                                <div class="tag-container">
+                                    <span *ngFor="let tag of tags; let i = index" class="tag">
+                                        {{ tag }}
+                                        <button type="button" class="remove-tag" (click)="removeTag(i)">x</button>
+                                    </span>
+                                    <input type="text" class="form-control tag-input" placeholder="New Tag..."
+                                        (keydown.enter)="addTag($event)" #tagInput>
+                                </div>
+                            </div>
+                        </div>
+                        -->
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label>Content</label>
+                                <textarea cols="40" rows="10" formControlName="content"
+                                    class="textarea form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group mb-0">
+                                <input class="btn-send" value="Submit Now" [disabled]="!postForm.valid" (click)="createPost()">
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>

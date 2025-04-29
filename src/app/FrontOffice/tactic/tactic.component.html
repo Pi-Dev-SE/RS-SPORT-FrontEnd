@@ -1,0 +1,419 @@
+<!-- LIST VIEW -->
+@if (showListView) {
+  <div class="list-view-container">
+    <div class="header-banner">
+      <div class="header-content">
+        <h1 class="page-title">ALL TACTICS BOARDS</h1>
+        <div class="header-actions">
+          <button class="btn btn-create" (click)="showAddTacticsBoardForm = true">
+            <i >+</i> CREATE TACTICS BOARD
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tactics-container">
+      @if (showAddTacticsBoardForm) {
+      <div class="add-board-form">
+        <div class="form-row">
+          <input type="text" class="form-input" [(ngModel)]="newTacticsBoard.name" placeholder="Board name">
+          <div class="form-actions">
+            <button class="btn btn-save" (click)="createNewBoard()">Create</button>
+            <button class="btn btn-cancel" (click)="showAddTacticsBoardForm = false">Cancel</button>
+          </div>
+        </div>
+      </div>
+      }
+
+      <div class="tactics-grid">
+        @for (tactic of tacticsBoards; track tactic.idTactic) {
+        <div class="tactic-card">
+          <div class="card-image">
+            <img src="assets/FrontOffice/images/dark-board-background-with-football-tactics-vector.jpg" alt="Tactics Board">
+            <div class="card-overlay">
+              <button class="btn btn-view" (click)="viewBoardDetails(tactic.idTactic!)">
+                <i class="fas fa-eye"></i> VIEW DETAILS
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <h3>{{ tactic.name }}</h3>
+            <div class="card-meta">
+              <span><i class="fas fa-calendar-alt"></i> {{ tactic.createdAt | date }}</span>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- DETAIL VIEW -->
+  @if (showDetailsView) {
+  <div class="detail-view-container">
+    <div style="text-align: right; ">
+    <button class="btn btn-back" (click)="backToList()" >
+      <i></i> BACK TO LIST
+    </button>
+    </div>
+    <div class="detail-header">
+      <div class="header-content">
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="sidebar" [class.closed]="!showSidebar">
+        <!-- Tactics Boards section -->
+        <div class="control-section">
+          <h3><i class="fas fa-chess-board"></i> TACTICS BOARDS</h3>
+          <button class="section-toggle" (click)="toggleTactics()">
+            <i class="fas" [class.fa-chevron-down]="!showTacticsOptions" [class.fa-chevron-up]="showTacticsOptions"></i>
+          </button>
+
+          @if (showTacticsOptions) {
+          <div class="section-content">
+            <button class="control-btn" (click)="showTacticsBoardsList = !showTacticsBoardsList">
+              <i class="fas fa-list"></i> Show Boards
+            </button>
+
+            @if (showTacticsBoardsList) {
+            <div class="boards-list">
+              @for (board of tacticsBoards; track board.idTactic) {
+              <div class="board-item"
+                   (click)="selectTacticsBoard(board)"
+                   [class.selected]="selectedBoard?.idTactic === board.idTactic">
+                <i class="fas fa-circle"></i> {{ board.name }}
+              </div>
+              }
+            </div>
+            }
+
+            <button class="control-btn" (click)="showAddTacticsBoardForm = !showAddTacticsBoardForm">
+              <i class="fas fa-plus"></i> Add Board
+            </button>
+
+            @if (showAddTacticsBoardForm) {
+            <div class="form-group">
+              <input type="text" class="form-input" [(ngModel)]="newTacticsBoard.name" placeholder="Board name">
+              <button class="btn btn-sm btn-save" (click)="createNewBoard()">Create</button>
+            </div>
+            }
+
+            <button class="control-btn"
+                    (click)="showUpdateTacticsBoardForm = !showUpdateTacticsBoardForm"
+                    [disabled]="!selectedBoard">
+              <i class="fas fa-edit"></i> Update Board
+            </button>
+
+            @if (showUpdateTacticsBoardForm) {
+            <div class="form-group">
+              <input type="text" class="form-input" [(ngModel)]="updateTacticsBoardName" placeholder="New name">
+              <button class="btn btn-sm btn-save" (click)="updateTacticsBoard()">Update</button>
+            </div>
+            }
+
+            <button class="control-btn btn-danger"
+                    (click)="showDeleteTacticsBoardForm = !showDeleteTacticsBoardForm"
+                    [disabled]="!selectedBoard">
+              <i class="fas fa-trash"></i> Delete Board
+            </button>
+
+            @if (showDeleteTacticsBoardForm) {
+            <div class="form-group">
+              <input type="text" class="form-input" [(ngModel)]="deleteTacticsBoardName" placeholder="Confirm name">
+              <button class="btn btn-sm btn-danger" (click)="deleteTacticsBoard()">Delete</button>
+            </div>
+            }
+          </div>
+          }
+        </div>
+
+        @if (selectedBoard) {
+        <!-- Players section -->
+        <div class="control-section">
+          <h3><i ></i> PLAYERS</h3>
+          <button class="section-toggle" (click)="togglePlayers()">
+            <i class="fas" [class.fa-chevron-right]="!showSidebar" [class.fa-chevron-left]="showSidebar"></i>
+          </button>
+
+          @if (showPlayersOptions) {
+          <div class="section-content">
+            <button class="control-btn" (click)="showAddPlayerForm = !showAddPlayerForm">
+              <i >+</i> Add Player
+            </button>
+
+            @if (showAddPlayerForm) {
+            <div class="form-group">
+              <label>Select Player:</label>
+              <select class="form-input" [(ngModel)]="selectedExistingPlayer" (ngModelChange)="onPlayerSelect($event)">
+                <option [ngValue]="null">Select a player</option>
+                @for (player of availablePlayers; track player.id) {
+                <option [ngValue]="player">Player #{{player.jerseyNumber}}</option>
+                }
+              </select>
+
+              <label>Jersey Number:</label>
+              <input type="number" class="form-input" [(ngModel)]="newPlayer.jerseyNumber" [readonly]="selectedExistingPlayer">
+
+              <label>Jersey Color:</label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input type="radio" name="jerseyColor" value="Red" [(ngModel)]="newPlayer.jerseyColor">
+                  <span class="radio-indicator red"></span> Red
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="jerseyColor" value="White" [(ngModel)]="newPlayer.jerseyColor">
+                  <span class="radio-indicator white"></span> White
+                </label>
+              </div>
+
+              <label>Position:</label>
+              <div class="position-inputs">
+                <div>
+                  <label>X:</label>
+                  <input type="number" class="form-input" [(ngModel)]="newPlayer.position.x">
+                </div>
+                <div>
+                  <label>Y:</label>
+                  <input type="number" class="form-input" [(ngModel)]="newPlayer.position.y">
+                </div>
+              </div>
+
+              <button class="btn btn-save" (click)="addPlayer()">Add Player</button>
+            </div>
+            }
+
+            <button class="control-btn" (click)="showUpdatePlayerForm = !showUpdatePlayerForm">
+              <i class="fas fa-user-edit"></i> Update Player
+            </button>
+
+            @if (showUpdatePlayerForm) {
+            <div class="form-group">
+              <label>Jersey Number:</label>
+              <input type="number" class="form-input" [(ngModel)]="playerToUpdate.jerseyNumber">
+
+              <label>Jersey Color:</label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input type="radio" name="updateJerseyColor" value="Red" [(ngModel)]="playerToUpdate.jerseyColor">
+                  <span class="radio-indicator red"></span> Red
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="updateJerseyColor" value="White" [(ngModel)]="playerToUpdate.jerseyColor">
+                  <span class="radio-indicator white"></span> White
+                </label>
+              </div>
+
+              <label>Position:</label>
+              <div class="position-inputs">
+                <div>
+                  <label>X:</label>
+                  <input type="number" class="form-input" [(ngModel)]="playerToUpdate.position.x">
+                </div>
+                <div>
+                  <label>Y:</label>
+                  <input type="number" class="form-input" [(ngModel)]="playerToUpdate.position.y">
+                </div>
+              </div>
+
+              <button class="btn btn-save" (click)="updatePlayer()">Update Player</button>
+            </div>
+            }
+
+            <button class="control-btn btn-danger" (click)="showDeletePlayerForm = !showDeletePlayerForm">
+              <i class="fas fa-user-minus"></i> Delete Player
+            </button>
+
+            @if (showDeletePlayerForm) {
+            <div class="form-group">
+              <label>Jersey Number:</label>
+              <input type="number" class="form-input" [(ngModel)]="playerToDelete.jerseyNumber">
+              <button class="btn btn-danger" (click)="deletePlayer()">Delete Player</button>
+            </div>
+            }
+          </div>
+          }
+        </div>
+
+        <!-- Balls section -->
+        <div class="control-section">
+          <h3><i class="fas fa-futbol"></i> BALLS</h3>
+          <button class="section-toggle" (click)="toggleBalls()">
+            <i class="fas" [class.fa-chevron-down]="!showBalls" [class.fa-chevron-up]="showBalls"></i>
+          </button>
+
+          @if (showBalls) {
+          <div class="section-content">
+            <button class="control-btn" (click)="addBall()">
+              <i class="fas fa-plus"></i> Add Ball
+            </button>
+            <button class="control-btn btn-danger" (click)="deleteBall()">
+              <i class="fas fa-trash"></i> Delete Ball
+            </button>
+          </div>
+          }
+        </div>
+
+        <!-- Animations section -->
+        <div class="control-section">
+          <h3><i ></i> ANIMATIONS</h3>
+          <button class="section-toggle" (click)="toggleAnimationsOptions()">
+            <i class="fas" [class.fa-chevron-down]="!showAnimationOptions" [class.fa-chevron-up]="showAnimationOptions"></i>
+          </button>
+
+          @if (showAnimationOptions) {
+          <div class="section-content">
+            <div class="animation-buttons">
+              <button class="animation-btn"
+                      (click)="setAnimationMode('pass')"
+                      [class.active]="currentAnimationMode === 'pass'">
+                <i class="fas fa-long-arrow-alt-right"></i> Pass
+              </button>
+              <button class="animation-btn"
+                      (click)="setAnimationMode('shoot')"
+                      [class.active]="currentAnimationMode === 'shoot'">
+                <i class="fas fa-bullseye"></i> Shoot
+              </button>
+              <button class="animation-btn"
+                      (click)="setAnimationMode('run')"
+                      [class.active]="currentAnimationMode === 'run'">
+                <i class="fas fa-running"></i> Run
+              </button>
+            </div>
+          </div>
+          }
+        </div>
+
+        <!-- Drawing tools -->
+        <div class="control-section">
+          <h3><i class="fas fa-pencil-alt"></i> DRAWING TOOLS</h3>
+          <button class="section-toggle" (click)="toggleDrawing()">
+            <i class="fas" [class.fa-chevron-down]="!showDrawingTools" [class.fa-chevron-up]="showDrawingTools"></i>
+          </button>
+
+          @if (showDrawingTools) {
+          <div class="section-content">
+            <div class="drawing-tools">
+              <button class="drawing-btn" (click)="setDrawingMode('pen')" [class.active]="currentTool === 'pen'">
+                <i class="fas fa-pen"></i>
+              </button>
+              <button class="drawing-btn" (click)="setDrawingMode('line')" [class.active]="currentTool === 'line'">
+                <i class="fas fa-slash"></i>
+              </button>
+              <button class="drawing-btn" (click)="setDrawingMode('arrow')" [class.active]="currentTool === 'arrow'">
+                <i class="fas fa-arrow-right"></i>
+              </button>
+              <button class="drawing-btn" (click)="setDrawingMode('eraser')" [class.active]="currentTool === 'eraser'">
+                <i class="fas fa-eraser"></i>
+              </button>
+              <input type="color" class="color-picker" [(ngModel)]="currentColor" title="Choose color">
+              <button class="drawing-btn btn-danger" (click)="clearDrawing()">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </div>
+          }
+        </div>
+        }
+      </div>
+
+      <button class="toggle-sidebar-btn" (click)="toggleSidebar()">
+        <i class="fas" [class.fa-chevron-right]="!showSidebar" [class.fa-chevron-left]="showSidebar"></i>
+      </button>
+
+      <!-- Tactics board with drawing canvas -->
+      <div class="field-container" [class.sidebar-closed]="!showSidebar">
+        <div class="football-field">
+          <!-- Grass pattern -->
+          <div class="grass-pattern"></div>
+
+          <!-- Field markings -->
+          <div class="center-circle"></div>
+          <div class="center-spot"></div>
+          <div class="goal left-goal"></div>
+          <div class="goal right-goal"></div>
+          <div class="penalty-box left-penalty-box"></div>
+          <div class="penalty-box right-penalty-box"></div>
+          <div class="corner-arc top-left-corner"></div>
+          <div class="corner-arc top-right-corner"></div>
+          <div class="corner-arc bottom-left-corner"></div>
+          <div class="corner-arc bottom-right-corner"></div>
+          <div class="halfway-line"></div>
+
+          <!-- Coordinates -->
+          @if (showPlayersOptions) {
+          <div class="coordinates">
+            <div class="y-axis">
+              <div class="axis-label" style="top: 0;">0</div>
+              <div class="axis-label" style="top: 10%;">40</div>
+              <div class="axis-label" style="top: 20%;">80</div>
+              <div class="axis-label" style="top: 30%;">120</div>
+              <div class="axis-label" style="top: 40%;">160</div>
+              <div class="axis-label" style="top: 50%;">200</div>
+              <div class="axis-label" style="top: 60%;">240</div>
+              <div class="axis-label" style="top: 70%;">280</div>
+              <div class="axis-label" style="top: 80%;">320</div>
+              <div class="axis-label" style="top: 90%;">360</div>
+              <div class="axis-label" style="top: 100%;">400</div>
+            </div>
+            <div class="x-axis">
+              <div class="axis-label" style="left: 0;">0</div>
+              <div class="axis-label" style="left: 10%;">60</div>
+              <div class="axis-label" style="left: 20%;">120</div>
+              <div class="axis-label" style="left: 30%;">180</div>
+              <div class="axis-label" style="left: 40%;">240</div>
+              <div class="axis-label" style="left: 50%;">300</div>
+              <div class="axis-label" style="left: 60%;">360</div>
+              <div class="axis-label" style="left: 70%;">420</div>
+              <div class="axis-label" style="left: 80%;">480</div>
+              <div class="axis-label" style="left: 90%;">540</div>
+              <div class="axis-label" style="left: 100%;">600</div>
+            </div>
+          </div>
+          }
+
+          <!-- Canvas for drawings -->
+          <canvas #previewCanvas class="drawing-canvas preview-canvas"></canvas>
+          <canvas #drawingCanvas
+                  class="drawing-canvas"
+                  [class.drawing-mode]="isDrawingMode"
+                  (mousedown)="startDrawing($event)"
+                  (mousemove)="draw($event)"
+                  (mouseup)="stopDrawing()"
+                  (mouseleave)="stopDrawing()"
+                  (click)="handleFieldClick($event)">
+          </canvas>
+
+          <!-- Players -->
+          @for (player of players; track player.id) {
+          <div class="player"
+               [style.left.px]="player.position.x"
+               [style.top.px]="player.position.y"
+               [style.background-color]="player.jerseyColor"
+               [style.color]="player.jerseyColor === 'Red' ? 'white' : 'black'"
+               (mousedown)="startDrag($event, player)"
+               (click)="handlePlayerClick(player)">
+            {{ player.jerseyNumber }}
+          </div>
+          }
+
+          <!-- Balls -->
+          @for (ball of balls; track ball.id) {
+          <div class="ball"
+               [style.left.px]="ball.position.x"
+               [style.top.px]="ball.position.y"
+               (mousedown)="startDragBall($event, ball)"></div>
+          }
+
+          <!-- Field name -->
+          <div class="field-name">{{ selectedBoard?.name }}</div>
+        </div>
+      </div>
+
+      @if (showGoalMessage) {
+      <div class="goal-message">{{ showGoalMessage }}</div>
+      }
+    </div>
+  </div>
+  }

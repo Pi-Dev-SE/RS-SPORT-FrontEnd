@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-# SPR01
+# Front4se3
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.16.
 
@@ -26,6 +25,3 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
-=======
-# Front-End
->>>>>>> 9f93a05a9614f024a4a0f5d402417cd003d9f90d
