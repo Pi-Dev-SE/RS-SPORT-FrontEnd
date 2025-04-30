@@ -360,7 +360,7 @@ export class MessagesComponent {
 
   addEmoji(event: any) {
     // Add emoji to current caret position
-    const messageInput = document.getElementById('message-input') as HTMLInputElement;
+const messageInput = document.getElementById('message-input') as HTMLTextAreaElement;
     if (!messageInput) return;
     messageInput.focus();
     const start = messageInput.selectionStart;

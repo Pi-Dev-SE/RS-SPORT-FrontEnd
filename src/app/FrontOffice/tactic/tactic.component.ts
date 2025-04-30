@@ -40,6 +40,10 @@ export class TacticComponent implements OnInit, AfterViewInit {
   // List View Properties
   tacticsBoards: TacticsBoard[] = [];
 
+  currentPage: number = 1;
+  pageSize: number = 6;
+  totalsPages: number = 0;
+
   // Detail View Properties
   @ViewChild('drawingCanvas') drawingCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('previewCanvas') previewCanvas!: ElementRef<HTMLCanvasElement>;
@@ -134,7 +138,7 @@ export class TacticComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadTacticsBoards();
+    this.loadTacticsBoards(this.currentPage);
 
     // Check if we're viewing a specific board
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -170,10 +174,13 @@ export class TacticComponent implements OnInit, AfterViewInit {
   }
 
   // ========== LIST VIEW METHODS ==========
-  loadTacticsBoards(): void {
-    this.tacticsService.getTacticsBoards().subscribe({
-      next: (boards) => this.tacticsBoards = boards,
-      error: (err) => console.error('Failed to load boards:', err)
+  loadTacticsBoards(page: number): void {
+    const sort = this.sortOption === 'newest' ? 'desc' : 'asc';
+
+    this.tacticsService.getTacticsBoards(page - 1, this.pageSize, this.searchQuery, sort).subscribe(response => {
+      this.tacticsBoards = response.data;
+      this.currentPage = response.currentPage;
+      this.totalsPages = response.totalPages;
     });
   }
 
@@ -449,7 +456,7 @@ export class TacticComponent implements OnInit, AfterViewInit {
 
     this.tacticsService.updateTacticsBoard(this.selectedBoard.idTactic!, updatedBoard).subscribe({
       next: () => {
-        this.loadTacticsBoards();
+        this.loadTacticsBoards(this.currentPage);
         this.selectedBoard = updatedBoard;
         this.updateTacticsBoardName = '';
         this.showUpdateTacticsBoardForm = false;
@@ -477,7 +484,7 @@ export class TacticComponent implements OnInit, AfterViewInit {
     if (this.selectedBoard.idTactic !== undefined) {
       this.tacticsService.deleteTacticsBoard(this.selectedBoard.idTactic).subscribe({
         next: () => {
-          this.loadTacticsBoards();
+          this.loadTacticsBoards(this.currentPage);
           this.backToList();
           alert('Tactics board deleted successfully!');
         },
@@ -872,18 +879,21 @@ export class TacticComponent implements OnInit, AfterViewInit {
   }
 
   // ========== PAGINATION, SEARCH & SORT ==========
-  currentPage: number = 1;
-  pageSize: number = 6; // nombre de cartes par page
+
   searchQuery: string = '';
-  sortOption: string = 'newest';
+  sortOption:  'newest' | 'oldest' = 'newest';
 
   // Réinitialiser la pagination lorsque la recherche ou le tri change
   onSearchChange(): void {
     this.currentPage = 1;
+    this.loadTacticsBoards(this.currentPage);
+
   }
 
   onSortChange(): void {
     this.currentPage = 1;
+    this.loadTacticsBoards(this.currentPage);
+
   }
 
   get filteredTacticsBoards() {

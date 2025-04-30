@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError, of } from 'rxjs';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { TacticsBoard } from '../../core/models/TacticsBoard';
 import { map } from 'rxjs/operators';
 
@@ -30,11 +30,27 @@ export class TacticsBoardService {
     return throwError(() => new Error('An error occurred while processing the request.'));
   }
 
-  getTacticsBoards(): Observable<TacticsBoard[]> {
-    return this.http.get<TacticsBoard[]>(`${this.apiUrl}/getAllBoards`).pipe(
+  getTacticsBoards(page: number, size: number, search: string = '', sort: string = 'desc'): Observable<{
+    data: TacticsBoard[],
+    currentPage: number,
+    totalPages: number,
+    totalItems: number
+  }> {
+    let params = new HttpParams()
+    .set('page', page.toString())
+    .set('size', size.toString())
+    .set('search', search)
+    .set('sort', sort);
+    return this.http.get<{
+      data: TacticsBoard[],
+      currentPage: number,
+      totalPages: number,
+      totalItems: number
+    }>(`${this.apiUrl}/getAllBoards`, { params }).pipe(
       catchError(this.handleError)
     );
   }
+
 
   getTacticsBoard(id: number): Observable<TacticsBoard> {
     return this.http.get<TacticsBoard>(`${this.apiUrl}/getBoard/${id}`).pipe(
@@ -122,7 +138,6 @@ export class TacticsBoardService {
       jerseyColor: player.jerseyColor,
       positionX: player.position.x,
       positionY: player.position.y,
-      role: player.role
     };
     return this.http.put<PlayerIcon>(`${this.apiUrl}/players/update/${tacticsBoardId}`, formattedPlayer).pipe(
       catchError((error: HttpErrorResponse) => {
@@ -135,8 +150,8 @@ export class TacticsBoardService {
       })
     );
   }
-  deletePlayer(playerId: number, tacticsBoardId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/players/delete/${tacticsBoardId}/${playerId}`).pipe(
+  deletePlayer(jerseyNumber: number, tacticsBoardId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/players/delete/${tacticsBoardId}/${jerseyNumber}`).pipe(
       catchError(error => {
         console.error('Error deleting player:', error);
         if (error.status === 404) {

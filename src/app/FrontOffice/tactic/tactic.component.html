@@ -37,7 +37,7 @@
       }
 
       <div class="tactics-grid">
-        @for (tactic of paginatedTacticsBoards; track tactic.idTactic) {
+        @for (tactic of tacticsBoards; track tactic.idTactic) {
 
         <div class="tactic-card">
           <div class="card-image">
@@ -59,9 +59,9 @@
       }
       </div>
       <div class="pagination-controls">
-        <button class="btn" (click)="currentPage = currentPage - 1" [disabled]="currentPage === 1">Previous</button>
-        <span>Page {{ currentPage }} of {{ totalPages }}</span>
-        <button class="btn" (click)="currentPage = currentPage + 1" [disabled]="currentPage === totalPages">Next</button>
+        <button class="btn" (click)="loadTacticsBoards(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
+        <span>Page {{ currentPage }} of {{ totalsPages }}</span>
+        <button class="btn" (click)="loadTacticsBoards(currentPage + 1)" [disabled]="currentPage === totalsPages">Next</button>
       </div>
     </div>
   </div>
@@ -91,33 +91,7 @@
 
           @if (showTacticsOptions) {
           <div class="section-content">
-            <button class="control-btn" (click)="showTacticsBoardsList = !showTacticsBoardsList">
-              <i class="fas fa-list"></i> Show Boards
-            </button>
-
-            @if (showTacticsBoardsList) {
-            <div class="boards-list">
-              @for (board of tacticsBoards; track board.idTactic) {
-              <div class="board-item"
-                   (click)="selectTacticsBoard(board)"
-                   [class.selected]="selectedBoard?.idTactic === board.idTactic">
-                <i class="fas fa-circle"></i> {{ board.name }}
-              </div>
-              }
-            </div>
-            }
-
-            <button class="control-btn" (click)="showAddTacticsBoardForm = !showAddTacticsBoardForm">
-              <i class="fas fa-plus"></i> Add Board
-            </button>
-
-            @if (showAddTacticsBoardForm) {
-            <div class="form-group">
-              <input type="text" class="form-input" [(ngModel)]="newTacticsBoard.name" placeholder="Board name">
-              <button class="btn btn-sm btn-save" (click)="createNewBoard()">Create</button>
-            </div>
-            }
-
+            
             <button class="control-btn"
                     (click)="showUpdateTacticsBoardForm = !showUpdateTacticsBoardForm"
                     [disabled]="!selectedBoard">

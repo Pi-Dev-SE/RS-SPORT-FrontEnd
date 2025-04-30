@@ -33,7 +33,7 @@ export class LoginComponent {
       next: (response: User) => {
         console.log(response);
         this.userService.saveToLocalStorage(response);
-        this.router.navigate(['/']);
+        this.router.navigate(['/chat']);
       },
       error: (error: any) => {
         console.error(error);
