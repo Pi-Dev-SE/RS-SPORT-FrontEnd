@@ -18,6 +18,7 @@ import { PrimengModule } from './chat/primeng/primeng.module';
 import { TacticComponent } from './FrontOffice/tactic/tactic.component';
 import { LoginComponent } from './chat/auth/components/login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TacticsBackComponent } from './BackOffice/tactics-back/tactics-back.component';
 
 
 
@@ -33,7 +34,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     SidebarBackComponent,
     HomeFrontComponent,
     HomeBackComponent,
-    LoginComponent
+    LoginComponent,
+    TacticsBackComponent
   ],
   imports: [
     BrowserModule,

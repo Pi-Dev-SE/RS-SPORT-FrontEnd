@@ -6,6 +6,7 @@ import { HomeFrontComponent } from './FrontOffice/home-front/home-front.componen
 import { HomeBackComponent } from './BackOffice/home-back/home-back.component';
 import { TacticComponent } from './FrontOffice/tactic/tactic.component';
 import { LoginComponent } from './chat/auth/components/login/login.component';
+import { TacticsBackComponent } from './BackOffice/tactics-back/tactics-back.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,10 @@ const routes: Routes = [
       {
         path:"",
         component: HomeBackComponent
+      },
+      {
+        path:"tactics",
+        component: TacticsBackComponent
       }
     ]
   },
