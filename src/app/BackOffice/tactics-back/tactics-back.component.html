@@ -7,6 +7,12 @@
         <li class="breadcrumb-item active">Tactics Boards</li>
       </ol>
     </nav>
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info" (click)="toggleStats()">
+        <i class="bi" [ngClass]="showStats ? 'bi-eye-slash' : 'bi-eye'"></i>
+        {{ showStats ? 'Masquer les statistiques' : 'Afficher les statistiques' }}
+      </button>
+    </div>
   </div><!-- End Page Title -->
 
   <!-- Alert Messages -->
@@ -14,6 +20,55 @@
     {{alertMessage}}
     <button type="button" class="btn-close" (click)="alertMessage = ''"></button>
   </div>
+
+  <!-- Section Statistiques -->
+  <section *ngIf="showStats" class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Statistiques des tableaux tactiques</h5>
+            <p>Visualisation des données statistiques concernant l'utilisation des tableaux tactiques.</p>
+
+            <div class="row">
+              <!-- Graphique d'engagement -->
+              <div class="col-lg-4">
+                <div class="card shadow mb-4">
+                  <div class="card-body">
+                    <div class="chart-container" style="position: relative; height:300px;">
+                      <canvas #engagementChart></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Graphique d'activité mensuelle -->
+              <div class="col-lg-4">
+                <div class="card shadow mb-4">
+                  <div class="card-body">
+                    <div class="chart-container" style="position: relative; height:300px;">
+                      <canvas #activityChart></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Graphique du nombre de joueurs par tableau -->
+              <div class="col-lg-4">
+                <div class="card shadow mb-4">
+                  <div class="card-body">
+                    <div class="chart-container" style="position: relative; height:300px;">
+                      <canvas #playerCountChart></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section class="section">
     <div class="row">

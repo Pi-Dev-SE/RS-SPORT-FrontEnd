@@ -4,6 +4,21 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { TacticsBoard } from '../../core/models/TacticsBoard';
 import { map } from 'rxjs/operators';
 
+export interface TacticsEngagementData {
+  modifiedBoards: number;
+  unchangedBoards: number;
+}
+
+export interface TacticsMonthlyActivity {
+  month: string;
+  count: number;
+}
+
+export interface TacticsPlayerCount {
+  boardName: string;
+  playerCount: number;
+}
+
 export interface Position {
   x: number;
   y: number;
@@ -103,6 +118,67 @@ export class TacticsBoardService {
           return of([]);
         }
         return this.handleError(error);
+      })
+    );
+  }
+
+  // Méthodes pour les statistiques
+
+  // Récupère les données d'engagement (tableaux modifiés vs non modifiés)
+  getEngagementData(): Observable<TacticsEngagementData> {
+    return this.http.get<TacticsEngagementData>(`${this.apiUrl}/stats/engagement`).pipe(
+      catchError((error) => {
+        console.error('Erreur lors de la récupération des données d\'engagement:', error);
+        // Données fictives en cas d'erreur
+        return of({ modifiedBoards: 12, unchangedBoards: 5 });
+      })
+    );
+  }
+
+  // Récupère les données d'activité mensuelle
+  getMonthlyActivityData(): Observable<TacticsMonthlyActivity[]> {
+    return this.http.get<TacticsMonthlyActivity[]>(`${this.apiUrl}/stats/monthly-activity`).pipe(
+      map(data => {
+        // Vérification et traitement des données reçues
+        if (!data || data.length === 0) {
+          console.warn('Aucune donnée d\'activité mensuelle reçue du serveur');
+          // Retourner un tableau vide au lieu de données fictives
+          return [];
+        }
+        // Trier les données par ordre chronologique
+        return data.sort((a, b) => {
+          // Utiliser les noms de mois complets en français
+          const months = [
+            'January', 'February', 'March', 'April', 'May', 'June', 
+            'July', 'August', 'September', 'October', 'November', 'December',
+            // Ajouter aussi les noms en français pour plus de robustesse
+            'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 
+            'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+          ];
+          return months.indexOf(a.month) - months.indexOf(b.month);
+        });
+      }),
+      catchError((error) => {
+        console.error('Erreur lors de la récupération des données d\'activité mensuelle:', error);
+        // Retourner un tableau vide au lieu de données fictives
+        return of([]);
+      })
+    );
+  }
+
+  // Récupère le nombre de joueurs par tableau tactique
+  getPlayerCountByBoard(): Observable<TacticsPlayerCount[]> {
+    return this.http.get<TacticsPlayerCount[]>(`${this.apiUrl}/stats/player-count`).pipe(
+      catchError((error) => {
+        console.error('Erreur lors de la récupération du nombre de joueurs par tableau:', error);
+        // Données fictives en cas d'erreur
+        return of([
+          { boardName: 'Formation 4-4-2', playerCount: 11 },
+          { boardName: 'Formation 4-3-3', playerCount: 10 },
+          { boardName: 'Formation 3-5-2', playerCount: 10 },
+          { boardName: 'Formation 5-3-2', playerCount: 10 },
+          { boardName: 'Tactique défensive', playerCount: 11 }
+        ]);
       })
     );
   }
