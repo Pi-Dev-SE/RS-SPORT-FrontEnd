@@ -1,0 +1,145 @@
+<div class="container mt-4">
+  <!-- Search bar and buttons row -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex align-items-center search-section">
+      <!-- Reduced search bar -->
+      <div class="input-group search-bar">
+        <span class="input-group-text"><i class="bi bi-search"></i></span>
+        <input type="text" class="form-control" placeholder="Find By..." [(ngModel)]="searchTerm">
+      </div>
+
+      <!-- Notification button moved next to search bar -->
+      <button type="button" class="btn btn-primary position-relative ms-2" (click)="toggleNotifications()">
+        <i class="bi bi-bell"></i>
+        <span *ngIf="notificationCount > 0"
+              class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+          {{ notificationCount }}
+        </span>
+      </button>
+    </div>
+
+    <div class="action-buttons">
+      <button class="btn btn-view-list-regime btn-sm ms-2" routerLink="/regime">
+        <i class="bi bi-arrow-right"></i> View List Regime
+      </button>
+      <button class="btn btn-add-report btn-sm ms-2" routerLink="/Addreport">
+        <i class="bi bi-plus-circle"></i> Add Report
+      </button>
+
+      <button class="btn btn-add-report btn-sm ms-2" routerLink="/simulation">
+        <i class="bi bi-plus-circle"></i>  Risk Estimation
+      </button>
+    </div>
+  </div>
+
+
+  <!-- Centered Notification popup with overlay -->
+  <div *ngIf="showNotifications" class="notification-overlay" (click)="closeNotificationsOnOverlayClick($event)">
+    <div class="notification-popup">
+      <div class="notification-header">
+        <h5>Notifications</h5>
+        <button class="btn-close" (click)="toggleNotifications()"></button>
+      </div>
+      <div class="notification-body">
+        <div *ngIf="lastNotification" class="notification-item">
+          {{ lastNotification }}
+        </div>
+        <div *ngIf="!lastNotification" class="notification-empty">
+          No new notifications
+        </div>
+      </div>
+      <div class="notification-footer">
+        <button class="btn btn-secondary" (click)="clearNotifications()">
+          Clear all
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading indicator -->
+  <div *ngIf="isLoading" class="text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- No reports alert -->
+  <div *ngIf="filteredReports().length === 0 && !isLoading" class="alert alert-warning text-center">
+    No reports found.
+  </div>
+
+  <!-- Reports grid -->
+  <div class="row">
+    <div class="col-md-4 mb-4" *ngFor="let report of filteredReports()">
+
+      <div class="card shadow-sm">
+        <div class="card-body text-center">
+          <img src="../assets/FrontOffice/images/report.jpg" alt="Report Image" class="report-img mb-2">
+
+          <p class="card-text"><strong>Severity:</strong>
+            <span class="badge"
+                  [ngClass]="{
+                    'bg-danger': report.injurySeverity.toLowerCase() === 'high',
+                    'bg-warning': report.injurySeverity.toLowerCase() === 'moderate',
+                    'bg-success': report.injurySeverity.toLowerCase() === 'low'
+                  }">
+              {{ report.injurySeverity }}
+            </span>
+          </p>
+          <p class="card-text"><strong>Diagnosis date:</strong> {{ report.diagnosisDate }}</p>
+          <p class="card-text"><strong>Recovery date:</strong> {{ report.expectedRecoveryDate }}</p>
+
+          <p class="card-text"><strong>Status:</strong>
+            <span class="badge"
+                  [ngClass]="{
+                    'bg-danger': report.status.toLowerCase() === 'injured',
+                    'bg-warning': report.status.toLowerCase() === 'recovering',
+                    'bg-success': report.status.toLowerCase() === 'active'
+                  }">
+              {{ report.status }}
+            </span>
+          </p>
+          <p class="card-text"><strong>Medical Staff:</strong> {{ report.firstNameMed }}</p>
+          <p class="card-text"><strong>Player:</strong> {{ report.firstNamePlay }}</p>
+
+          <div class="d-flex justify-content-between">
+            <button class="btn btn-outline-primary btn-sm" (click)="editReport(report.healthId)">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-outline-danger btn-sm" (click)="deleteReport(report.healthId)">
+              <i class="bi bi-trash"></i>
+            </button>
+            <button class="btn btn-outline-secondary btn-sm" [routerLink]="['/reportDetail', report.healthId]">
+              <i class="bi bi-eye"> View Report </i>
+            </button>
+            <button *ngIf="!report.regimeId" class="btn btn-outline-primary btn-sm" [routerLink]="['/Addregime/', report.healthId]">
+              <i class="bi bi-plus"></i> Add Regime
+            </button>
+
+            <button *ngIf="report.regimeId" class="btn btn-outline-secondary btn-sm" [routerLink]="['/regimeDetail', report.regimeId]">
+              <i class="bi bi-eye"></i> View Regime
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="d-flex justify-content-center mt-3">
+    <button class="btn btn-orange me-2 mb-3" (click)="prevPage()" [disabled]="currentPage === 0">
+      « Previous
+    </button>
+
+    <span class="pagination-number align-self-center mx-2 mb-3">
+      <span class="active-page">{{ currentPage + 1 }}</span>
+    </span>
+
+    <button class="btn btn-orange ms-2 mb-3" (click)="nextPage()" [disabled]="currentPage + 1 >= totalPages">
+      Next »
+    </button>
+  </div>
+
+
+</div>
+

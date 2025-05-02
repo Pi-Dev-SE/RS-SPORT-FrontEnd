@@ -1,0 +1,95 @@
+<div class="container-fluid mt-4"> 
+  <div class="row">
+    <!-- Simulation Form Panel -->
+    <div class="col-md-3 p-3">
+      <h3 >Risk Estimation</h3>
+
+      <form (submit)="submitSimulation(); $event.preventDefault()">
+        <div class="mb-3">
+          <label for="duration" class="form-label">Activity Duration (minutes)</label>
+          <input type="number" id="duration" [(ngModel)]="form.duration" name="duration"
+                 class="form-control" min="10" max="240">
+        </div>
+
+        <div class="mb-3">
+          <label for="surface" class="form-label">Playing Surface</label>
+          <select id="surface" [(ngModel)]="form.surface" name="surface" class="form-control">
+            <option value="synthetic">Synthetic</option>
+            <option value="grass">Grass</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="temperature" class="form-label">Temperature (°C)</label>
+          <input type="number" id="temperature" [(ngModel)]="form.temperature" name="temperature"
+                 class="form-control" min="-10" max="45">
+        </div>
+
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn-send">Run Estimation</button>
+          <button type="button" class="btn-send" (click)="toggleAnnotations()">
+            {{ showAnnotations ? 'Hide' : 'Show' }} Labels
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- 3D Viewer -->
+    <div class="col-md-9">
+      <div class="viewer-container" style="height: 80vh;" #canvasContainer>
+        <!-- Loading indicator -->
+        <div class="loading-indicator" *ngIf="isLoading">
+          <div class="spinner"></div>
+          <span>Loading...</span>
+        </div>
+
+        <!-- Error message -->
+        <div class="error-message" *ngIf="errorMessage">
+          <strong>Error:</strong> {{ errorMessage }}
+        </div>
+
+        <!-- Risk Legend -->
+        <div class="risk-legend" *ngIf="simulationComplete">
+          <h4>Injury Risk Legend</h4>
+          <div class="risk-item">
+            <div class="risk-color high"></div>
+            <div>High Risk</div>
+          </div>
+          <div class="risk-item">
+            <div class="risk-color medium"></div>
+            <div>Medium Risk</div>
+          </div>
+          <div class="risk-item">
+            <div class="risk-color low"></div>
+            <div>Low Risk</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Information Panel -->
+  <div class="row mt-3" *ngIf="simulationComplete">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header custom-orange-header text-white">
+          <h4>Simulation Results</h4>
+        </div>
+        <div class="card-body">
+          <p class="lead">
+            Based on your input parameters (Duration: {{ form.duration }} min, Surface: {{ form.surface }}, 
+            Temperature: {{ form.temperature }}°C), we've identified the following risk areas:
+          </p>
+          <p>
+            The 3D model shows potential injury risk levels for different body parts. Red indicates high risk, 
+            orange indicates medium risk, and green indicates low risk. Areas without coloration have negligible risk.
+          </p>
+          <p>
+            <strong>Recommendation:</strong> Consider appropriate warm-up exercises and protective equipment 
+            for the highlighted risk areas.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

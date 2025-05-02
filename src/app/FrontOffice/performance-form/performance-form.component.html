@@ -1,0 +1,103 @@
+<div class="contact-page-section sec-spacer">
+    <div class="container">
+      <div class="contact-comment-section">
+        <h3>Performance Tracking Form</h3>
+        <div id="form-message"></div>
+        <form [formGroup]="performanceForm" (ngSubmit)="onSubmit()">
+          <fieldset>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Follow-up Date</label>
+                  <input formControlName="dateSuivi" class="form-control" type="date">
+                  <div *ngIf="performanceForm.get('dateSuivi')?.invalid && performanceForm.get('dateSuivi')?.touched" class="text-danger mt-1">
+                    <small><i class="bi bi-exclamation-triangle-fill"></i> This field is required.</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Pain (0-10)</label>
+                  <input formControlName="douleur" class="form-control" type="number">
+                  <div *ngIf="performanceForm.get('douleur')?.invalid && performanceForm.get('douleur')?.touched" class="text-danger mt-1">
+                    <small *ngIf="performanceForm.get('douleur')?.errors?.['required']">
+                      <i class="bi bi-exclamation-triangle-fill"></i> This field is required.
+                    </small>
+                    <small *ngIf="performanceForm.get('douleur')?.errors?.['min'] || performanceForm.get('douleur')?.errors?.['max']">
+                      <i class="bi bi-exclamation-triangle-fill"></i> Value between 0 and 10.
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Endurance (%)</label>
+                  <input formControlName="endurance" class="form-control" type="number">
+                  <div *ngIf="performanceForm.get('endurance')?.invalid && performanceForm.get('endurance')?.touched" class="text-danger mt-1">
+                    <small><i class="bi bi-exclamation-triangle-fill"></i> Value between 0 and 100.</small>
+                  </div>
+                </div> 
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Fatigue Index (0-10)</label>
+                  <input formControlName="indiceFatigue" class="form-control" type="number">
+                  <div *ngIf="performanceForm.get('indiceFatigue')?.invalid && performanceForm.get('indiceFatigue')?.touched" class="text-danger mt-1">
+                    <small><i class="bi bi-exclamation-triangle-fill"></i> Value between 0 and 10.</small>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+  
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Heart Rate (bpm)</label>
+                  <input formControlName="frequenceCardiaque" class="form-control" type="number">
+                  <div *ngIf="performanceForm.get('frequenceCardiaque')?.invalid && performanceForm.get('frequenceCardiaque')?.touched" class="text-danger mt-1">
+                    <small><i class="bi bi-exclamation-triangle-fill"></i> Value between 40 and 220.</small>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Weight (kg)</label>
+                  <input formControlName="poids" class="form-control" type="number">
+                  <div *ngIf="performanceForm.get('poids')?.invalid && performanceForm.get('poids')?.touched" class="text-danger mt-1">
+                    <small><i class="bi bi-exclamation-triangle-fill"></i> Value between 30 and 200.</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <div class="row">
+              
+  
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label> Able to Resume</label>
+                  <select formControlName="apteAReprendre" class="form-control">
+                    <option [value]="true">Yes</option>
+                    <option [value]="false">No</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="form-group mb-0 d-flex gap-2">
+                <input class="btn-send" type="submit" value="Submit Now" [disabled]="performanceForm.invalid">
+                <input class="btn-send" type="button" value="Cancel" [routerLink]="'/report'">
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+  

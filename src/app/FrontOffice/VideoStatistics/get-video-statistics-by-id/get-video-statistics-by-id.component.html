@@ -1,0 +1,92 @@
+<div class="rs-team-single-section team-inner-page sec-spacer">
+  <div class="container">
+    <div class="row g-5">
+      <!-- Image Section -->
+      <div class="col-md-4">
+        <div class="card shadow-lg border-0 rounded">
+          <img src="/assets/FrontOffice/images/team/view-soccer-ball-field.jpg" class="card-img-top rounded-top" alt="Soccer Field">
+          <div class="card-body text-center">
+            <h3 class="player-title">Statistics</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Section -->
+      <div class="col-md-8">
+        <div class="card shadow-lg border-0 rounded p-4 mb-4">
+          <h3 class="mb-4 text-primary">Player Statistics</h3>
+          <table class="table table-striped">
+            <tbody>
+              <tr><td><strong>Total Distance Covered:</strong></td><td>{{videoData.totalDistanceCovered}} km</td></tr>
+              <tr><td><strong>Sprint Distance:</strong></td><td>{{videoData.sprintDistance}} m</td></tr>
+              <tr><td><strong>Top Speed:</strong></td><td>{{videoData.topSpeed}} km/h</td></tr>
+              <tr><td><strong>Pass Accuracy:</strong></td><td>{{videoData.passAccuracy}} %</td></tr>
+              <tr><td><strong>Total Passes:</strong></td><td>{{videoData.passNbr}}</td></tr>
+              <tr><td><strong>Min Speed:</strong></td><td>{{videoData.minSpeed}} km/h</td></tr>
+            </tbody>
+          </table>
+
+          <!-- Grouped Dropdown Button -->
+          <div class="dropdown mt-4">
+          <!-- Add an icon if using something like Font Awesome or Bootstrap Icons -->
+          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-gear-fill"></i> Actions
+          </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" (click)="delete(videoData.videoStatisticsId)">Delete</a></li>
+              <li><a class="dropdown-item" (click)="downloadPDF()">Download PDF</a></li>
+              <li><a class="dropdown-item" (click)="showTeamPerformance()">Team Performance</a></li>
+              <li><a class="dropdown-item" (click)="generateQRCode()">Generate QR Code</a></li>
+            </ul>
+          </div>
+
+
+          <!-- Display Team Performance Result -->
+          <div *ngIf="teamPerformance" class="alert alert-info mt-3">
+            <strong>Team Performance:</strong> {{ teamPerformance }}
+          </div>
+
+          <!-- QR Code Display Section -->
+          <div *ngIf="qrCodeUrl" class="mt-4">
+            <h4>Scan the QR code to view the performance summary:</h4>
+            <img [src]="qrCodeUrl" alt="QR Code" class="img-fluid">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Overview Section -->
+    <div class="row mt-4">
+      <div class="col-sm-12">
+        <div class="card shadow border-0 p-4">
+          <h3 class="text-secondary mb-3">Overview</h3>
+          <p class="text-justify">
+            This report summarizes the player's video analysis data. The data includes total distance covered during the game, sprint-specific distance, top and minimum speed reached, and metrics related to passing efficiency such as total passes and accuracy. This information is essential to assess player performance, identify strengths, and target areas for improvement in future training or match strategies.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden content for PDF -->
+<div id="pdf-content" class="hidden-pdf-content">
+  <h1 style="text-align: center; color: #2c3e50;">Player Statistics</h1>
+  <table style="width: 100%; border-collapse: collapse; font-size: 18px;">
+    <tr><td><strong>Total Distance Covered:</strong></td><td>{{videoData.totalDistanceCovered}} km</td></tr>
+    <tr><td><strong>Sprint Distance:</strong></td><td>{{videoData.sprintDistance}} m</td></tr>
+    <tr><td><strong>Top Speed:</strong></td><td>{{videoData.topSpeed}} km/h</td></tr>
+    <tr><td><strong>Pass Accuracy:</strong></td><td>{{videoData.passAccuracy}} %</td></tr>
+    <tr><td><strong>Total Passes:</strong></td><td>{{videoData.passNbr}}</td></tr>
+    <tr><td><strong>Min Speed:</strong></td><td>{{videoData.minSpeed}} km/h</td></tr>
+  </table>
+  <h2 style="margin-top: 30px;">Performance Summary</h2>
+  <p style="line-height: 1.8; font-size: 16px;">
+    <strong>Team Performance:</strong> {{ teamPerformance }}
+  </p>
+
+  <h2 style="margin-top: 30px;">Overview</h2>
+  <p style="line-height: 1.8; font-size: 16px;">
+    This report summarizes the player's video analysis data. The data includes total distance covered during the game, sprint-specific distance, top and minimum speed reached, and metrics related to passing efficiency such as total passes and accuracy. This information is essential to assess player performance, identify strengths, and target areas for improvement in future training or match strategies.
+  </p>
+</div>

@@ -1,0 +1,16 @@
+.btn-send {
+    background-color: #f4b400; /* Même couleur que Submit Now */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-send:hover {
+    background-color: #e0a000;
+}
+h3 {
+    color: #f7b839;
+}

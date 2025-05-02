@@ -1,0 +1,67 @@
+<div class="rs-breadcrumbs sec-color">
+    <img src="assets/FrontOffice/images/breadcrumbs/shop.jpg" alt="Breadcrubs" />
+    <div class="breadcrumbs-inner">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h1 class="page-title">Video Analysis</h1>
+                    <ul>
+                        <li>
+                            <a class="active" routerLink="../../getAllVideoAnalysis">ALL VIDEO ANALYSIS</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumbs Section End -->
+
+<!-- Shop Single Page Start Here -->
+<div class="single-product-page sec-spacer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9 col-md-12">
+                <div class="single-product-area left-area">
+                    <div class="row">
+                        <div class="col-lg-5 col-md-5 col-sm-12">
+                            <div class="inner-single-product-slider">
+                                <div class="inner">
+                                    <div class="slider single-product-image">
+                                        <div>
+                                          <div class="images-single" *ngIf="videoSafeUrl">
+
+                                            <video width="100%" height="auto" controls>
+                                              <source [src]="videoSafeUrl" type="video/mp4" />
+                                              
+                                            </video>
+                                          </div>
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-7 col-md-7 col-sm-12">
+                          <div class="single-price-info" *ngIf="videoData">
+                            <h3>{{ videoData.title }}</h3>
+                            <span class="single-price">{{ videoData.description }}</span>
+                            <p class="cat"><strong>Analysis Type: </strong>{{ videoData.analysisType }}</p>
+                            <p class="tag"><strong>Status: </strong> {{ videoData.status }}</p>
+                            <br /><br /><br />
+                            <a class="primary-btn" [routerLink]="['../../updateVideoAnalysis', videoData.videoAnalysisId]">Update</a>
+                            <br />
+                            <a class="primary-btn" (click)="delete(videoData.videoAnalysisId)">Delete</a>
+                          </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+    </div>
+</div>

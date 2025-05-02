@@ -1,0 +1,146 @@
+/*==========================
+  PDF Content Styling
+===========================*/
+
+/* Hide PDF content from view */
+.hidden-pdf-content,
+#pdf-content {
+  display: none;
+}
+
+/* PDF content layout */
+#pdf-content {
+  width: 800px;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background: #fff;
+  color: #000;
+  font-size: 16px;
+}
+
+#pdf-content table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#pdf-content table td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+#pdf-content h1,
+#pdf-content h2 {
+  text-align: center;
+  color: #2c3e50;
+  margin: 10px 0;
+}
+
+#pdf-content p {
+  line-height: 1.8;
+}
+
+/*==========================
+  General Table Styling
+===========================*/
+
+.table td {
+  padding: 12px 8px;
+  font-size: 16px;
+}
+
+/*==========================
+  Card Styling
+===========================*/
+
+.card {
+  background: #fff;
+  border-radius: 10px;
+}
+
+/*==========================
+  Button Styling
+===========================*/
+
+.btn {
+  min-width: 120px;
+  font-weight: bold;
+  padding: 10px 16px;
+  border: none;
+}
+
+/* Specific Button Colors */
+.btn-success {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+/*==========================
+  Dropdown Button Styling
+===========================*/
+
+/* Stylish Dropdown Toggle Button */
+.dropdown .btn-primary {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+  transition: background 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Hover effect with slight lift */
+.dropdown .btn-primary:hover {
+  background: linear-gradient(135deg, #0056b3, #003f88);
+  transform: translateY(-2px);
+}
+
+/* Optional dropdown icon */
+.dropdown .btn-primary::after {
+  margin-left: auto;
+  vertical-align: middle;
+}
+
+/* Dropdown menu enhancements */
+.dropdown-menu {
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+  padding: 0;
+  overflow: hidden;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Dropdown items styling */
+.dropdown-item {
+  padding: 14px 20px;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f8ff;
+  color: #0056b3;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
