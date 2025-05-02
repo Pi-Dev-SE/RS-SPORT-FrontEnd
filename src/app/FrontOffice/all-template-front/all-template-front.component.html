@@ -1,0 +1,38 @@
+    <!--Preloader start here-->
+        <div id="preloader">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+  </div>
+<!--Preloader area end here-->
+
+    <app-header-front></app-header-front>
+    <router-outlet></router-outlet>
+    <app-footer-front></app-footer-front>
+
+        <!-- Search Modal Start -->
+        <div aria-hidden="true" class="modal fade search-modal" role="dialog" tabindex="-1">
+        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true" class="fa fa-close"></span>
+	        </button>
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="search-block clearfix">
+                        <form>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="eg: Soccer News" type="text">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+		<!-- Start scrollUp  -->
+		<div id="return-to-top">
+			<span>Top</span>
+		</div>
+		<!-- End scrollUp  -->
+

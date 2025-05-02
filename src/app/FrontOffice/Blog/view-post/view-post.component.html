@@ -1,0 +1,55 @@
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">{{ postData.clubName }}</div>
+        <div class="card-subtitle">
+          Posted by {{ postData.postedBy }} • {{ postData.date | date: 'medium' }}
+        </div>
+      </div>
+
+      <div class="card-header-buttons">
+        <!-- Main Action Button -->
+        <button class="button btn-action" (click)="toggleActions()">
+          Actions <span [class.rotate]="showActions">▼</span>
+        </button>
+
+        <!-- Dropdown menu -->
+        <div class="dropdown-menu" [class.show]="showActions">
+          <button class="dropdown-item" (click)="deletePost()">🗑 Delete Post</button>
+          <button class="dropdown-item" (click)="joinMeeting()">📹 Join Video Meet</button>
+          <button class="dropdown-item" [routerLink]="['/UpdatePost', postData.id]">✏️ Update Post</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card-image">
+      <img [src]="'http://localhost/image_upload/' + postData.img" alt="Post Image" />
+    </div>
+    <div class="card-content">{{ postData.content }}</div>
+  </div>
+
+  <div class="comment-box">
+    <h2>Publish Your Comment</h2>
+    <form class="comment-form" [formGroup]="commentForm">
+      <textarea rows="4" placeholder="Comment..." required formControlName="content"></textarea>
+      <input type="text" placeholder="Posted By*" required formControlName="postedBy" />
+      <button type="submit" (click)="publishComment()" [disabled]="!commentForm.valid">Publish Comment</button>
+    </form>
+
+    <div class="comments-section">
+      <h3>Comments</h3>
+      <div *ngFor="let comment of comments" class="comment-item">
+        <div class="comment-content">
+          <div class="comment-header">
+            <span class="username">{{ comment.postedBy }}</span>
+            <span class="timestamp">{{ comment.createdAt | date: 'medium' }}</span>
+            <button class="comment-delete" (click)="deleteComment(comment.idComment)">🗑</button>
+          </div>
+          <div class="text">{{ comment.content }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

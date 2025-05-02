@@ -1,0 +1,54 @@
+.calendar-container {
+    position: relative;
+    min-height: 400px; /* Réduit la hauteur */
+    margin: 10px 0;
+  }
+  
+  .loading-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px 15px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 5px;
+    z-index: 10;
+    font-size: 0.9em;
+  }
+  
+  .error-message {
+    color: #d9534f;
+    padding: 10px;
+    font-size: 0.9em;
+  }
+  
+  /* Styles globaux pour FullCalendar (car encapsulation désactivée) */
+  .fc {
+    font-size: 0.85em;
+  }
+  
+  .fc-toolbar {
+    padding: 5px 0;
+    font-size: 0.9em;
+  }
+  
+  .fc-col-header-cell {
+    padding: 4px 2px !important;
+  }
+  
+  .fc-daygrid-day {
+    padding: 2px !important;
+  }
+  
+  .fc-daygrid-day-frame {
+    min-height: 30px !important;
+  }
+  
+  .fc-daygrid-day-number {
+    padding: 2px !important;
+    font-size: 0.9em;
+  }
+  
+  .fc-day-today {
+    background-color: #f0f0f0 !important;
+  }

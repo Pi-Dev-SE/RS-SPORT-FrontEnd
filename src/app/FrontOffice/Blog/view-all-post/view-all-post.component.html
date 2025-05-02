@@ -1,0 +1,69 @@
+<div id="rs-blog" class="rs-blog py-5 bg-light">
+  <div class="container">
+
+    <!-- Search Bar -->
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-8 d-flex align-items-center gap-2">
+        <input
+          type="text"
+          class="form-control form-control-lg shadow-sm"
+          placeholder="🔍 Search by club name..."
+          [(ngModel)]="searchText"
+          (input)="onSearch()"
+        />
+        <button class="btn btn-outline-secondary btn-lg" (click)="startListening()">
+          🎙
+        </button>
+      </div>
+    </div>
+
+
+    <!-- Live Results Button -->
+    <div class="row justify-content-center mb-5">
+      <div class="col-auto">
+        <button
+          (click)="openFlashscore()"
+          class="btn btn-success btn-lg shadow"
+        >
+          ⚽ See Live Football Results
+        </button>
+      </div>
+    </div>
+
+    <!-- Post Cards -->
+    <div class="row">
+      <div
+        class="col-xl-4 col-lg-4 col-md-6 mb-4 d-flex"
+        *ngFor="let item of allPosts"
+      >
+        <div class="card shadow-sm border-0 w-100">
+          <div class="ratio ratio-16x9">
+            <img
+              [src]="'http://localhost/image_upload/' + item.img"
+              alt="Post Image"
+              class="card-img-top object-fit-cover"
+              style="border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem;"
+            />
+          </div>
+          <div class="card-body">
+            <p class="text-muted mb-2">
+              <i class="fa fa-calendar-check-o me-1"></i>
+              {{ item.date | date: 'medium' }}
+            </p>
+            <h5 class="card-title text-primary mb-1">🏟 Club: {{ item.clubName }}</h5>
+            <p class="card-text text-secondary">Posted by: <strong>{{ item.postedBy }}</strong></p>
+          </div>
+          <div class="card-footer bg-transparent border-0">
+            <a
+              [routerLink]="['../viewpost', item.id]"
+              class="btn btn-outline-primary w-100"
+            >
+              View Post
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

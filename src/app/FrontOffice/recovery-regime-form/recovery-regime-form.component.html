@@ -1,0 +1,111 @@
+<div class="contact-page-section sec-spacer">
+    <div class="container">
+        <div class="contact-comment-section">
+            <h3>Regime Recovery Form</h3>
+            <div id="form-message"></div>
+            <form [formGroup]="rForm!" (ngSubmit)="onSubmit()">
+                <fieldset>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Generated At</label>
+                                <input formControlName="generatedAt" class="form-control" type="date">
+                                <div *ngIf="rForm?.get('generatedAt')?.invalid && rForm?.get('generatedAt')?.touched" class="text-danger mt-1">
+                                    <small><i class="bi bi-exclamation-triangle-fill"></i> This field is required.</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Daily Duration (min)</label>
+                                <input formControlName="dailyDuration" class="form-control" type="number">
+                                <div *ngIf="rForm?.get('dailyDuration')?.invalid && rForm?.get('dailyDuration')?.touched" class="text-danger mt-1">
+                                    <small *ngIf="rForm?.get('dailyDuration')?.errors?.['required']">
+                                        <i class="bi bi-exclamation-triangle-fill"></i> This field is required.
+                                    </small>
+                                    <small *ngIf="rForm?.get('dailyDuration')?.errors?.['min']">
+                                        <i class="bi bi-exclamation-triangle-fill"></i> Must be a positive number.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Recommended Exercise</label>
+                                <input formControlName="recommendedExercise" class="form-control" type="text">
+                                <div *ngIf="rForm?.get('recommendedExercise')?.invalid && rForm?.get('recommendedExercise')?.touched" class="text-danger mt-1">
+                                    <small><i class="bi bi-exclamation-triangle-fill"></i> This field is required.</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Exercise Intensity</label>
+                                <input formControlName="exerciseIntensity" class="form-control" type="text">
+                                <div *ngIf="rForm?.get('exerciseIntensity')?.invalid && rForm?.get('exerciseIntensity')?.touched" class="text-danger mt-1">
+                                    <small><i class="bi bi-exclamation-triangle-fill"></i> This field is required.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Diet Recommendation</label>
+                                <textarea formControlName="dietRecommendation" class="form-control"></textarea>
+                                <div *ngIf="rForm?.get('dietRecommendation')?.invalid && rForm?.get('dietRecommendation')?.touched" class="text-danger mt-1">
+                                    <small><i class="bi bi-exclamation-triangle-fill"></i> This field is required.</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Physiotherapy Required</label>
+                                <select class="form-control" formControlName="physiotherapyRequired">
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                                <div *ngIf="rForm?.get('physiotherapyRequired')?.invalid && rForm?.get('physiotherapyRequired')?.touched" class="text-danger mt-1">
+                                    <small><i class="bi bi-exclamation-triangle-fill"></i> This field is required.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Progress Tracking</label>
+                                <select formControlName="progressTracking" class="form-control" >
+                                    <option *ngFor="let prog of progressList" [value]="prog"> {{prog}}</option>
+                                    </select>
+                                <div *ngIf="rForm?.get('progressTracking')?.invalid && rForm?.get('progressTracking')?.touched" class="text-danger mt-1">
+                                    <small><i class="bi bi-exclamation-triangle-fill"></i> This field is required.</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select class="form-control" formControlName="status">
+                                    <option *ngFor="let status of statusList" [value]="status">{{ status }}</option>
+                                </select>
+                                <div *ngIf="rForm?.get('status')?.invalid && rForm?.get('status')?.touched" class="text-danger mt-1">
+                                    <small><i class="bi bi-exclamation-triangle-fill"></i> This field is required.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group mb-0 d-flex gap-2">
+                            <input class="btn-send" type="submit" value="Submit Now" [disabled]="rForm?.invalid">
+                            <input class="btn-send" type="button" value="Cancel" [routerLink]="'/report'">
+
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>

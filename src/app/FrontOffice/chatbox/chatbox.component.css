@@ -1,0 +1,203 @@
+.chatbox {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    animation: fadeIn 0.3s ease-in-out;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.chat-header {
+    background: #00e676;
+    color: white;
+    padding: 12px 15px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+}
+
+.chat-header img {
+    width: 22px;
+    height: 22px;
+    margin-right: 8px;
+}
+
+.close-btn {
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+    background: rgba(0, 0, 0, 0.1);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-btn:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.chat-body {
+    padding: 20px 15px;
+    background-color: #f0f2f5;
+}
+
+.message {
+    background: #fff;
+    padding: 12px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    display: inline-block;
+    max-width: 85%;
+    margin-left: 5px;
+    position: relative;
+}
+
+.chat-footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #f0f2f5;
+}
+
+.open-chat {
+    background: #25D366;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.button-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-content img {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+}
+
+.open-chat:hover {
+    background: #1ebe5d;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Animation d'apparition */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Bouton flottant */
+.floating-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #25D366;
+    color: white;
+    border: none;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.floating-btn img {
+    width: 35px;
+    height: 35px;
+}
+
+.floating-btn:hover {
+    background: #1ebe5d;
+}
+
+/* Ajoutez ces styles à votre fichier CSS existant */
+
+.qr-code-container {
+    text-align: center;
+    margin-top: 15px;
+    padding: 10px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.qr-code {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+    display: block;
+}
+
+.qr-code-text {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #555;
+}
+
+.qr-code-btn {
+    background: #075E54;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+}
+
+.qr-code-btn:hover {
+    background: #054d44;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.qr-icon {
+    margin-right: 8px;
+    font-style: normal;
+}
+
+.chat-footer {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 15px;
+    background-color: #f0f2f5;
+}

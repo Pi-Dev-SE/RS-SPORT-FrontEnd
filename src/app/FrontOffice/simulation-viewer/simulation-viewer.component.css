@@ -1,0 +1,132 @@
+.btn-send {
+    background-color: #f7b839; /* Même couleur que Submit Now */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-send:hover {
+    background-color: #e0a000;
+}
+
+h3 {
+    color: #f7b839;
+}
+
+h4 {
+    color:white;
+}
+
+/* Viewer container styles */
+.viewer-container {
+    position: relative;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Loading indicator */
+  .loading-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+  }
+  
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+    margin-bottom: 10px;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  /* Error message */
+  .error-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 0, 0, 0.7);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+  }
+  
+  /* Risk legend */
+  .risk-legend {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px 15px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 5;
+  }
+  
+  .risk-legend h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .risk-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .risk-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    margin-right: 10px;
+  }
+  
+  .risk-color.high {
+    background-color: red;
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.7);
+  }
+  
+  .risk-color.medium {
+    background-color: orange;
+    box-shadow: 0 0 5px rgba(255, 165, 0, 0.7);
+  }
+  
+  .risk-color.low {
+    background-color: green;
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.7);
+  }
+  
+  /* Ensure the labels container covers the entire viewer */
+  .body-part-label-container {
+    pointer-events: auto;
+  }
+  .custom-orange-header {
+    background-color: #f7b839; /* Orange standard */
+    /* Ou pour un orange plus sophistiqué : */
+    background: linear-gradient(135deg, #f7b839 0%, #f7b839 100%);
+    border-bottom: 1px solid #e67e22;
+  }
