@@ -1,29 +1,29 @@
+import { User } from './../Models/user';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { HealthReport } from '../Models/HealthReport';
-import { user } from '../Models/user'; 
 
 @Injectable({
   providedIn: 'root'
 })
 export class MedicalReportService {
   private apiUrl = 'http://localhost:8089/spr01/HealthReport';
-  
+
 
   constructor(private http: HttpClient) {}
 
   getReports(page: number, size: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}?page=${page}&size=${size}`);
   }
-  
 
-  getMedicalStaff(): Observable<user[]> {
-    return this.http.get<user[]>(`${this.apiUrl}/staffmedical`);
+
+  getMedicalStaff(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/staffmedical`);
   }
 
-  getPlayers(): Observable<user[]> {
-    return this.http.get<user[]>(`${this.apiUrl}/players`);
+  getPlayers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/players`);
   }
 
   addReport(report: HealthReport): Observable<HealthReport> {

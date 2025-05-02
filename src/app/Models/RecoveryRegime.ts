@@ -2,7 +2,7 @@ import { TypeStatusRegime } from "./type-status-regime";
 
 
 export class RecoveryRegime {
-    healthId!:number;  
+    healthId!:number;
     regimeId!: number;
     generatedAt!: Date;
     dailyDuration!: number;

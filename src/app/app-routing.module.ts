@@ -47,7 +47,7 @@ const routes: Routes = [
       {path:"getAllVideoStatistics", component: GetAllVideoStatisticsComponent},
       {path:"getVideoStatisticsById/:id", component: GetVideoStatisticsByIdComponent},
       {path:"UpdatePost/:id", component: UpdatePostComponent},
-      
+
       {
         path:"report", component: MedicalReportComponent
       },

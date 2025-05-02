@@ -4,7 +4,7 @@ import { TypeStatusHealth } from './type-status-health';
 
 
 export class HealthReport {
-healthId!:number;    
+healthId!:number;
 injuryType!: string;
 injurySeverity!: TypeInjurySeverity;
 diagnosisDate!: Date;
