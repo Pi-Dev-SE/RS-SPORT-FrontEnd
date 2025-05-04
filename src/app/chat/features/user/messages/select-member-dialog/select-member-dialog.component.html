@@ -1,0 +1,30 @@
+<p-dialog [header]="title"
+  [modal]="true"
+  [(visible)]="visible"
+  [dismissableMask]="true"
+  [style]="{ width: '30rem', maxWidth: '90%' }"
+  (onHide)="onHide()">
+  <!-- Input -->
+  <div class="p-fluid mb-3">
+    <p-autoComplete [(ngModel)]="selectedUsers"
+      appendTo="body"
+      [suggestions]="searchedUsers"
+      (completeMethod)="handleKeyUp($event)"
+      field="firstname"
+      [multiple]="true"
+      placeholder="To...">
+      <ng-template let-user pTemplate="item">
+        <div class="flex align-items-center gap-2">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNL_ZnOTpXSvhf1UaK7beHey2BX42U6solRA&s"
+            style="width: 24px; height: 24px; object-fit: cover; border-radius: 50%;" />
+          <div>{{ user.firstname }}</div>
+        </div>
+      </ng-template>
+    </p-autoComplete>
+  </div>
+  <!-- Button -->
+  <div class="flex justify-content-end gap-2 mt-auto">
+      <p-button label="Cancel" severity="secondary" (onClick)="visible = false" />
+      <p-button [label]="submitButtonText" (click)="onSubmit()" styleClass="btn-yellow"/>
+  </div>
+</p-dialog>

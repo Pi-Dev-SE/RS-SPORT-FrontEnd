@@ -1,6 +1,8 @@
-import { UpdateVideoAnalysisComponent } from './FrontOffice/VideoAnalysis/update-video-analysis/update-video-analysis.component';
-import { NgModule } from '@angular/core';
+
+import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './core/auth.guard';
+import { UpdateVideoAnalysisComponent } from './FrontOffice/VideoAnalysis/update-video-analysis/update-video-analysis.component';
 import { AllTemplateFrontComponent } from './FrontOffice/all-template-front/all-template-front.component';
 import { AllTemplateBackComponent } from './BackOffice/all-template-back/all-template-back.component';
 import { HomeFrontComponent } from './FrontOffice/home-front/home-front.component';
@@ -25,73 +27,113 @@ import { PerformanceFormComponent } from './FrontOffice/performance-form/perform
 import { PerformanceDashboardComponent } from './FrontOffice/performance-dashboard/performance-dashboard.component';
 import { SimulationViewerComponent } from './FrontOffice/simulation-viewer/simulation-viewer.component';
 import { RecoveryCalendarComponent } from './FrontOffice/recovery-calendar/recovery-calendar.component';
+import { TacticComponent } from './FrontOffice/tactic/tactic.component';
+import { TacticsBackComponent } from './BackOffice/tactics-back/tactics-back.component';
+import { SignInComponent } from './FrontOffice/sign-in/sign-in.component';
+import { SignUpComponent } from './FrontOffice/sign-up/sign-up.component';
+import { LogoutComponent } from './FrontOffice/logout/logout.component';
+
 const routes: Routes = [
-  {path:"",component: AllTemplateFrontComponent,
+  {
+    path:"",
+    component: AllTemplateFrontComponent,
     children:[
       {
         path:"",
         component: HomeFrontComponent
+
       },
-      {path:"matches", component: AllTemplateFrontComponent},
-      {path:"addVideoAnalysis", component: AddVideoAnalysisComponent},
-      {path:"getAllVideoAnalysis", component: GetAllVideoAnalysisComponent},
+      {
+        path:"signin",
+        component: SignInComponent
+      },
+      {
+        path:"signup",
+        component: SignUpComponent
+      },
+      {
+        path:"logout",
+        component: LogoutComponent
+      },
+      {
+        path: "tacticsboard",
+        component: TacticComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'chat',
+        loadChildren: () => import('./chat/features/user/user.module').then(m => m.UserModule),
+        canActivate: [AuthGuard]
+      },
+      {path:"matches", component: AllTemplateFrontComponent,canActivate: [AuthGuard]},
+      {path:"addVideoAnalysis", component: AddVideoAnalysisComponent,canActivate: [AuthGuard]},
+      {path:"getAllVideoAnalysis", component: GetAllVideoAnalysisComponent,canActivate: [AuthGuard]},
       {path:"getVideoAnalysisById/:id", component: GetVideoAnalysisByIdComponent,
         children:[
           {path:"addvideostatistics", component: AddVideoStatisticsComponent},
-          ]},
-      {path:"updateVideoAnalysis/:id", component: UpdateVideoAnalysisComponent},
-      {path:"createPost", component: CreatePostComponent},
-      {path:"addvideostatistics", component: AddVideoStatisticsComponent},
-      {path:"viewallpost", component: ViewAllPostComponent},
-      {path:"viewpost/:id", component: ViewPostComponent},
-      {path:"getAllVideoStatistics", component: GetAllVideoStatisticsComponent},
-      {path:"getVideoStatisticsById/:id", component: GetVideoStatisticsByIdComponent},
-      {path:"UpdatePost/:id", component: UpdatePostComponent},
+          ],canActivate: [AuthGuard]},
+      {path:"updateVideoAnalysis/:id", component: UpdateVideoAnalysisComponent,canActivate: [AuthGuard]},
+      {path:"createPost", component: CreatePostComponent,canActivate: [AuthGuard]},
+      {path:"addvideostatistics", component: AddVideoStatisticsComponent,canActivate: [AuthGuard]},
+      {path:"viewallpost", component: ViewAllPostComponent,canActivate: [AuthGuard]},
+      {path:"viewpost/:id", component: ViewPostComponent,canActivate: [AuthGuard]},
+      {path:"getAllVideoStatistics", component: GetAllVideoStatisticsComponent,canActivate: [AuthGuard]},
+      {path:"getVideoStatisticsById/:id", component: GetVideoStatisticsByIdComponent,canActivate: [AuthGuard]},
+      {path:"UpdatePost/:id", component: UpdatePostComponent,canActivate: [AuthGuard]},
 
       {
-        path:"report", component: MedicalReportComponent
+        path:"report", component: MedicalReportComponent,canActivate: [AuthGuard]
       },
       {
-        path:"Addreport", component: MedicalReportFormComponent
+        path:"Addreport", component: MedicalReportFormComponent,canActivate: [AuthGuard]
       },
       {
-        path:"Addregime/:healthId", component: RecoveryRegimeFormComponent
+        path:"Addregime/:healthId", component: RecoveryRegimeFormComponent,canActivate: [AuthGuard]
       },
       {
-        path:"Addregime", component: RecoveryRegimeFormComponent
+        path:"Addregime", component: RecoveryRegimeFormComponent,canActivate: [AuthGuard]
       },
 
       {
-        path:"regime", component: RecoveryRegimeComponent
+        path:"regime", component: RecoveryRegimeComponent,canActivate: [AuthGuard]
       },
-      { path: 'regimeDetail/:id', component: RegimeDetailComponent },
-      { path: 'reportDetail/:id', component: ReportDetailComponent },
+      { path: 'regimeDetail/:id', component: RegimeDetailComponent ,canActivate: [AuthGuard]},
+      { path: 'reportDetail/:id', component: ReportDetailComponent ,canActivate: [AuthGuard]},
       {
-        path:"AddPerformance/:playerId", component: PerformanceFormComponent
-      },
-      {
-        path:"AddPerformance", component: PerformanceFormComponent
+        path:"AddPerformance/:playerId", component: PerformanceFormComponent,canActivate: [AuthGuard]
       },
       {
-        path:"DashboardPerformance/:playerId", component: PerformanceDashboardComponent
+        path:"AddPerformance", component: PerformanceFormComponent,canActivate: [AuthGuard]
+      },
+      {
+        path:"DashboardPerformance/:playerId", component: PerformanceDashboardComponent,canActivate: [AuthGuard]
       },
 
-      { path: 'simulation', component: SimulationViewerComponent },
-      { path: 'calender', component: RecoveryCalendarComponent },
-
+      { path: 'simulation', component: SimulationViewerComponent ,canActivate: [AuthGuard]},
+      { path: 'calender', component: RecoveryCalendarComponent ,canActivate: [AuthGuard]},
 
     ]
   },
-
   {
-    path:"admin",component: AllTemplateBackComponent,
+    path:"admin",
+    component: AllTemplateBackComponent,
+    canActivate: [AuthGuard],
     children:[
       {
         path:"",
         component: HomeBackComponent
+
+      },
+      {
+        path:"tactics",
+        component: TacticsBackComponent
       }
     ]
-  }
+  },
+
+
+
+
 ];
 
 @NgModule({

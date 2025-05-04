@@ -30,7 +30,7 @@ export class CreatePostComponent {
       })
     }
 
-    
+
       onFileSelected(video: any): void{
         this.selectedFile = video.target.files[0];
       }

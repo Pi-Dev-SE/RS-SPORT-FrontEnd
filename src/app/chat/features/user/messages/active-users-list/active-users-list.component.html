@@ -1,0 +1,19 @@
+<div *ngIf="activeUsers && activeUsers.length > 0" class="conversation-active-users-wrapper">
+  <!-- Title -->
+  <div class="conversation-active-users-title">
+    Active users
+  </div>
+  <!-- List -->
+  <div class="conversation-active-users">
+    <div class="active-user">
+      <app-avatar [isOnline]="true" width="56px" [avatarUrl]="currentUser.avatarUrl"></app-avatar>
+      <small>You</small>
+    </div>
+    <ng-container *ngFor="let activeUser of activeUsers">
+      <div *ngIf="activeUser.firstname !== currentUser.firstname" class="active-user">
+        <app-avatar [isOnline]="true" width="56px" [avatarUrl]="activeUser.avatarUrl"></app-avatar>
+        <small>{{activeUser.firstname !== currentUser.firstname ? activeUser.firstname : 'You'}}</small>
+      </div>
+    </ng-container>
+  </div>
+</div>

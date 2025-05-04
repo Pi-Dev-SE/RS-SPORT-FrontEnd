@@ -6,7 +6,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 @Component({
   selector: 'app-recovery-calendar',
   templateUrl: './recovery-calendar.component.html',
-  styleUrls: ['./recovery-calendar.component.scss'],
+  styleUrls: ['./recovery-calendar.component.css'],
   encapsulation: ViewEncapsulation.None
 })
 export class RecoveryCalendarComponent implements OnInit {

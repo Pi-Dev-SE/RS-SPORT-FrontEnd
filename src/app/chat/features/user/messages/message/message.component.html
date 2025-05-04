@@ -1,0 +1,42 @@
+<div *ngIf="message.messageType === MessageType.TEXT" class="chat-message"
+  [class.owner]="isOwner">
+  <app-avatar [firstname]="message.sender?.firstname" width="40px" [avatarUrl]="message.sender?.avatarUrl"></app-avatar>
+  <div class="chat-message-content"
+    [title]="message.dateSent | date:'HH:mm:ss dd/MM/yyyy'">
+    <div *ngIf="isGroup" class="chat-message-username">{{message.sender?.firstname}}</div>
+    <div class="chat-message-text">{{message.content}}</div>
+  </div>
+</div>
+
+<!-- NOTIFICATION -->
+<div *ngIf="message.messageType?.startsWith('NOTIFICATION')" class="chat-message-notification">
+  {{message.sender?.firstname}}
+  <!-- NOTIFICATION_CREATE_ROOM -->
+  <ng-container *ngIf="message.messageType === MessageType.NOTIFICATION_CREATE_ROOM">
+    <span>create this group.</span>
+  </ng-container>
+  <!-- NOTIFICATION_ADD_MEMBER -->
+  <ng-container *ngIf="message.messageType === MessageType.NOTIFICATION_ADD_MEMBER">
+    <span>added {{message.content}} to the group.</span>
+  </ng-container>
+  <!-- NOTIFICATION_REMOVE_MEMBER -->
+  <ng-container *ngIf="message.messageType === MessageType.NOTIFICATION_REMOVE_MEMBER">
+    <span>removed {{message.content}} from the group.</span>
+  </ng-container>
+  <!-- NOTIFICATION_LEAVE_ROOM -->
+  <ng-container *ngIf="message.messageType === MessageType.NOTIFICATION_LEAVE_ROOM">
+    <span>left the group.</span>
+  </ng-container>
+  <!-- NOTIFICATION_MAKE_ADMIN -->
+  <ng-container *ngIf="message.messageType === MessageType.NOTIFICATION_MAKE_ADMIN">
+    <span>added {{message.content}} as a group admin.</span>
+  </ng-container>
+  <!-- NOTIFICATION_REMOVE_ADMIN -->
+  <ng-container *ngIf="message.messageType === MessageType.NOTIFICATION_REMOVE_ADMIN">
+    <span>removed {{message.content}} as a group admin.</span>
+  </ng-container>
+  <!-- NOTIFICATION_CHANGE_NAME -->
+  <ng-container *ngIf="message.messageType === MessageType.NOTIFICATION_CHANGE_NAME">
+    <span>named the group {{message.content}}.</span>
+  </ng-container>
+</div>

@@ -1,6 +1,9 @@
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './core/auth.interceptor';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AllTemplateFrontComponent } from './FrontOffice/all-template-front/all-template-front.component';
@@ -12,11 +15,20 @@ import { NavbarBackComponent } from './BackOffice/navbar-back/navbar-back.compon
 import { SidebarBackComponent } from './BackOffice/sidebar-back/sidebar-back.component';
 import { HomeFrontComponent } from './FrontOffice/home-front/home-front.component';
 import { HomeBackComponent } from './BackOffice/home-back/home-back.component';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PrimengModule } from './chat/primeng/primeng.module';
+import { TacticComponent } from './FrontOffice/tactic/tactic.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TacticsBackComponent } from './BackOffice/tactics-back/tactics-back.component';
+import { SignInComponent } from './FrontOffice/sign-in/sign-in.component';
+import { SignUpComponent } from './FrontOffice/sign-up/sign-up.component';
+import { LogoutComponent } from './FrontOffice/logout/logout.component';
+
 import { MatchesComponent } from './FrontOffice/matches/matches.component';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { AddVideoAnalysisComponent } from './FrontOffice/VideoAnalysis/add-video-analysis/add-video-analysis.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+
 import { GetAllVideoAnalysisComponent } from './FrontOffice/VideoAnalysis/get-all-video-analysis/get-all-video-analysis.component';
 import { GetVideoAnalysisByIdComponent } from './FrontOffice/VideoAnalysis/get-video-analysis-by-id/get-video-analysis-by-id.component';
 import { CreatePostComponent } from './FrontOffice/Blog/create-post/create-post.component';
@@ -61,6 +73,10 @@ const FullCalendarPlugins = [ // define plugins array
     SidebarBackComponent,
     HomeFrontComponent,
     HomeBackComponent,
+    TacticsBackComponent,
+    SignInComponent,
+    SignUpComponent,
+    LogoutComponent,
     MatchesComponent,
     AddVideoAnalysisComponent,
     GetAllVideoAnalysisComponent,
@@ -81,12 +97,10 @@ const FullCalendarPlugins = [ // define plugins array
     RegimeDetailComponent,
     PerformanceFormComponent,
     PerformanceDashboardComponent,
-
     SimulationViewerComponent,
     BodyPartLabelComponent,
     ChatboxComponent,
     RecoveryCalendarComponent,
-
   ],
   imports: [
     BrowserModule,
@@ -94,16 +108,19 @@ const FullCalendarPlugins = [ // define plugins array
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    PrimengModule,
+    BrowserAnimationsModule,
     RecaptchaModule,
     RecaptchaFormsModule,
     AccordionModule.forRoot(),
     NgxPaginationModule,
     CommonModule,
     FullCalendarModule
-
-
   ],
-  providers: [DatePipe],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    DatePipe
+  ],
   bootstrap: [AppComponent],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

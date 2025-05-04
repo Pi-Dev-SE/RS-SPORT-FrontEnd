@@ -1,0 +1,178 @@
+<div class="wrapper">
+
+  <div class="container-header">
+    <div class="header-account">
+      <app-avatar [isOnline]="true"
+        [firstname]="currentUser.firstname"
+        width="48px"
+        [uploadAvatar]="true"
+        [avatarUrl]="currentUser.avatarUrl">
+      </app-avatar>
+      <div class="header-username">{{currentUser.firstname}}</div>
+      <!-- new messages -->
+      <span (click)="visible = true" class="material-symbols-rounded" title="Nouveau message">add_circle</span>
+    </div>
+    <div *ngIf="selectedRoom" class="header-title">
+      {{selectedRoom.name}}
+      <span *ngIf="!selectedRoom.isGroup" class="header-title-small">{{((userService.getUserStatus(getMemberNotMe(selectedRoom.members).firstname) | async) === 'ONLINE') ? 'Online' : 'Last active: ' + (getMemberNotMe(selectedRoom.members).lastLogin | timeAgo) }}</span>
+    </div>
+    <div (click)="logout()" class="header-setting">
+
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="conversation-area">
+      <!-- Active users -->
+      <app-active-users-list
+        [currentUser]="currentUser">
+      </app-active-users-list>
+      <!-- conversations -->
+      <app-conversations-list
+        [currentUser]="currentUser"
+        (selectRoomEvent)="selectRoom($event)">
+      </app-conversations-list>
+    </div>
+
+
+    <div class="chat-area" id="chat-area">
+      <ng-container *ngIf="selectedRoom && selectedRoom.messages">
+        <app-message-list
+          [messages]="selectedRoom.messages"
+          [currentUser]="currentUser"
+          [selectedRoom]="selectedRoom"
+          [lastSeen]="currentMemberLastSeen"
+          style="flex-grow: 1;">
+        </app-message-list>
+        <form (submit)="sendMessage()" class="chat-footer">
+          <div class="other-list">
+            <div class="emoji">
+              <span (click)="visibleEmojiPicker = !visibleEmojiPicker" class="material-symbols-rounded" title="Emoji">mood</span>
+              <emoji-mart *ngIf="visibleEmojiPicker"
+                (emojiSelect)="addEmoji($event)"
+                [showPreview]="false"
+                [style]="{ width: '319px', position: 'absolute', bottom: 'calc(100% + 0.5rem)', left: '0', boxShadow: '0 5px 15px rgba(0,0,0,0.1)', borderRadius: '12px' }">
+              </emoji-mart>
+            </div>
+          </div>
+          <input type="text" pInputText [(ngModel)]="message.content" id="message-input" placeholder="Écrivez votre message ici..." name="content" autofocus class="w-full mr-2" />
+          <span (click)="sendMessage()" class="send-button material-symbols-rounded" title="Envoyer">send</span>
+        </form>
+      </ng-container>
+    </div>
+
+
+    <div *ngIf="selectedRoom" class="detail-area">
+      <div class="detail-header">
+        <app-avatar [isOnline]="selectedRoom.isGroup ? false : undefined"
+          [firstname]="selectedRoom.name"
+          width="64px"
+          [avatarUrl]="selectedRoom.isGroup ? undefined : selectedRoom.avatarUrl">
+        </app-avatar>
+        <div class="detail-title">
+          <div class="detail-group-name">{{selectedRoom.name}}</div>
+          <span (click)="editGroupNameVisible = true" class="pi pi-pen-to-square cursor-pointer"></span>
+        </div>
+        <span *ngIf="selectedRoom.isGroup" class="detail-subtitle">Created by {{selectedRoom.createdById}}, {{selectedRoom.createdAt | timeAgo}}</span>
+      </div>
+
+      <div class="theme">
+        <div class="theme-mode">
+          <p>Dark mode</p>
+          <p-inputSwitch [(ngModel)]="themeMode" (onChange)="switchMode(themeMode ? 'dark' : 'light')" />
+        </div>
+        <div class="theme-color">
+          <p>Color</p>
+          <p-dropdown (onChange)="switchColor(themeColor.name)"
+            [options]="themeColors"
+            [(ngModel)]="themeColor">
+            <ng-template pTemplate="selectedItem">
+              <div class="theme-button" [style.backgroundColor]="themeColor.color"></div>
+            </ng-template>
+            <ng-template let-theme pTemplate="item">
+              <div class="theme-button" [style.backgroundColor]="theme.color"></div>
+            </ng-template>
+        </p-dropdown>
+        </div>
+      </div>
+
+      <div class="detail-members">
+        <div class="detail-members-header">
+          <div class="detail-member-title">Members</div>
+          <span *ngIf="currentMember.isAdmin" (click)="addMembersVisible = true" class="detail-member-add">Add members</span>
+        </div>
+        <div *ngIf="selectedRoom.members" class="detail-members-list">
+          <ng-container *ngFor="let member of selectedRoom.members">
+            <div *ngIf="selectedRoom.isGroup || member.firstname !== currentUser.firstname" class="detail-member">
+              <app-avatar [firstname]="member.firstname" width="44px" [avatarUrl]="member.avatarUrl"></app-avatar>
+              <div class="detail-member-detail">
+                <div class="detail-member-username">{{member.firstname}}</div>
+                <span *ngIf="selectedRoom.isGroup && member.isAdmin" class="detail-member-subtitle">Admin</span>
+              </div>
+              <span *ngIf="selectedRoom.isGroup && currentMember.isAdmin" (click)="selectedMember = member; editMemberVisible = true" class="material-symbols-rounded">more_vert</span>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <div *ngIf="selectedRoom?.isGroup" class="leave-group">
+        <p (click)="leaveGroup()">
+          <span class="material-symbols-rounded">logout</span>
+          Leave group
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- New message -->
+<app-select-member-dialog
+  [visible]="visible"
+  [title]="'New message'"
+  [submitButtonText]="'Chat'"
+  (onSubmitEvent)="chat($event)"
+  (onHideEvent)="visible = false">
+</app-select-member-dialog>
+
+
+<!-- Add members -->
+<app-select-member-dialog
+  *ngIf="selectedRoom"
+  [visible]="addMembersVisible"
+  [title]="'Add members'"
+  [submitButtonText]="'Add'"
+  [excludeUsers ]="selectedRoom.members"
+  (onSubmitEvent)="addMembers($event)"
+  (onHideEvent)="visible = false">
+</app-select-member-dialog>
+
+
+<p-dialog *ngIf="selectedMember"
+  [showHeader]="false"
+  [modal]="true"
+  [(visible)]="editMemberVisible"
+  [dismissableMask]="true"
+  [style]="{ width: '30rem', maxWidth: '90%', borderRadius: '12px', overflow: 'hidden' }"
+  (onHide)="selectedMember = undefined"
+  class="edit-member-dialog">
+  <button *ngIf="!selectedMember.isAdmin" (click)="makeAdmin(selectedMember)">Make Admin</button>
+  <button *ngIf="selectedMember.isAdmin" (click)="removeAdmin(selectedMember)">Remove Admin</button>
+  <button *ngIf="currentMember.firstname != selectedMember.firstname" (click)="removeMember(selectedMember)">Remove from group</button>
+  <button (click)="editMemberVisible = false">Cancel</button>
+</p-dialog>
+
+
+<p-dialog header="Edit Group Name"
+  [modal]="true"
+  [(visible)]="editGroupNameVisible"
+  [style]="{ width: '25rem', borderRadius: '12px', overflow: 'hidden' }">
+  <div class="flex align-items-center gap-3 mb-3">
+      <label for="groupName" class="font-semibold w-6rem">Group Name</label>
+      <input pInputText id="groupName" class="flex-auto" [(ngModel)]="newGroupName" autocomplete="off" />
+  </div>
+  <div class="flex justify-content-end gap-2">
+      <p-button label="Cancel" severity="secondary" (onClick)="editGroupNameVisible = false" />
+      <p-button label="Save" (onClick)="updateGroupName()" styleClass="btn-yellow"/>
+  </div>
+</p-dialog>

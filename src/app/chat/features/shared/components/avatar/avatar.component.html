@@ -1,0 +1,12 @@
+<div (click)="upload()"
+  [class.online]="isOnline !== undefined
+    ? isOnline
+    : ((userService.getUserStatus(firstname) | async) === 'ONLINE')">
+  <img [ngStyle]="{
+    width: width,
+    height: height,
+    objectFit: 'cover',
+    borderRadius: '50%'
+  }"
+    [src]="avatarUrl" alt="">
+  </div>

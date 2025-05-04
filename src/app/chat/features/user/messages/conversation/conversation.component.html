@@ -1,0 +1,55 @@
+<div class="conversation"
+  [class.selected]="isSelected"
+  (click)="selectRoom()"
+  [ngStyle]="{
+    'font-weight': (messageRoom.unSeenCount && messageRoom.unSeenCount > 0) ? '900' : 'normal'
+  }">
+  <!-- Avatar -->
+  <app-avatar [firstname]="messageRoom.name" width="44px" [avatarUrl]="messageRoom.avatarUrl"></app-avatar>
+  <!-- Last message -->
+  <div class="conversation-detail">
+    <div class="conversation-username">{{messageRoom.name}}</div>
+    <div class="conversation-content">
+      <!-- <span class="conversation-message">{{messageRoom.lastMessage?.content}}</span> -->
+      <span *ngIf="messageRoom.lastMessage?.messageType === MessageType.TEXT">
+        {{messageRoom.lastMessage?.content}}
+      </span>
+      <ng-container *ngIf="messageRoom.lastMessage?.messageType?.startsWith('NOTIFICATION')" class="chat-message-notification">
+        {{messageRoom.lastMessage?.sender?.firstname}}&nbsp;
+        <!-- NOTIFICATION_CREATE_ROOM -->
+        <ng-container *ngIf="messageRoom.lastMessage?.messageType === MessageType.NOTIFICATION_CREATE_ROOM">
+          <span>create this group.</span>
+        </ng-container>
+        <!-- NOTIFICATION_ADD_MEMBER -->
+        <ng-container *ngIf="messageRoom.lastMessage?.messageType === MessageType.NOTIFICATION_ADD_MEMBER">
+          <span>added {{messageRoom.lastMessage?.content}} to the group.</span>
+        </ng-container>
+        <!-- NOTIFICATION_REMOVE_MEMBER -->
+        <ng-container *ngIf="messageRoom.lastMessage?.messageType === MessageType.NOTIFICATION_REMOVE_MEMBER">
+          <span>removed {{messageRoom.lastMessage?.content}} from the group.</span>
+        </ng-container>
+        <!-- NOTIFICATION_LEAVE_ROOM -->
+        <ng-container *ngIf="messageRoom.lastMessage?.messageType === MessageType.NOTIFICATION_LEAVE_ROOM">
+          <span>left the group.</span>
+        </ng-container>
+        <!-- NOTIFICATION_MAKE_ADMIN -->
+        <ng-container *ngIf="messageRoom.lastMessage?.messageType === MessageType.NOTIFICATION_MAKE_ADMIN">
+          <span>added {{messageRoom.lastMessage?.content}} as a group admin.</span>
+        </ng-container>
+        <!-- NOTIFICATION_REMOVE_ADMIN -->
+        <ng-container *ngIf="messageRoom.lastMessage?.messageType === MessageType.NOTIFICATION_REMOVE_ADMIN">
+          <span>removed {{messageRoom.lastMessage?.content}} as a group admin.</span>
+        </ng-container>
+      </ng-container>
+      <span class="conversation-date">
+        <span>•</span>
+        {{messageRoom.lastMessage?.dateSent | timeAgo}}
+      </span>
+    </div>
+  </div>
+  <!-- Unseen count -->
+  <div class="conversation-unseen"
+    *ngIf="messageRoom.unSeenCount && messageRoom.unSeenCount > 0">
+    {{messageRoom.unSeenCount}}
+  </div>
+</div>

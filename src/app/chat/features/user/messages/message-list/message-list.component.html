@@ -1,0 +1,16 @@
+<div class="message-list">
+  <ng-container *ngFor="let message of messages; let i = index">
+    <div *ngIf="i === unseenMessageIndex" id="unseen-breakpoint" class="text-400 text-center my-3">
+      _________________________ Unseen messages _________________________
+    </div>
+    <app-message [message]="message"
+      [isOwner]="message.sender?.firstname === currentUser.firstname"
+      [isGroup]="selectedRoom.isGroup">
+    </app-message>
+  </ng-container>
+
+  <!-- Scroll to Unseen messages -->
+  <div *ngIf="selectedRoom.unSeenCount && selectedRoom.unSeenCount > 0" class="text-center">
+    <span class="material-symbols-rounded" (click)="scrollToUnseen()">arrow_upward</span>
+  </div>
+</div>
