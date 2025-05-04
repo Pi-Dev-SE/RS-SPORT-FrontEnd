@@ -1,7 +1,7 @@
 export enum TypeStatusRegime {
-    Active = 'active', 
-    Completed = 'completed',
-    Paused = 'paused' 
-    
+    Active = 'ACTIVE',
+    Completed = 'COMPLETED',
+    Paused = 'PAUSED'
+
 
 }

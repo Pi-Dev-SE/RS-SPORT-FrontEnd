@@ -1,0 +1,103 @@
+<div class="dashboard-container">
+    <div class="dashboard-header">
+      <h1>Medical Performance Monitoring</h1>  
+      <div class="date-filter">
+        <label>
+          De:
+          <input type="date" [(ngModel)]="dateDebut">
+        </label>
+        <label>
+          À:
+          <input type="date" [(ngModel)]="dateFin">
+        </label>
+        <button (click)="filtrerParDate()" class="btn-primary">Filtrer</button>
+      </div>
+      <div class="action-buttons">
+        <button class="btn btn-view-list-regime btn-sm ms-2" routerLink="/regime">
+          <i  class="bi bi-arrow-right"></i> View List Regime
+        </button>
+      </div>
+    </div>
+  
+    <div class="dashboard-overview" *ngIf="dernierePerformance">
+      <div class="status-card" [ngClass]="{'high-risk': dernierePerformance.niveauRisque === 'HIGH', 
+                                           'medium-risk': dernierePerformance.niveauRisque === 'MEDIUM',
+                                           'low-risk': dernierePerformance.niveauRisque === 'LOW'}">
+        <h2>État actuel</h2>
+        <div class="status-indicator">
+          <div class="score-circle">
+            <span>{{ dernierePerformance.scoreProgression }}%</span>
+            <small>Score</small>
+            <p> <i *ngIf="dernierePerformance.messageAvertissement" class="bi bi-exclamation-triangle-fill"></i>  {{dernierePerformance.messageAvertissement}}</p>
+          </div>
+          <div class="recovery-circle">
+            <span>{{ dernierePerformance.tauxRecuperationEstime }}%</span>
+            <small>Recovery</small>
+          </div>
+        </div>
+        <div class="status-details">
+          <p><strong>Risk level:</strong> {{ dernierePerformance.niveauRisque }}</p>
+          <p><strong>Able to resume:</strong> {{ dernierePerformance.apteAReprendre ? 'Oui' : 'Non' }}</p>
+          <p><strong>Latest review:</strong> {{ dernierePerformance.dateSuivi | date:'dd/MM/yyyy' }}</p>
+        </div>
+      </div>
+  
+      <div class="recommendations-card">
+        <h2>Recommendations based on last training</h2>
+        <ul>
+          <li *ngFor="let rec of recommendations">{{ rec }}</li>
+        </ul>
+      </div>
+    </div>
+  
+    <div class="dashboard-charts">
+      <div class="chart-container">
+        <h2>Evolution of indicators</h2>
+        <canvas id="performanceCanvas"></canvas>
+      </div>
+      
+      <div class="chart-container">
+        <h2>Overall progress</h2>
+        <canvas id="progressionCanvas"></canvas>
+      </div>
+    </div>
+  
+    <div class="dashboard-details">
+      <h2>Detailed history</h2>
+      <table class="performance-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Pain</th>
+            <th>Endurance</th>
+            <th>Score</th>
+            <th>Recovery</th>
+            <th>Risk</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let perf of historique" [ngClass]="{'high-risk': perf.niveauRisque === 'HIGH', 
+                                                          'medium-risk': perf.niveauRisque === 'MEDIUM',
+                                                          'low-risk': perf.niveauRisque === 'LOW'}">
+            <td>{{ perf.dateSuivi | date:'dd/MM/yyyy' }}</td>
+            <td>{{ perf.douleur }}/10</td>
+            <td>{{ perf.endurance }}/100</td>
+            
+            <td>{{ perf.scoreProgression }}%</td>
+            <td>{{ perf.tauxRecuperationEstime }}%</td>
+            <td>{{ perf.niveauRisque }}</td>
+            <td><button class="btn btn-outline-primary btn-sm" (click)="editPerformance(perf.id)">
+              <i class="bi bi-pencil"></i>
+            </button></td>
+            <td><button class="btn btn-outline-danger btn-sm" (click)="deletePerformance(perf.id) " >
+              <i class="bi bi-trash"></i>
+            </button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  

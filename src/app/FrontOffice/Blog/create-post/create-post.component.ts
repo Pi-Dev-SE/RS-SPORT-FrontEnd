@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PostService } from '../../../service/Post/post.service';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-create-post',
   templateUrl: './create-post.component.html',
@@ -11,9 +12,10 @@ export class CreatePostComponent {
 
   postForm!: FormGroup;
   //tags: string[] = [];
+  selectedFile: File | null = null;
 
 
-  constructor(private fb: FormBuilder, 
+  constructor(private fb: FormBuilder,
               private router: Router,
               private postService: PostService) {}
 
@@ -21,48 +23,69 @@ export class CreatePostComponent {
       this.postForm = this.fb.group({
         clubName: [null, Validators.required],
         content: [null, [Validators.required, Validators.maxLength(5000)]],
-        img:[null,Validators.required],
-        postedBy:[null,Validators.required],
+        img: [null, [Validators.required, Validators.maxLength(5000)]],
+        postedBy: [null,Validators.required],
         //tags: [[]]
 
       })
     }
 
-    /*
-    addTag(event: KeyboardEvent) {
-      if (event.key === 'Enter') {
-        const input = event.target as HTMLInputElement;
-        const value = input.value.trim();
-    
-        if (value) {
-          this.tags.push(value);
-          this.postForm.get('tags')?.setValue(this.tags); 
-          input.value = '';
+
+      onFileSelected(video: any): void{
+        this.selectedFile = video.target.files[0];
+      }
+
+    createPost(): void {
+      if (this.postForm.valid && this.selectedFile) {
+        const formData = new FormData();
+        formData.append('img', this.selectedFile);
+
+        const clubName = this.postForm.get('clubName')?.value;
+        const postedBy = this.postForm.get('postedBy')?.value;
+        const content = this.postForm.get('content')?.value;
+
+
+
+        console.log('Form Values:');
+        console.log('clubName:', clubName);
+        console.log('postedBy:', postedBy);
+        console.log('content:', content);
+
+
+
+        if (clubName && postedBy && content  ) {
+          formData.append('clubName', clubName);
+          formData.append('postedBy', postedBy);
+          formData.append('content', content);
+
+
+
+          console.log('FormData:');
+          console.log(formData);
+
+          this.postService.createNewPost(formData).subscribe(() => {
+            //alert("Event added successfully!");
+            this.postForm.reset();
+            this.selectedFile = null;
+            this.router.navigateByUrl('viewallpost')
+           Swal.fire(
+                   'You informations!',
+                   'saved with success',
+                   'success'
+                 )
+          },
+          error => {
+            alert("An error occurred while adding vedio.");
+            console.error(error);
+          });
+        } else {
+          console.error("One or more form values are null.");
+          return;
         }
-        event.preventDefault();
+      } else {
+        // Error handling for form validation and file selection
       }
     }
-    
-    
-
-    removeTag(index: number) {
-      this.tags.splice(index, 1);
-      this.postForm.patchValue({ tags: this.tags });
-    }
-    */
-
-    createPost(){
-      const data = this.postForm.value;
-      //data.tags = this.tags;
-
-      this.postService.createNewPost(data).subscribe( res => {
-        console.log("Post created successfully !!!", "OK");
-        //this.router.navigateByUrl("/");
-      }, error => {
-        console.log("Error creating post !!!", "OK");
-      })
-    }
-
 
 
 }

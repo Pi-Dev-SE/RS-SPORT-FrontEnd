@@ -8,12 +8,12 @@
 							<div class="header-top-left">
 								<ul>
 									<li><a href="mailto:support@rstheme.com"><i class="fa fa-envelope-o" aria-hidden="true"></i> </a></li>
-									<li><img src="images/logo/flag.jpg" alt="Logo">
+									<li><img src="assets/FrontOffice/images/logo/flag.jpg" alt="Logo">
                                         <a href="#">English
                                             <i class="fa fa-angle-down" aria-hidden="true"></i>
                                         </a>
 										<ul>
-											<li><img src="images/logo/flag2.jpg" alt="Logo"><a href="#">Japanese</a></li>
+											<li><img src="assets/FrontOffice/images/logo/flag2.jpg" alt="Logo"><a href="#">Japanese</a></li>
 										</ul>
 									</li>
 								</ul>
@@ -48,39 +48,31 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-2 col-md-12 col-sm-12 logo">
-                            <a href="index.html"><img src="images/logo.png" alt="logo"></a>
+                            <a href="index.html"><img src="assets/FrontOffice/images/logo.png" alt="logo"></a>
                         </div>
                         <div class="col-lg-10 col-md-12 col-sm-12 mobile-menu">
                             <div class="main-menu">
                                 <a class="rs-menu-toggle"><i class="fa fa-bars"></i>Menu</a>
                                 <nav class="rs-menu">
                                     <ul class="nav-menu">
-                                        <!-- Home -->
-                                        <li class="current-menu-item current_page_item menu-item-has-children">
-                                            <a href="#">Home</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="index.html">Home One</a></li>
-                                                <li><a href="index2.html">Home Two</a></li>
-                                                <li><a href="index3.html">Home Three</a></li>
-                                                <li><a href="index4.html">Home Four</a></li>
-                                                <li><a href="index5.html">Home Five</a></li>
-                                            </ul>
-                                        </li>
-                                        <!-- End Home -->
 
-                                        <!-- Drop Down -->
-                                        <li class="menu-item-has-children">
-                                            <a href="#">Club List</a>
-                                            <ul class="sub-menu">
-                                               <li><a href="badda.html">Badda FC</a></li>
-                                               <li><a href="banani.html">Banani FC</a></li>
-                                               <li><a href="trisali.html">Trishal FC</a></li>
-                                               <li><a href="dhoar.html">Dhoar FC</a></li>
-                                               <li><a href="mirpur.html">Mirpur FC</a></li>
-                                               <li><a href="Joypur.html">Joypur FC</a></li>
-                                            </ul>
-                                        </li>
-                                         <!-- Drop Down -->
+
+
+                                        <!-- Home -->
+                                        <li class="">
+                                          <a href="index.html">Home</a>
+
+                                      </li>
+                                      <!-- End Home -->
+
+                                      <!-- Drop Down -->
+                                      <li class="#">
+                                          <a href="#">Club List</a>
+
+                                      </li>
+                                       <!-- Drop Down -->
+
+                                                                               <!-- Drop Down -->
                                          <!--*ngIf="isAdmin$ | async"-->
                                         <li class="menu-item-has-children" >
                                             <a href="#">Pages</a>
@@ -93,31 +85,55 @@
 
                                         <li><a routerLink="/tacticsboard">Tactics Board</a></li>
 
-                                        <li class="menu-item-has-children"><a href="#">Result</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="result.html">Result</a></li>
-                                                <li><a href="result-single.html">Result Single</a></li>
-                                            </ul>
-                                        </li>
 
-                                        <li><a href="match-fixtures.html">Fixtures & Tickets</a></li>
+                                      <li><a routerLink="/report">Health</a></li>
+                                      <!--End Icons
+
+                                      <li class="menu-item-has-children"><a href="#">Result</a>
+                                          <ul class="sub-menu">
+                                              <li><a href="result.html">Result</a></li>
+                                              <li><a href="result-single.html">Result Single</a></li>
+                                          </ul>
+                                      </li>  -->
+
+
+
+
+                                      <li><a href="#">Session & Exercices</a></li>
+
+
+
+
+
+
+
+
+                                        <!--<li><a href="match-fixtures.html">Fixtures & Tickets</a></li>-->
 
                                         <li class="menu-item-has-children">
                                             <a>Blog</a>
                                             <ul class="sub-menu">
                                                 <li><a routerLink="createPost" >Create New Post</a></li>
-                                                <li><a href="blog-left.html">Vue All Post</a></li>
+                                                <li><a routerLink="viewallpost">Vue All Post</a></li>
                                             </ul>
                                         </li>
                                         <li class="menu-item-has-children">
-                                            <a >Video Analysis</a>
+                                            <a >Video</a>
                                             <ul class="sub-menu">
-                                                <li><a routerLink="addVideoAnalysis">Create Video Analysis</a></li>
-                                                <li><a routerLink="getAllVideoAnalysis">Get All Video Analysis</a></li>
+                                                <li class="menu-item-has-children"><a href="#">Video Analysis</a>
+                                                  <ul class="sub-menu">
+                                                    <li><a routerLink="addVideoAnalysis">Create Video Analysis</a></li>
+                                                    <li><a routerLink="getAllVideoAnalysis">Get All Video Analysis</a></li>
+                                                  </ul>
+                                                <li class="menu-item-has-children"><a href="#">Video stats</a>
+                                                  <ul class="sub-menu">
+                                                      <li><a routerLink="addvideostatistics">Create Video stats</a></li>
+                                                      <li><a routerLink="getAllVideoStatistics">Get All Video stats</a></li>
+                                                  </ul>
                                             </ul>
                                         </li>
-
                                         <li><a routerLink="chat">Chat</a></li>
+                                        <li><a href="contact.html">Contact</a></li>
                                     </ul>
                                </nav>
                               <!--Header Search Start  here-->

@@ -1,0 +1,62 @@
+
+<div class="rs-breadcrumbs sec-color">
+  <img src="assets/FrontOffice/images/breadcrumbs/shop.jpg" alt="Breadcrubs" />
+  <div class="breadcrumbs-inner">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <h1 class="page-title">UPDATE POST</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="contact-page-section sec-spacer">
+  <div class="container">
+    <div class="contact-comment-section">
+      <h3>Update Your Post</h3>
+      <form [formGroup]="postForm">
+        <fieldset>
+          <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label>Club Name</label>
+                <input formControlName="clubName" class="form-control" type="text">
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label>Posted By</label>
+                <input formControlName="postedBy" class="form-control" type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label>Change Image (Optional)</label>
+                <input type="file" class="form-control" (change)="onFileSelected($event)">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="form-group">
+                <label>Content</label>
+                <textarea cols="40" rows="10" formControlName="content" class="textarea form-control"></textarea>
+              </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="form-group mb-0">
+                <input class="btn-send" value="Update Post" (click)="updatePost()">
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+</div>

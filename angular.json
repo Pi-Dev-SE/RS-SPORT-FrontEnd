@@ -37,7 +37,13 @@
             "allowedCommonJsDependencies": [
               "sockjs-client",
               "html2canvas",
-              "file-saver"
+              "file-saver",
+              "core-js",
+              "canvg",
+              "raf",
+              "rgbcolor",
+              "sweetalert2",
+              "qrcode"
             ]
           },
           "configurations": {

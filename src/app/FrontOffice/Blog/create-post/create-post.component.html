@@ -1,3 +1,23 @@
+<div class="rs-breadcrumbs sec-color">
+  <img src="assets/FrontOffice/images/breadcrumbs/shop.jpg" alt="Breadcrubs" />
+  <div class="breadcrumbs-inner">
+      <div class="container">
+          <div class="row">
+              <div class="col-md-12 text-center">
+                  <h1 class="page-title">CREATE POST</h1>
+                  <ul>
+                      <li>
+                          <a class="active" routerLink="../getAllVideoAnalysis">ALL VIDEO ANALYSIS</a>
+                      </li>
+
+                  </ul>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- Breadcrumbs Section End -->
+
 <div class="contact-page-section sec-spacer">
     <div class="container">
         <div class="contact-comment-section">
@@ -19,12 +39,11 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="form-group">
                                 <label>Image</label>
-                                <input formControlName="img" class="form-control">
+                                <input formControlName="img" class="form-control" type="file" (change)="onFileSelected($event)">
                             </div>
                         </div>
                         <!--
@@ -53,7 +72,7 @@
                         </div>
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="form-group mb-0">
-                                <input class="btn-send" value="Submit Now" [disabled]="!postForm.valid" (click)="createPost()">
+                                <input class="btn-send" value="Submit Now"  (click)="createPost()">
                             </div>
                         </div>
                     </div>

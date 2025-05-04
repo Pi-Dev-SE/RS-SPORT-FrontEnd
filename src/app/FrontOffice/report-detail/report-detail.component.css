@@ -1,0 +1,132 @@
+/* Centrage et espacement de la page */
+.health-report-container {
+    max-width: 800px; /* Limite la largeur pour un affichage propre */
+    margin: 80px auto 50px; /* Espace sous le header et avant le footer */
+    padding: 20px;
+    background-color: #fff; /* Fond blanc pour contraste */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Titre principal */
+.health-report-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #f7b839;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f7b839;
+    padding-bottom: 10px;
+}
+
+/* Sections du rapport */
+.health-report-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+/* Icônes et titres */
+.health-report-section h5 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.health-report-section h5 i {
+    margin-right: 8px;
+    color: #007bff;
+}
+
+/* Texte des valeurs */
+.health-report-section p {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+    font-weight: 500;
+}
+
+/* Badges de statut */
+.health-status-badge {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-transform: uppercase;
+}
+
+/* Couleurs dynamiques des statuts */
+
+.badge-injured {
+    background-color: #dc3545;
+    color: white;
+}
+
+.badge-recovering {
+    background-color: #ffc107;
+    color: black;
+}
+
+.badge-healthy {
+    background-color: #28a745;
+    color: white;
+}
+
+
+/* Bouton retour */
+.back-button {
+    display: inline-block;
+    padding: 8px 15px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background-color: #f7b839;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.back-button:hover {
+    background-color: #f7b839;
+}
+
+.pdf-button:hover {
+    background-color: #f7b839;
+}
+.mr-2 {
+    margin-right: 0.5rem;
+  }
+  
+  .ml-2 {
+    margin-left: 0.5rem;
+  }
+
+  .pdf-button {
+    display: inline-block;
+    padding: 8px 15px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background-color: #f7b839;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease-in-out;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+  }

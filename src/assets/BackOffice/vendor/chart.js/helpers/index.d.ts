@@ -1,4 +1,4 @@
-// export * from './helpers.color.js';
+export * from './helpers.color.js';
 export * from './helpers.core.js';
 export * from './helpers.canvas.js';
 export * from './helpers.collection.js';
