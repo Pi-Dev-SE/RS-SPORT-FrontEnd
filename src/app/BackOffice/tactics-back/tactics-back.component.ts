@@ -2,6 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angula
 import { TacticsBoardService, TacticsEngagementData, TacticsMonthlyActivity, TacticsPlayerCount } from '../../FrontOffice/tactic/tactics-board.service';
 import { TacticsBoard } from '../../core/models/TacticsBoard';
 import { Chart, ChartConfiguration, ChartData, ChartType } from 'chart.js/auto';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-tactics-back',
@@ -219,7 +220,7 @@ export class TacticsBackComponent implements OnInit {
       },
       error: (err) => {
         console.error('Erreur lors du chargement des données d\'engagement:', err);
-        this.showAlert('Erreur lors du chargement des données d\'engagement', 'warning');
+        this.showAlert('Error loading engagement data', 'warning');
       }
     });
 
@@ -233,7 +234,7 @@ export class TacticsBackComponent implements OnInit {
       },
       error: (err) => {
         console.error('Erreur lors du chargement des données d\'activité mensuelle:', err);
-        this.showAlert('Erreur lors du chargement des données d\'activité mensuelle', 'warning');
+        this.showAlert('Error loading monthly activity data', 'warning');
         this.monthlyActivityData = [];
       }
     });
@@ -245,9 +246,172 @@ export class TacticsBackComponent implements OnInit {
       },
       error: (err) => {
         console.error('Erreur lors du chargement du nombre de joueurs par tableau:', err);
-        this.showAlert('Erreur lors du chargement du nombre de joueurs par tableau', 'warning');
+        this.showAlert('Error loading number of players per table', 'warning');
       }
     });
+  }
+
+  // Méthodes d'exportation CSV
+  exportEngagementData(): void {
+    if (!this.engagementData) {
+      this.showAlert('No data available for export', 'warning');
+      return;
+    }
+
+    // Création des données CSV avec structure claire en colonnes au format dataset professionnel
+    const headers = ['Rk', 'Board type', 'Number'];
+    const rows = [
+      [1, 'Modified boards', this.engagementData.modifiedBoards],
+      [2, 'Unchanged boards', this.engagementData.unchangedBoards]
+    ];
+
+    // Génération du fichier CSV au format professionnel
+    const csvContent = this.generateCSV( headers, rows);
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+
+    // Téléchargement du fichier
+    saveAs(blob, `engagement-tactics-boards-${this.formatDate(new Date())}.csv`);
+    this.showAlert('Successful export', 'success');
+  }
+
+  exportMonthlyActivityData(): void {
+    if (this.monthlyActivityData.length === 0) {
+      this.showAlert('No data available for export', 'warning');
+      return;
+    }
+
+    // Création des données CSV avec structure claire en colonnes au format dataset professionnel
+    const headers = ['Rk', 'Months', 'Number of editions'];
+
+    // Préparation des données avec formatage pour un meilleur alignement
+    const rows = this.monthlyActivityData.map((item: TacticsMonthlyActivity, index: number) => {
+      return [index + 1, item.month, item.count];
+    });
+
+    // Génération du fichier CSV au format professionnel
+    const csvContent = this.generateCSV( headers, rows);
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+
+    // Téléchargement du fichier
+    saveAs(blob, `monthly-activity-tactics-boards-${this.formatDate(new Date())}.csv`);
+    this.showAlert('Export success', 'success');
+  }
+
+  exportPlayerCountData(): void {
+    if (this.playerCountData.length === 0) {
+      this.showAlert('No export data available', 'warning');
+      return;
+    }
+
+    // Création des données CSV avec structure claire en colonnes au format dataset professionnel
+    const headers = ['Rk', 'Board name', 'Number of players'];
+
+    // Préparation des données avec formatage pour un meilleur alignement
+    const rows = this.playerCountData.map((item: TacticsPlayerCount, index: number) => {
+      return [index + 1, item.boardName || 'No name', item.playerCount || 0];
+    });
+
+    // Génération du fichier CSV au format professionnel
+    const csvContent = this.generateCSV( headers, rows);
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+
+    // Téléchargement du fichier
+    saveAs(blob, `players-per-tactics-board-${this.formatDate(new Date())}.csv`);
+    this.showAlert('Successful export', 'success');
+  }
+
+  // Méthode pour exporter toutes les statistiques en un seul fichier au format dataset professionnel
+  exportAllStatistics(): void {
+    // 1) Vérifier la disponibilité des données
+    if (!this.engagementData && this.monthlyActivityData.length === 0 && this.playerCountData.length === 0) {
+      this.showAlert('No export data available', 'warning');
+      return;
+    }
+
+    // 2) Préparer l'en-tête et les lignes combinées
+    const headers = [
+      'Rk',
+      'Board name',
+      'Number of players',
+      'Number of editions',
+      'Modified boards',
+      'Unchanged boards'
+    ];
+    const rows: any[] = [];
+
+    // Remplir les lignes pour chaque board
+    this.playerCountData.forEach((p, i) => {
+      const engagement = this.engagementData || { modifiedBoards: 0, unchangedBoards: 0 };
+      const activity = this.monthlyActivityData.find(a => a.month === p.boardName) || { count: 0 };
+      rows.push([
+        i + 1,
+        p.boardName || 'Sans nom',
+        p.playerCount || 0,
+        activity.count || 0,
+        engagement.modifiedBoards || 0,
+        engagement.unchangedBoards || 0
+      ]);
+    });
+
+    // 3) Générer le CSV grâce à la méthode generateCSV (avec BOM et point-virgule)
+    const csvContent = this.generateCSV(headers, rows);
+
+    // 4) Télécharger
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+    saveAs(blob, `statistics-tactics-boards-${this.formatDate(new Date())}.csv`);
+    this.showAlert('Successful export of all statistics', 'success');
+  }
+
+
+  // Méthode utilitaire pour échapper les valeurs CSV avec support pour le format tabulaire
+  private escapeCSVValues(values: any[]): string[] {
+    return values.map((value: any) => {
+      const stringValue = String(value);
+      // Échapper les caractères spéciaux pour le format tabulaire
+      if (stringValue.includes('\t') || stringValue.includes('\n') || stringValue.includes('"')) {
+        return `"${stringValue.replace(/"/g, '""')}"`; // Échapper les guillemets doubles
+      }
+      // Aligner les valeurs numériques à droite pour un meilleur rendu visuel
+      if (!isNaN(Number(stringValue)) && stringValue !== '') {
+        // Ajouter des espaces pour aligner les nombres
+        return stringValue.padStart(Math.max(4, stringValue.length), ' ');
+      }
+      return stringValue;
+    });
+  }
+
+  // Méthode utilitaire pour générer un fichier CSV bien formaté au format dataset professionnel
+  private generateCSV(headers: string[], rows: any[]): string {
+    const BOM = '\uFEFF';
+    const exportDate = this.formatDate(new Date());
+    const title = `Tactics Board Statistics (${exportDate})`;
+
+    // 1. BOM + titre + date en lignes commentées (optionnel)
+    let csv = BOM + `# ${title}\r\n`;
+
+    // 2. Ligne d’en-tête
+    csv += headers.join(';') + '\r\n';
+
+    // 3. Lignes de données
+    rows.forEach(row => {
+      const escaped = row.map((Value: any) => {
+        const str = String(Value).replace(/"/g, '""');
+        return (/[;\r\n"]/.test(str)) ? `"${str}"` : str;
+      });
+      csv += escaped.join(';') + '\r\n';
+    });
+
+    return csv;
+  }
+
+
+
+  // Formater la date pour les noms de fichiers
+  private formatDate(date: Date): string {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
   }
 
 
@@ -269,7 +433,7 @@ export class TacticsBackComponent implements OnInit {
     // Vérifier si les données sont disponibles avant d'initialiser les graphiques
     if (!this.engagementData && !this.monthlyActivityData.length && !this.playerCountData.length) {
       console.warn('Aucune donnée statistique disponible pour initialiser les graphiques');
-      this.showAlert('Aucune donnée statistique disponible pour le moment', 'info');
+      this.showAlert('No statistical data available at present', 'info');
     }
 
     // Initialiser les graphiques même si certaines données sont manquantes
@@ -294,7 +458,7 @@ export class TacticsBackComponent implements OnInit {
       ctx.font = '14px Arial';
       ctx.textAlign = 'center';
       ctx.fillStyle = '#6c757d';
-      ctx.fillText('Aucune donnée d\'engagement disponible', ctx.canvas.width / 2, ctx.canvas.height / 2);
+      ctx.fillText('No engagement data available', ctx.canvas.width / 2, ctx.canvas.height / 2);
       return;
     }
 
@@ -306,7 +470,7 @@ export class TacticsBackComponent implements OnInit {
     this.engagementChart = new Chart(ctx, {
       type: 'pie',
       data: {
-        labels: ['Tableaux modifiés', 'Tableaux inchangés'],
+        labels: ['Modified boards', 'Unchanged boards'],
         datasets: [{
           data: [modifiedBoards, unchangedBoards],
           backgroundColor: ['#4e73df', '#1cc88a'],
@@ -328,7 +492,7 @@ export class TacticsBackComponent implements OnInit {
           },
           title: {
             display: true,
-            text: 'Taux d\'engagement des tableaux tactiques',
+            text: 'Commitment rate of tactics boards',
             font: {
               size: 16
             }
@@ -353,7 +517,7 @@ export class TacticsBackComponent implements OnInit {
       ctx.font = '14px Arial';
       ctx.textAlign = 'center';
       ctx.fillStyle = '#6c757d';
-      ctx.fillText('Aucune donnée d\'activité mensuelle disponible', ctx.canvas.width / 2, ctx.canvas.height / 2);
+      ctx.fillText('No monthly activity data available', ctx.canvas.width / 2, ctx.canvas.height / 2);
       return;
     }
 
@@ -361,10 +525,10 @@ export class TacticsBackComponent implements OnInit {
     this.activityChart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: this.monthlyActivityData.map(item => item.month),
+        labels: this.monthlyActivityData.map((item: TacticsMonthlyActivity) => item.month),
         datasets: [{
-          label: 'Nombre d\'éditions',
-          data: this.monthlyActivityData.map(item => item.count),
+          label: 'Number of editions',
+          data: this.monthlyActivityData.map((item: TacticsMonthlyActivity) => item.count),
           backgroundColor: 'rgba(78, 115, 223, 0.05)',
           borderColor: 'rgba(78, 115, 223, 1)',
           pointRadius: 3,
@@ -395,7 +559,7 @@ export class TacticsBackComponent implements OnInit {
           },
           title: {
             display: true,
-            text: 'Fréquence d\'édition des tableaux tactiques par mois',
+            text: 'Frequency of tactical charts per month',
             font: {
               size: 16
             }
@@ -420,7 +584,7 @@ export class TacticsBackComponent implements OnInit {
       ctx.font = '14px Arial';
       ctx.textAlign = 'center';
       ctx.fillStyle = '#6c757d';
-      ctx.fillText('Aucune donnée de joueurs par tableau disponible', ctx.canvas.width / 2, ctx.canvas.height / 2);
+      ctx.fillText('No player data available for each board', ctx.canvas.width / 2, ctx.canvas.height / 2);
       return;
     }
 
@@ -436,10 +600,10 @@ export class TacticsBackComponent implements OnInit {
     this.playerCountChart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: displayData.map(item => item.boardName || 'Sans nom'),
+        labels: displayData.map((item: TacticsPlayerCount) => item.boardName || 'No name'),
         datasets: [{
-          label: 'Nombre de joueurs',
-          data: displayData.map(item => item.playerCount || 0),
+          label: 'Number of players',
+          data: displayData.map((item: TacticsPlayerCount) => item.playerCount || 0),
           backgroundColor: [
             'rgba(78, 115, 223, 0.8)',
             'rgba(28, 200, 138, 0.8)',
@@ -473,7 +637,7 @@ export class TacticsBackComponent implements OnInit {
           },
           title: {
             display: true,
-            text: 'Nombre de joueurs par tableau tactique',
+            text: 'Number of players per tactics board',
             font: {
               size: 16
             }

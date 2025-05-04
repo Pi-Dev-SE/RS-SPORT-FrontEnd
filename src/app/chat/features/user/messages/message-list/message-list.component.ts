@@ -62,6 +62,17 @@ export class MessageListComponent {
     this.messageContentSubscription = this.messageContentService.subscribeMessageContent().subscribe({
       next: (messageContent: MessageContent) => {
         if(messageContent.messageRoomId === this.selectedRoom.id) {
+          // S'assurer que l'expéditeur du message a un prénom valide
+          if (messageContent.sender) {
+            if (!messageContent.sender.firstname && messageContent.sender.email) {
+              messageContent.sender.firstname = messageContent.sender.email.split('@')[0];
+            } else if (!messageContent.sender.firstname) {
+              messageContent.sender.firstname = 'Utilisateur';
+            }
+          } else {
+            messageContent.sender = { firstname: 'Utilisateur' };
+          }
+          
           this.messages.push(messageContent);
           // Scroll to the bottom of the chat
           setTimeout(() => {

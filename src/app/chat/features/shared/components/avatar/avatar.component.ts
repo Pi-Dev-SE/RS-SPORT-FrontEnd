@@ -29,6 +29,22 @@ export class AvatarComponent {
     if(!this.avatarUrl) {
       this.avatarUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNL_ZnOTpXSvhf1UaK7beHey2BX42U6solRA&s';
     }
+
+    // S'assurer que firstname n'est pas undefined ou vide
+    if (!this.firstname || this.firstname.trim() === '') {
+      // Récupérer l'utilisateur actuel du localStorage pour essayer d'obtenir un prénom
+      const userData = localStorage.getItem('user_data') ?? localStorage.getItem('user') ?? '{}';
+      const parsedUser = JSON.parse(userData);
+
+      if (parsedUser.firstname) {
+        this.firstname = parsedUser.firstname;
+      } else if (parsedUser.email) {
+        this.firstname = parsedUser.email.split('@')[0];
+      } else {
+        console.warn('Avatar: firstname est vide ou undefined');
+        this.firstname = 'User';
+      }
+    }
   }
 
 

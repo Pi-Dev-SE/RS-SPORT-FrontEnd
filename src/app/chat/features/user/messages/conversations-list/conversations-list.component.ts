@@ -77,6 +77,17 @@ export class ConversationsListComponent {
       messageContent.dateSent = new Date().toISOString();
     }
 
+    // S'assurer que l'expéditeur du message a un prénom valide
+    if (messageContent.sender) {
+      if (!messageContent.sender.firstname && messageContent.sender.email) {
+        messageContent.sender.firstname = messageContent.sender.email.split('@')[0];
+      } else if (!messageContent.sender.firstname) {
+        messageContent.sender.firstname = 'Utilisateur';
+      }
+    } else {
+      messageContent.sender = { firstname: 'Utilisateur' };
+    }
+
     const index = this.messageRooms.findIndex((room: MessageRoom) => room.id === messageContent.messageRoomId);
     if(index !== -1) {
       let room = this.messageRooms[index];

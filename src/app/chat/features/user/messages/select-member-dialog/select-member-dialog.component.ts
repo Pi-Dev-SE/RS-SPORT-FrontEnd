@@ -41,7 +41,15 @@ export class SelectMemberDialogComponent {
       next: (users) => {
         console.log(users);
 
-        this.searchedUsers = users;
+        // Vérifier et corriger les utilisateurs sans prénom
+        this.searchedUsers = users.map(user => {
+          if (!user.firstname && user.email) {
+            return { ...user, firstname: user.email.split('@')[0] };
+          } else if (!user.firstname) {
+            return { ...user, firstname: 'Utilisateur' };
+          }
+          return user;
+        });
       },
       error: (error) => {
         console.error(error);
@@ -62,7 +70,15 @@ export class SelectMemberDialogComponent {
     this.userService.searchUsers(firstname, exclusions).subscribe({
       next: users => {
         console.log('search results:', users);
-        this.searchedUsers = users;
+        // Vérifier et corriger les utilisateurs sans prénom
+        this.searchedUsers = users.map(user => {
+          if (!user.firstname && user.email) {
+            return { ...user, firstname: user.email.split('@')[0] };
+          } else if (!user.firstname) {
+            return { ...user, firstname: 'Utilisateur' };
+          }
+          return user;
+        });
       },
       error: err => console.error(err)
     });

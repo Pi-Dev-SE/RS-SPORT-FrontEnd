@@ -19,6 +19,17 @@ export class ConversationComponent {
   otherAvatarUrl!: string;
   MessageType = MessageType;
 
+  ngOnInit() {
+    // S'assurer que le nom de la conversation est défini
+    if (!this.messageRoom.name || this.messageRoom.name.trim() === '') {
+      console.warn('Conversation: nom de la conversation manquant');
+      if (this.messageRoom.isGroup) {
+        this.messageRoom.name = 'Groupe';
+      } else {
+        this.messageRoom.name = 'Discussion';
+      }
+    }
+  }
 
   selectRoom() {
     this.selectRoomEvent.emit(this.messageRoom);

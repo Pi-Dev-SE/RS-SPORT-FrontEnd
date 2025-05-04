@@ -1,5 +1,5 @@
 
-		<!--Header area start here-->
+<!--Header area start here-->
 		<header>
 			<div class="header-top-area">
 				<div class="container">
@@ -28,8 +28,15 @@
 										<li><a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
 										<li><a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
 										<li><a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> <sup>1</sup></a></li>
-										<li class="log"><a routerLink="login"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</a></li>
-										<li class="sign"><a href="#"><span>/</span> Sign Up</a></li>
+										<!-- Afficher ces liens uniquement si l'utilisateur n'est pas connecté -->
+										<ng-container *ngIf="!(isAuthenticated$ | async)">
+											<li class="log"><a routerLink="signin"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</a></li>
+											<li class="sign"><a routerLink="signup"><span>/</span> Sign Up</a></li>
+										</ng-container>
+										<!-- Afficher ce lien uniquement si l'utilisateur est connecté -->
+										<ng-container *ngIf="isAuthenticated$ | async">
+											<li class="log"><a routerLink="logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
+										</ng-container>
 									</ul>
 								</nav>
 							</div>
@@ -74,36 +81,13 @@
                                             </ul>
                                         </li>
                                          <!-- Drop Down -->
-
-                                        <li class="menu-item-has-children">
+                                         <!--*ngIf="isAdmin$ | async"-->
+                                        <li class="menu-item-has-children" >
                                             <a href="#">Pages</a>
                                             <ul class="sub-menu">
-                                                <li><a href="about.html">About</a></li>
-                                                <li><a href="world-cup.html">World Cup</a></li>
-                                                <li class="menu-item-has-children"><a href="#">Team</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="team.html">Team</a></li>
-                                                        <li><a href="team-single.html">Team Single</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="menu-item-has-children"><a href="#">Gallery</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="gallery.html">Gallery</a></li>
-                                                        <li><a href="gallery2.html">Gallery Two</a></li>
-                                                        <li><a href="gallery3.html">Gallery Three</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="menu-item-has-children">
-                                                  <a href="#">Shop</a>
-                                                  <ul class="sub-menu">
-                                                     <li><a href="shop.html">Shop</a></li>
-                                                     <li><a href="shop-single.html">Shop Single</a></li>
-                                                  </ul>
-                                                </li>
-                                                <li><a href="cart.html">Cart</a></li>
-                                                <li><a href="checkout.html">Checkout</a></li>
-                                                <li><a href="error-404.html">Error 404</a></li>
-                                            </ul>
+                                                <li><a routerLink="admin">Dashboard</a></li>
+
+                                              </ul>
                                         </li>
                                         <!--End Icons -->
 

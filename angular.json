@@ -36,7 +36,8 @@
             "scripts": [],
             "allowedCommonJsDependencies": [
               "sockjs-client",
-              "html2canvas"
+              "html2canvas",
+              "file-saver"
             ]
           },
           "configurations": {

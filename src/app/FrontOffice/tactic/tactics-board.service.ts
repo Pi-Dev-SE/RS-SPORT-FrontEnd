@@ -149,11 +149,9 @@ export class TacticsBoardService {
         return data.sort((a, b) => {
           // Utiliser les noms de mois complets en français
           const months = [
-            'January', 'February', 'March', 'April', 'May', 'June', 
+            'January', 'February', 'March', 'April', 'May', 'June',
             'July', 'August', 'September', 'October', 'November', 'December',
-            // Ajouter aussi les noms en français pour plus de robustesse
-            'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 
-            'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+
           ];
           return months.indexOf(a.month) - months.indexOf(b.month);
         });

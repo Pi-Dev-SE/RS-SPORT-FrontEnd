@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './core/auth.interceptor';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,9 +18,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PrimengModule } from './chat/primeng/primeng.module';
 import { TacticComponent } from './FrontOffice/tactic/tactic.component';
-import { LoginComponent } from './chat/auth/components/login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TacticsBackComponent } from './BackOffice/tactics-back/tactics-back.component';
+import { SignInComponent } from './FrontOffice/sign-in/sign-in.component';
+import { SignUpComponent } from './FrontOffice/sign-up/sign-up.component';
+import { LogoutComponent } from './FrontOffice/logout/logout.component';
 
 
 
@@ -34,8 +38,10 @@ import { TacticsBackComponent } from './BackOffice/tactics-back/tactics-back.com
     SidebarBackComponent,
     HomeFrontComponent,
     HomeBackComponent,
-    LoginComponent,
-    TacticsBackComponent
+    TacticsBackComponent,
+    SignInComponent,
+    SignUpComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +52,9 @@ import { TacticsBackComponent } from './BackOffice/tactics-back/tactics-back.com
     PrimengModule,
     BrowserAnimationsModule,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

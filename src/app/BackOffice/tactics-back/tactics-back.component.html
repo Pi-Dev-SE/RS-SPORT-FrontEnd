@@ -10,7 +10,7 @@
     <div class="d-flex justify-content-end">
       <button class="btn btn-info" (click)="toggleStats()">
         <i class="bi" [ngClass]="showStats ? 'bi-eye-slash' : 'bi-eye'"></i>
-        {{ showStats ? 'Masquer les statistiques' : 'Afficher les statistiques' }}
+        {{ showStats ? 'Hide statistics' : 'View statistics' }}
       </button>
     </div>
   </div><!-- End Page Title -->
@@ -27,15 +27,24 @@
       <div class="col-lg-12">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Statistiques des tableaux tactiques</h5>
-            <p>Visualisation des données statistiques concernant l'utilisation des tableaux tactiques.</p>
+            <h5 class="card-title">Tactics boards statistics</h5>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <p>Visualization of statistical data on the use of tactics boards.</p>
+
+            </div>
 
             <div class="row">
               <!-- Graphique d'engagement -->
               <div class="col-lg-4">
                 <div class="card shadow mb-4">
                   <div class="card-body">
-                    <div class="chart-container" style="position: relative; height:300px;">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <h6 class="card-subtitle text-muted">Engagement rate</h6>
+                      <button class="btn btn-sm btn-outline-secondary" (click)="exportEngagementData()">
+                        <i class="bi bi-download"></i> Export CSV file
+                      </button>
+                    </div>
+                    <div class="chart-container" style="position: relative; height:400px;">
                       <canvas #engagementChart></canvas>
                     </div>
                   </div>
@@ -46,7 +55,13 @@
               <div class="col-lg-4">
                 <div class="card shadow mb-4">
                   <div class="card-body">
-                    <div class="chart-container" style="position: relative; height:300px;">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <h6 class="card-subtitle text-muted">Monthly activity</h6>
+                      <button class="btn btn-sm btn-outline-secondary" (click)="exportMonthlyActivityData()">
+                        <i class="bi bi-download"></i> Export CSV file
+                      </button>
+                    </div>
+                    <div class="chart-container" style="position: relative; height:400px;">
                       <canvas #activityChart></canvas>
                     </div>
                   </div>
@@ -57,7 +72,13 @@
               <div class="col-lg-4">
                 <div class="card shadow mb-4">
                   <div class="card-body">
-                    <div class="chart-container" style="position: relative; height:300px;">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <h6 class="card-subtitle text-muted">Players per board</h6>
+                      <button class="btn btn-sm btn-outline-secondary" (click)="exportPlayerCountData()">
+                        <i class="bi bi-download"></i> Export CSV file
+                      </button>
+                    </div>
+                    <div class="chart-container" style="position: relative; height:400px;">
                       <canvas #playerCountChart></canvas>
                     </div>
                   </div>

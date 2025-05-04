@@ -51,10 +51,24 @@ export class MessagesComponent {
 
   async ngOnInit() {
     this.currentUser = this.userService.getFromLocalStorage();
+
+    // Vérifier si l'utilisateur existe et a un prénom
     if(!this.currentUser || !this.currentUser.firstname) {
-      this.router.navigate(['/login']);
-      return;
+      // Si l'utilisateur n'a pas de prénom mais a un email, utiliser la partie locale de l'email comme prénom
+      if(this.currentUser && this.currentUser.email) {
+        this.currentUser.firstname = this.currentUser.email.split('@')[0];
+      } else if(this.currentUser) {
+        // Si aucun email n'est disponible, utiliser un nom par défaut
+        this.currentUser.firstname = 'Utilisateur';
+        console.warn('Aucun prénom ou email trouvé, utilisation d\'un nom par défaut');
+      } else {
+        // Si aucune information utilisateur n'est disponible, rediriger vers la page de connexion
+        this.router.navigate(['/signin']);
+        return;
+      }
     }
+
+    console.log('Utilisateur actuel:', this.currentUser);
 
     window.addEventListener('beforeunload', () => {
       this.userService.disconnect(this.currentUser);
@@ -80,7 +94,7 @@ export class MessagesComponent {
     this.userService.disconnect(this.currentUser);
     this.messageContentService.disconnect();
     this.userService.removeLocalStorage();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 
 
@@ -92,6 +106,16 @@ export class MessagesComponent {
 
   findOrCreateChatRoom(members: User[]) {
     if(!this.currentUser.firstname) return;
+    
+    // S'assurer que tous les membres ont un prénom valide
+    members.forEach(member => {
+      if (!member.firstname && member.email) {
+        member.firstname = member.email.split('@')[0];
+      } else if (!member.firstname) {
+        member.firstname = 'Utilisateur';
+      }
+    });
+    
     const firstnames = members.map((user: User) => user.firstname)
                                         .filter((firstname): firstname is string => firstname !== undefined)
                                         .filter((firstname: string) => firstname !== this.currentUser.firstname);
@@ -162,6 +186,15 @@ export class MessagesComponent {
     if(!this.selectedRoom) return;
     this.messageRoomMemberService.getRoomMembers(this.selectedRoom.id).subscribe({
       next: (members: any) => {
+        // S'assurer que tous les membres ont un prénom valide
+        members.forEach((member: any) => {
+          if (!member.firstname && member.email) {
+            member.firstname = member.email.split('@')[0];
+          } else if (!member.firstname) {
+            member.firstname = 'Utilisateur';
+          }
+        });
+        
         this.selectedRoom.members = members;
         let firstnames = members.map((member: any) => member.firstname);
         if (!this.selectedRoom.isGroup) {
@@ -182,6 +215,19 @@ export class MessagesComponent {
     if(!this.selectedRoom) return;
     this.messageContentService.getMessagesByRoomId(this.selectedRoom.id).subscribe({
       next: (messages: any) => {
+        // S'assurer que tous les expéditeurs de messages ont un prénom valide
+        messages.forEach((message: any) => {
+          if (message.sender) {
+            if (!message.sender.firstname && message.sender.email) {
+              message.sender.firstname = message.sender.email.split('@')[0];
+            } else if (!message.sender.firstname) {
+              message.sender.firstname = 'Utilisateur';
+            }
+          } else {
+            message.sender = { firstname: 'Utilisateur' };
+          }
+        });
+        
         this.selectedRoom.messages = messages;
         document.getElementById('message-input')?.focus();
       },
@@ -207,6 +253,16 @@ export class MessagesComponent {
 
   getMemberNotMe(members?: MessageRoomMember[]): MessageRoomMember {
     if(!members) return {} as MessageRoomMember;
+    
+    // Vérifier et corriger les membres sans prénom
+    members.forEach(member => {
+      if (!member.firstname && member.email) {
+        member.firstname = member.email.split('@')[0];
+      } else if (!member.firstname) {
+        member.firstname = 'Utilisateur';
+      }
+    });
+    
     return members.find((member: MessageRoomMember) => member.firstname !== this.currentUser.firstname) || {} as MessageRoomMember;
   }
 

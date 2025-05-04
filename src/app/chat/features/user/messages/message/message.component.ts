@@ -13,4 +13,19 @@ export class MessageComponent {
   @Input() isGroup?: boolean;
 
   MessageType = MessageType;
+
+  ngOnInit() {
+    // S'assurer que le prénom de l'expéditeur est défini
+    if (!this.message.sender || !this.message.sender.firstname) {
+      console.warn('Message: prénom de l\'expéditeur manquant');
+      if (!this.message.sender) {
+        this.message.sender = { firstname: 'Utilisateur' };
+      } else if (this.message.sender.email) {
+        // Utiliser l'email comme alternative pour le prénom
+        this.message.sender.firstname = this.message.sender.email.split('@')[0];
+      } else {
+        this.message.sender.firstname = 'Utilisateur';
+      }
+    }
+  }
 }

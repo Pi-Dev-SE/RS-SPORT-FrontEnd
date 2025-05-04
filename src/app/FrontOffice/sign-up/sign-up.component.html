@@ -1,0 +1,185 @@
+<div class="rs-breadcrumbs breadcrumbs-overlay">
+    <div class="breadcrumbs-img">
+        <img src="assets/FrontOffice/images/breadcrumbs/2.jpg" alt="Breadcrumbs Image">
+    </div>
+    <div class="breadcrumbs-text white-color">
+        <h1 class="page-title">Inscription</h1>
+        <ul>
+            <li>
+                <a class="active" href="/">Accueil</a>
+            </li>
+            <li>Inscription</li>
+        </ul>
+    </div>
+</div>
+
+<div class="rs-login pt-100 pb-100 md-pt-70 md-pb-70">
+    <div class="container">
+        <div class="noticed">
+            <div class="main-part">
+                <div class="method-account">
+                    <h2 class="login">Créer un compte</h2>
+                    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="login-form">
+                        <div *ngIf="errorMessage" class="alert alert-danger">
+                            {{ errorMessage }}
+                        </div>
+                        <div *ngIf="successMessage" class="alert alert-success">
+                            {{ successMessage }}
+                        </div>
+
+                        <!-- Informations de base -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="firstname">Prénom *</label>
+                                    <input type="text" id="firstname" formControlName="firstname" class="form-control" [ngClass]="{'is-invalid': signupForm.get('firstname')?.invalid && (signupForm.get('firstname')?.dirty || signupForm.get('firstname')?.touched)}">
+                                    <div *ngIf="signupForm.get('firstname')?.invalid && (signupForm.get('firstname')?.dirty || signupForm.get('firstname')?.touched)" class="invalid-feedback">
+                                        <div *ngIf="signupForm.get('firstname')?.errors?.['required']">Le prénom est requis</div>
+                                        <div *ngIf="signupForm.get('firstname')?.errors?.['minlength']">Le prénom doit contenir au moins 2 caractères</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="lastname">Nom *</label>
+                                    <input type="text" id="lastname" formControlName="lastname" class="form-control" [ngClass]="{'is-invalid': signupForm.get('lastname')?.invalid && (signupForm.get('lastname')?.dirty || signupForm.get('lastname')?.touched)}">
+                                    <div *ngIf="signupForm.get('lastname')?.invalid && (signupForm.get('lastname')?.dirty || signupForm.get('lastname')?.touched)" class="invalid-feedback">
+                                        <div *ngIf="signupForm.get('lastname')?.errors?.['required']">Le nom est requis</div>
+                                        <div *ngIf="signupForm.get('lastname')?.errors?.['minlength']">Le nom doit contenir au moins 2 caractères</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                          <div class="form-group">
+                            <label for="avatarUrl">Avatar URL</label>
+                            <input type="text" id="avatarUrl" formControlName="avatarUrl" class="form-control"
+                              [ngClass]="{
+                                'is-invalid': signupForm.get('avatarUrl')?.invalid && (signupForm.get('avatarUrl')?.dirty || signupForm.get('avatarUrl')?.touched)
+                              }" />
+                            <div *ngIf="signupForm.get('avatarUrl')?.invalid && (signupForm.get('avatarUrl')?.dirty || signupForm.get('avatarUrl')?.touched)" class="invalid-feedback">
+                              <div *ngIf="signupForm.get('avatarUrl')?.errors?.['pattern']">L'URL n'est pas valide</div>
+                            </div>
+                          </div>
+                        <div *ngIf="signupForm.get('avatarUrl')?.value">
+                          <img [src]="signupForm.get('avatarUrl')?.value" alt="Avatar preview" class="img-thumbnail mt-2" width="100" />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" formControlName="email" class="form-control" [ngClass]="{'is-invalid': signupForm.get('email')?.invalid && (signupForm.get('email')?.dirty || signupForm.get('email')?.touched)}">
+                            <div *ngIf="signupForm.get('email')?.invalid && (signupForm.get('email')?.dirty || signupForm.get('email')?.touched)" class="invalid-feedback">
+                                <div *ngIf="signupForm.get('email')?.errors?.['required']">L'email est requis</div>
+                                <div *ngIf="signupForm.get('email')?.errors?.['email']">Veuillez entrer un email valide</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Mot de passe *</label>
+                            <div class="password-input-container">
+                                <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password" class="form-control" [ngClass]="{'is-invalid': signupForm.get('password')?.invalid && (signupForm.get('password')?.dirty || signupForm.get('password')?.touched)}">
+                                <span class="password-toggle" (click)="togglePasswordVisibility()">
+                                    <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                </span>
+                            </div>
+                            <div *ngIf="signupForm.get('password')?.invalid && (signupForm.get('password')?.dirty || signupForm.get('password')?.touched)" class="invalid-feedback">
+                                <div *ngIf="signupForm.get('password')?.errors?.['required']">Le mot de passe est requis</div>
+                                <div *ngIf="signupForm.get('password')?.errors?.['minlength']">Le mot de passe doit contenir au moins 6 caractères</div>
+                            </div>
+                        </div>
+                       
+
+                        <div class="form-group">
+                            <label for="roleUser">Rôle *</label>
+                            <select id="roleUser" formControlName="roleUser" class="form-control" (change)="updateValidatorsBasedOnRole(signupForm.get('roleUser')?.value)">
+                                <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+                            </select>
+                        </div>
+
+                        <!-- Champs spécifiques au rôle ADMIN -->
+                        <div *ngIf="signupForm.get('roleUser')?.value === 'ADMIN'" class="role-specific-fields">
+                            <div class="form-group">
+                                <label for="department">Département *</label>
+                                <input type="text" id="department" formControlName="department" class="form-control" [ngClass]="{'is-invalid': signupForm.get('department')?.invalid && (signupForm.get('department')?.dirty || signupForm.get('department')?.touched)}">
+                                <div *ngIf="signupForm.get('department')?.invalid && (signupForm.get('department')?.dirty || signupForm.get('department')?.touched)" class="invalid-feedback">
+                                    <div *ngIf="signupForm.get('department')?.errors?.['required']">Le département est requis</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="adminLevel">Niveau d'administration *</label>
+                                <input type="text" id="adminLevel" formControlName="adminLevel" class="form-control" [ngClass]="{'is-invalid': signupForm.get('adminLevel')?.invalid && (signupForm.get('adminLevel')?.dirty || signupForm.get('adminLevel')?.touched)}">
+                                <div *ngIf="signupForm.get('adminLevel')?.invalid && (signupForm.get('adminLevel')?.dirty || signupForm.get('adminLevel')?.touched)" class="invalid-feedback">
+                                    <div *ngIf="signupForm.get('adminLevel')?.errors?.['required']">Le niveau d'administration est requis</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Champs spécifiques au rôle COACH -->
+                        <div *ngIf="signupForm.get('roleUser')?.value === 'COACH'" class="role-specific-fields">
+                            <div class="form-group">
+                                <label for="specializationCoach">Spécialisation *</label>
+                                <input type="text" id="specializationCoach" formControlName="specializationCoach" class="form-control" [ngClass]="{'is-invalid': signupForm.get('specializationCoach')?.invalid && (signupForm.get('specializationCoach')?.dirty || signupForm.get('specializationCoach')?.touched)}">
+                                <div *ngIf="signupForm.get('specializationCoach')?.invalid && (signupForm.get('specializationCoach')?.dirty || signupForm.get('specializationCoach')?.touched)" class="invalid-feedback">
+                                    <div *ngIf="signupForm.get('specializationCoach')?.errors?.['required']">La spécialisation est requise</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                              <label for="diplome">Diplôme *</label>
+                              <input type="text" id="diplome" formControlName="diplome" class="form-control" [ngClass]="{'is-invalid': signupForm.get('diplome')?.invalid && (signupForm.get('diplome')?.dirty || signupForm.get('diplome')?.touched)}">
+                              <div *ngIf="signupForm.get('diplome')?.invalid && (signupForm.get('diplome')?.dirty || signupForm.get('diplome')?.touched)" class="invalid-feedback">
+                                  <div *ngIf="signupForm.get('diplome')?.errors?.['required']">Le diplôme est requis</div>
+                              </div>
+                          </div>
+                        </div>
+
+                        <!-- Champs spécifiques au rôle MEDICALSTAFF -->
+                        <div *ngIf="signupForm.get('roleUser')?.value === 'MEDICALSTAFF'" class="role-specific-fields">
+
+
+                            <div class="form-group">
+                                <label for="specializationMed">Spécialisation médicale *</label>
+                                <input type="text" id="specializationMed" formControlName="specializationMed" class="form-control" [ngClass]="{'is-invalid': signupForm.get('specializationMed')?.invalid && (signupForm.get('specializationMed')?.dirty || signupForm.get('specializationMed')?.touched)}">
+                                <div *ngIf="signupForm.get('specializationMed')?.invalid && (signupForm.get('specializationMed')?.dirty || signupForm.get('specializationMed')?.touched)" class="invalid-feedback">
+                                    <div *ngIf="signupForm.get('specializationMed')?.errors?.['required']">La spécialisation médicale est requise</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="licenseNumber">Numéro de licence *</label>
+                                <input type="text" id="licenseNumber" formControlName="licenseNumber" class="form-control" [ngClass]="{'is-invalid': signupForm.get('licenseNumber')?.invalid && (signupForm.get('licenseNumber')?.dirty || signupForm.get('licenseNumber')?.touched)}">
+                                <div *ngIf="signupForm.get('licenseNumber')?.invalid && (signupForm.get('licenseNumber')?.dirty || signupForm.get('licenseNumber')?.touched)" class="invalid-feedback">
+                                    <div *ngIf="signupForm.get('licenseNumber')?.errors?.['required']">Le numéro de licence est requis</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Champs spécifiques au rôle PLAYER -->
+                        <div *ngIf="signupForm.get('roleUser')?.value === 'PLAYER'" class="role-specific-fields">
+                            <div class="form-group">
+                                <label for="jerseyNumber">Numéro de maillot *</label>
+                                <input type="number" id="jerseyNumber" formControlName="jerseyNumber" class="form-control" [ngClass]="{'is-invalid': signupForm.get('jerseyNumber')?.invalid && (signupForm.get('jerseyNumber')?.dirty || signupForm.get('jerseyNumber')?.touched)}">
+                                <div *ngIf="signupForm.get('jerseyNumber')?.invalid && (signupForm.get('jerseyNumber')?.dirty || signupForm.get('jerseyNumber')?.touched)" class="invalid-feedback">
+                                    <div *ngIf="signupForm.get('jerseyNumber')?.errors?.['required']">Le numéro de maillot est requis</div>
+                                    <div *ngIf="signupForm.get('jerseyNumber')?.errors?.['min']">Le numéro de maillot doit être supérieur à 0</div>
+                                    <div *ngIf="signupForm.get('jerseyNumber')?.errors?.['max']">Le numéro de maillot doit être inférieur à 100</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" [disabled]="signupForm.invalid || isSubmitting" class="readon">
+                                <span *ngIf="isSubmitting">Inscription en cours...</span>
+                                <span *ngIf="!isSubmitting">S'inscrire</span>
+                            </button>
+                        </div>
+
+                        <div class="last-password">
+                            <p>Vous avez déjà un compte? <a href="/signin">Se connecter</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

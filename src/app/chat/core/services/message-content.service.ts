@@ -13,7 +13,7 @@ export class MessageContentService {
 
   private apiUrl = 'http://localhost:8088/spr01/api/v1/messagecontents';
 
-  private webSocketURL = 'http://localhost:8088/spr01/api/ws';
+  private webSocketURL = 'http://localhost:8088/spr01/ws';
   private stompClient: CompatClient = {} as CompatClient;
   private messageContentSubject = new Subject<MessageContent>(); // BehaviorSubject of User type. You can know when a new comment is received.
   private subscriptionMessage: any;
