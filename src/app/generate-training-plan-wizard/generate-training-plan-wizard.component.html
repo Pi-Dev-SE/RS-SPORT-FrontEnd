@@ -1,0 +1,91 @@
+<div class="modal fade" [ngClass]="{'show d-block': true}" tabindex="-1" role="dialog" aria-labelledby="wizardModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="wizardModalLabel">Créer un plan d'entraînement</h5>
+          <button type="button" class="btn-close" (click)="close()" aria-label="Fermer le modal de création de plan"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Points et badges -->
+          <div class="gamification-bar mb-3">
+            <div class="progress mb-2">
+              <div class="progress-bar" role="progressbar" [style.width]="points + '%'" [attr.aria-valuenow]="points" aria-valuemin="0" aria-valuemax="100">
+                {{ points }} points
+              </div>
+            </div>
+            <div *ngIf="badges.length > 0" class="badges">
+              <span class="badge bg-success me-1" *ngFor="let badge of badges">{{ badge }}</span>
+            </div>
+          </div>
+  
+          <!-- Message d'erreur -->
+          <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+            {{ errorMessage }}
+          </div>
+          <!-- Message de succès -->
+          <div *ngIf="successMessage" class="alert alert-success" role="alert">
+            {{ successMessage }}
+          </div>
+  
+          <!-- Étape 1 : Objectif principal -->
+          <div *ngIf="currentStep === 1" class="step">
+            <h6>Étape 1 : Quel est votre objectif principal ?</h6>
+            <div class="options">
+              <button class="btn btn-outline-primary m-1" *ngFor="let goal of goals" (click)="selectOption(goal, 'goal')">{{ goal }}</button>
+            </div>
+          </div>
+  
+          <!-- Étape 2 : Sous-catégorie -->
+          <div *ngIf="currentStep === 2" class="step">
+            <h6>Étape 2 : Précisez votre objectif</h6>
+            <div class="options">
+              <button class="btn btn-outline-primary m-1" *ngFor="let subGoal of subGoals[userChoices.goal]" (click)="selectOption(subGoal, 'subGoal')">{{ subGoal }}</button>
+            </div>
+          </div>
+  
+          <!-- Étape 3 : Niveau de difficulté -->
+          <div *ngIf="currentStep === 3" class="step">
+            <h6>Étape 3 : Quel est votre niveau ?</h6>
+            <div class="options">
+              <button class="btn btn-outline-primary m-1" *ngFor="let difficulty of difficulties" (click)="selectOption(difficulty, 'difficulty')">{{ difficulty }}</button>
+            </div>
+          </div>
+  
+          <!-- Étape 4 : Durée -->
+          <div *ngIf="currentStep === 4" class="step">
+            <h6>Étape 4 : Quelle est la durée souhaitée ?</h6>
+            <div class="options">
+              <button class="btn btn-outline-primary m-1" *ngFor="let duration of durations" (click)="selectOption(duration, 'duration')">{{ duration }}</button>
+            </div>
+          </div>
+  
+          <!-- Étape 5 : Environnement -->
+          <div *ngIf="currentStep === 5" class="step">
+            <h6>Étape 5 : Où souhaitez-vous vous entraîner ?</h6>
+            <div class="options">
+              <button class="btn btn-outline-primary m-1" *ngFor="let environment of environments" (click)="selectOption(environment, 'environment')">{{ environment }}</button>
+            </div>
+          </div>
+  
+          <!-- Résultat : Plan généré -->
+          <div *ngIf="currentStep > 5" class="result">
+            <h6>Plan d'entraînement généré ({{ recommendedExercises.length }} exercices)</h6>
+            <div class="exercises-list border rounded p-2" style="max-height: 200px; overflow-y: auto;">
+              <div class="list-group">
+                <div class="list-group-item" *ngFor="let exercise of recommendedExercises">
+                  <div class="fw-medium">{{ exercise.name }}</div>
+                  <div class="text-muted small">{{ exercise.description }}</div>
+                  <div class="text-muted small">Type: {{ exercise.type }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" (click)="close()" aria-label="Annuler la création du plan">Annuler</button>
+          <button type="button" class="btn btn-success" (click)="confirmPlan()" [disabled]="recommendedExercises.length === 0 || currentStep <= 5" aria-label="Confirmer le plan d'entraînement">Confirmer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop fade show" *ngIf="true"></div>

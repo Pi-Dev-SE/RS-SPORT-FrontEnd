@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
+import { ExerciseComponent } from './FrontOffice/module/exercises/exercise/exercise.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrl: './app.component.css',
+
 })
 export class AppComponent {
-  title = 'front-4se3';
+  title = 'Frontend-app';
 }

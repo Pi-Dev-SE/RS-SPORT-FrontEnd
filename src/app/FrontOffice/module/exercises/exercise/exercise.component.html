@@ -1,0 +1,137 @@
+<div class="exercise-container">
+  <div class="header-section">
+    <h1>Exercise Management</h1>
+    <div class="btnsection">
+      <button class="btn-primary" (click)="openExerciseDetail()">
+        <i class="icon-add">+</i> New Exercise
+      </button>
+      <button class="btn-primary" routerLink="/training-sessions">
+        <i class="icon-add"></i> New training session
+      </button>
+      
+    <!-- Ajout du bouton View Calendar -->
+    <button class="btn-primary" routerLink="/calendar">
+      <i class="icon-calendar"></i> View Calendar
+    </button>
+    </div>
+  </div>
+
+  <div class="filters-section">
+    <div class="search-input">
+      <input type="text" placeholder="Search exercises..." (input)="search($event)">
+      <i class="icon-search">🔍</i>
+    </div>
+
+    <div class="select-wrapper">
+      <select [(ngModel)]="selectedType" (change)="filterByType(selectedType)">
+        <option *ngFor="let type of exerciseTypes" [value]="type.value">
+          {{type.label}}
+        </option>
+      </select>
+      <i class="icon-chevron-down">▼</i>
+    </div>
+
+    <div class="select-wrapper">
+      <select [(ngModel)]="selectedVisibility" (change)="filterByVisibility(selectedVisibility)">
+        <option *ngFor="let option of visibilityOptions" [value]="option.value">
+          {{option.label}}
+        </option>
+      </select>
+      <i class="icon-chevron-down">▼</i>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading-spinner">
+    <div class="spinner">◠</div>
+  </div>
+
+  <div *ngIf="!loading && filteredExercises.length === 0" class="no-results">
+    <i class="icon-search-off">🚫</i>
+    <p>No exercises found. Try changing your filters or add a new exercise.</p>
+  </div>
+
+  <div
+  class="exercise-grid"
+  cdkDropList
+  [cdkDropListData]="filteredExercises"
+  (cdkDropListDropped)="drop($event)"
+  *ngIf="!loading && filteredExercises.length > 0"
+>
+  <div
+    *ngFor="let exercise of filteredExercises"
+    cdkDrag
+    class="exercise-card"
+  >
+
+      <div class="card-image" [style.background-image]="'url(' + exercise.image + ')'">
+        <div class="card-badges">
+          <!-- Note moyenne (lecture seule) -->
+        <div class="rating average-rating" title="Average rating">
+          <span *ngFor="let star of getStars()"
+                class="star"
+                [class.filled]="isStarFilled(exercise, star)">
+            ★
+          </span>
+          <span *ngIf="exercise.averageRating" class="rating-value">
+            ({{ exercise.averageRating.toFixed(1) }})
+          </span>
+        </div>
+          <!-- Ajouter une note -->
+<div class="rating-form">
+  <span *ngFor="let star of [1, 2, 3, 4, 5]"
+        class="star"
+        [class.filled]="star <= (exercise.tempRating || 0)"
+        (click)="addRating(exercise, star)">
+
+    ★
+  </span>
+</div>
+
+
+          <span class="exercise-type" [ngClass]="exercise.exerciseType.toLowerCase()">
+            <i [class]="'icon-' + getExerciseTypeIcon(exercise.exerciseType)">
+              {{ getExerciseTypeIcon(exercise.exerciseType) === 'fitness_center' ? '🏋️' : '🧠' }}
+            </i>
+            {{getExerciseTypeLabel(exercise.exerciseType)}}
+          </span>
+          <span class="exercise-visibility" [ngClass]="exercise.visibility.toLowerCase()">
+            <i [class]="'icon-' + getVisibilityIcon(exercise.visibility)">
+              {{ getVisibilityIcon(exercise.visibility) === 'public' ? '🌍' : '🔒' }}
+            </i>
+          </span>
+        </div>
+      </div>
+      
+      <div class="card-content">
+        <h2 class="exercise-title">{{exercise.name}}</h2>
+        <p class="exercise-description">{{exercise.description | slice:0:100}}{{exercise.description.length > 100 ? '...' : ''}}</p>
+        
+        <div class="exercise-details">
+          <div class="detail-item">
+            <i class="icon-timer">⏱️</i>
+            <span>{{exercise.duration}}</span>
+          </div>
+          <div class="detail-item">
+            <i class="icon-flag">🏁</i>
+            <span>{{exercise.objectif | slice:0:20}}{{exercise.objectif.length > 20 ? '...' : ''}}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card-actions">
+        <button class="btn-icon btn-edit" (click)="openExerciseDetail(exercise)" title="Edit">
+          <i class="icon-edit">✏️</i>
+        </button>
+        <button class="btn-icon btn-delete" (click)="deleteExercise(exercise)" title="Delete">
+          <i class="icon-trash">🗑️</i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="pagination-buttons">
+  <button (click)="prevPage()" [disabled]="currentPage === 0">Précédent</button>
+  <span>Page {{ currentPage + 1 }} / {{ totalPages }}</span>
+  <button (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">Suivant</button>
+</div>
+

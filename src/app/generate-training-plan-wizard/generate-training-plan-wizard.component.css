@@ -1,0 +1,34 @@
+.step {
+    text-align: center;
+  }
+  
+  .options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .gamification-bar {
+    margin-bottom: 1rem;
+  }
+  
+  .progress {
+    height: 1.5rem;
+  }
+  
+  .progress-bar {
+    transition: width 0.3s ease-in-out;
+  }
+  
+  .badges {
+    text-align: center;
+  }
+  
+  .exercises-list {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    max-height: 200px;
+    overflow-y: auto;
+  }

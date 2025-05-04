@@ -1,0 +1,42 @@
+/* calendar.component.css */
+::ng-deep .fc {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #fafafa;
+    border-radius: 12px;
+  }
+  
+  ::ng-deep .fc-toolbar-title {
+    font-size: 1.3rem;
+    color: #e3f545;
+  }
+  
+  ::ng-deep .fc-button {
+    background-color: #d9ff00;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  ::ng-deep .fc-button:hover {
+    background-color: #0056b3;
+  }
+  
+  ::ng-deep .fc-daygrid-day-number {
+    font-weight: 600;
+    color: #ccf049;
+  }
+  
+  ::ng-deep .fc-event {
+    background-color: #28a745 !important;
+    border: none;
+    font-size: 0.8rem;
+    padding: 2px 4px;
+    border-radius: 4px;
+  }
+  
+  ::ng-deep .fc-day-today {
+    background-color: #e6f7ff !important;
+  }
+  
