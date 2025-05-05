@@ -1,6 +1,6 @@
 # ⚽ RS SPORT- Angular Web Application
 
-![Angular](https://img.shields.io/badge/Angular-v16-red)
+![Angular](https://img.shields.io/badge/Angular-v17-red)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
 ## 📖 Description
