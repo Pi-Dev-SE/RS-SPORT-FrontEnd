@@ -13,6 +13,8 @@ export class ViewAllPostComponent {
   searchText: string = '';
   isListening = false;
   recognition: any;
+  p: number = 1;
+
 
   constructor(
     private postService: PostService,
@@ -56,7 +58,7 @@ export class ViewAllPostComponent {
       this.recognition.onresult = (event: any) => {
         this.ngZone.run(() => {
           let spokenText = event.results[0][0].transcript;
-          spokenText = spokenText.trim().replace(/[.,!?]+$/, ''); 
+          spokenText = spokenText.trim().replace(/[.,!?]+$/, '');
           this.searchText = spokenText;
           this.onSearch();
         });
@@ -80,4 +82,20 @@ export class ViewAllPostComponent {
   openFlashscore() {
     window.open('https://www.flashscore.com/', '_blank');
   }
+
+
+
+  totalPosts: number = 0;
+  page: number = 1;
+  itemsPerPage: number = 6;
+
+  paginate() {
+    this.postService.getPaginatedPosts(this.page - 1, this.itemsPerPage).subscribe((res: any) => {
+      this.allPosts = res.content;
+      this.totalPosts = res.totalElements;
+    });
+  }
+
+
+
 }

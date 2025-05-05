@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
 })
 export class GetAllVideoStatisticsComponent {
 videos:any;
+p: number = 1; // for pagination current page
+
   constructor(private videoStatisticsService :VideoStatisticsService ,
               private router:Router
   ){}
