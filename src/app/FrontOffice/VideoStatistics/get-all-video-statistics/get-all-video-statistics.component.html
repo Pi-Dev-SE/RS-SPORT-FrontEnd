@@ -1,91 +1,61 @@
-
-<html class="no-js" lang="zxx">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="x-ua-compatible" content="ie=edge">
-		<title>Team | Soccer</title>
-		<meta name="description" content="">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="apple-touch-icon" href="apple-touch-icon.png">
-		<!-- Place favicon.ico in the root directory -->
-		<link rel="shortcut icon" type="image/x-icon" href="/assets/FrontOffice/images/fav.png">
-		<!-- bootstrap v3.3.6 css -->
-		<link rel="stylesheet" href="/assets/FrontOffice/css/bootstrap.min.css">
-		<!-- font-awesome css -->
-		<link rel="stylesheet" href="/assets/FrontOffice/css/font-awesome.min.css">
-		<!-- animate css -->
-		<link rel="stylesheet" href="/assets/FrontOffice/css/animate.css">
-		<!-- Main Menu css -->
-		<link rel="stylesheet" href="/assets/FrontOffice/css/rsmenu-main.css">
-		<!-- rsmenu transitions css -->
-		<link rel="stylesheet" href="/assets/FrontOffice/css/rsmenu-transitions.css">
-		<!-- hover-min css -->
-		<link rel="stylesheet" href="/assets/FrontOffice/css/hover-min.css">
-		  <!-- magnific-popup css -->
-		<link rel="stylesheet" href="/assets/FrontOffice/css/magnific-popup.css">
-		<!-- owl.carousel css -->
-		<link rel="stylesheet" href="/assets/FrontOffice/css/owl.carousel.css">
-		<!-- Slick css -->
-		<link rel="stylesheet" href="/assets/FrontOffice/css/slick.css">
-		<!-- Slick Theme css -->
-		<link rel="stylesheet" href="/assets/FrontOffice/css/slick-theme.css">
-		<!-- style css -->
-		<link rel="stylesheet" href="/assets/FrontOffice/style.css">
-		<!-- responsive css -->
-		<link rel="stylesheet" href="/assets/FrontOffice/css/responsive.css">
-		<!-- modernizr js -->
-		<script src="/assets/FrontOffice/js/modernizr-2.8.3.min.js"></script>
-
-	</head>
-
-
-
-
-  <!-- Our Team Start Here-->
-  <div class="our-team-section team-inner-page sec-spacer">
+<!-- Our Team Start Here-->
+<div class="our-team-section team-inner-page sec-spacer">
   <div class="container">
     <div class="row">
-      <div class="col-md-3 col-sm-6 col-xs-6" *ngFor="let video of videos">
+      <div
+        class="col-md-3 col-sm-6 col-xs-6"
+        *ngFor="let video of videos | paginate: { itemsPerPage: 4, currentPage: p }"
+      >
         <div class="our-team">
           <img src="/assets/FrontOffice/images/team/view-soccer-ball-field.jpg" alt="" />
           <div class="person-details">
             <div class="overly-bg"></div>
-            <a routerLink="../getVideoStatisticsById/{{video.videoStatisticsId}}"><h5 class="person-name">Statistics</h5></a>
+            <a routerLink="../getVideoStatisticsById/{{video.videoStatisticsId}}">
+              <h5 class="person-name">Statistics</h5>
+            </a>
             <table class="person-info">
               <tbody>
                 <tr>
-                   <td>Total Distance Covered :</td>
-                   <td>{{video.totalDistanceCovered}} (km)</td>
-                  </tr>
+                  <td>Total Distance Covered :</td>
+                  <td>{{video.totalDistanceCovered}} (km)</td>
+                </tr>
                 <tr>
-                   <td>Sprint Distance :</td>
-                   <td>{{video.sprintDistance}} (m)</td>
-                  </tr>
+                  <td>Sprint Distance :</td>
+                  <td>{{video.sprintDistance}} (m)</td>
+                </tr>
                 <tr>
-                   <td>Top Speed :</td>
-                   <td>{{video.topSpeed}} (km/h)</td>
-                  </tr>
+                  <td>Top Speed :</td>
+                  <td>{{video.topSpeed}} (km/h)</td>
+                </tr>
                 <tr>
-                   <td>Pass Accuracy :</td>
-                   <td>{{video.passAccuracy}} (%)</td>
-                  </tr>
+                  <td>Pass Accuracy :</td>
+                  <td>{{video.passAccuracy}} (%)</td>
+                </tr>
                 <tr>
-                  <td>Totale Pass Nombre :</td>
+                  <td>Total Pass Nombre :</td>
                   <td>{{video.passNbr}}</td>
                 </tr>
                 <tr>
                   <td>Min Speed :</td>
                   <td>{{video.minSpeed}} (km/h)</td>
+                </tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Centered Pagination Controls -->
+    <div class="col-12 d-flex justify-content-center mt-4">
+      <pagination-controls
+        (pageChange)="p = $event"
+        [previousLabel]="'←'"
+        [nextLabel]="'→'"
+        [directionLinks]="true"
+        [autoHide]="false"
+      ></pagination-controls>
+    </div>
   </div>
-  </div>
-  <!-- Our Team end Here-->
-</html>
-
-
-
+</div>
+<!-- Our Team end Here-->

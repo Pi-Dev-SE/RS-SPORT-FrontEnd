@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class SimulationService {
 
-  private apiUrl = 'http://localhost:8089/spr01/api/simulation';
+  private apiUrl = 'http://localhost:8088/spr01/api/simulation';
 
   constructor(private http: HttpClient) {}
 

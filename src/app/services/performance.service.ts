@@ -12,7 +12,7 @@ export class PerformanceService {
 
   constructor(private http: HttpClient) { }
 
-  private apiUrl = 'http://localhost:8089/spr01/Performance';
+  private apiUrl = 'http://localhost:8088/spr01/Performance';
 
   addPerformance (performance:PerformanceTracking) : Observable<PerformanceTracking> {
     return this.http.post<PerformanceTracking>(`${this.apiUrl}/addPerformance`, performance);
@@ -28,7 +28,7 @@ export class PerformanceService {
   getTendanceProgression(playerId: number, debut: string, fin: string): Observable<TendanceProgression> {
     return this.http.get<TendanceProgression>(`${this.apiUrl}/trend/${playerId}?debut=${debut}&fin=${fin}`);
   }
-  
+
 
   // Obtenir les recommandations pour un joueur
   getRecommandations(playerId: number): Observable<{recommendations: string}> {

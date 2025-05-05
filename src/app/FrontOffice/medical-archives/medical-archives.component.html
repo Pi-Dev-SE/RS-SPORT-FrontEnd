@@ -1,0 +1,30 @@
+<!-- medical-archives.component.html -->
+<div class="archives-container">
+    <!-- Conteneur principal pour un affichage uniforme -->
+    <div class="folders-grid">
+      <div *ngFor="let player of getObjectKeys(archives)" class="folder-container">
+        <!-- Dossier avec simple clic pour l'ouverture -->
+        <div class="folder-icon" [class.active]="openedFolder === player" (click)="toggleFolder(player, $event)">
+          <img src="assets/folder-icon.png" alt="Dossier" />
+          <div class="folder-label">{{ player }}</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Popup des fichiers (séparé du dossier pour un meilleur positionnement) -->
+    <div *ngIf="openedFolder" class="file-list-container" (click)="onPopupClick($event)">
+      <div class="file-list-header">
+        <span>{{ openedFolder }}</span>
+        <button class="close-btn" (click)="closeFolder($event)">&times;</button>
+      </div>
+      <ul class="file-list">
+        <li *ngFor="let report of archives[openedFolder]" class="file-item">
+          <span class="file-icon">📄</span>
+          <a (click)="downloadReport(openedFolder, report, $event)">{{ report }}</a>
+        </li>
+        <li *ngIf="archives[openedFolder]?.length === 0" class="empty-folder">
+          Aucun fichier disponible
+        </li>
+      </ul>
+    </div>
+  </div>

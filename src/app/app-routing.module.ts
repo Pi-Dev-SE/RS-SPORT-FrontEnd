@@ -37,6 +37,7 @@ import { TacticsBackComponent } from './BackOffice/tactics-back/tactics-back.com
 import { SignInComponent } from './FrontOffice/sign-in/sign-in.component';
 import { SignUpComponent } from './FrontOffice/sign-up/sign-up.component';
 import { LogoutComponent } from './FrontOffice/logout/logout.component';
+import { MedicalArchivesComponent } from './FrontOffice/medical-archives/medical-archives.component';
 
 const routes: Routes = [
   {
@@ -134,6 +135,7 @@ const routes: Routes = [
 
       { path: 'simulation', component: SimulationViewerComponent ,canActivate: [AuthGuard]},
       { path: 'calender', component: RecoveryCalendarComponent ,canActivate: [AuthGuard]},
+      { path: 'archives', component: MedicalArchivesComponent ,canActivate: [AuthGuard]},
 
     ]
   },

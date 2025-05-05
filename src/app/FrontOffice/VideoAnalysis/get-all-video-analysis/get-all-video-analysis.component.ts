@@ -5,47 +5,46 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-get-all-video-analysis',
   templateUrl: './get-all-video-analysis.component.html',
-  styleUrl: './get-all-video-analysis.component.css'
+  styleUrls: ['./get-all-video-analysis.component.css'] // fixed typo: 'styleUrl' → 'styleUrls'
 })
 export class GetAllVideoAnalysisComponent {
-
-  videos:any;
+  videos: any;
   searchText: string = '';
+  p: number = 1; // for pagination current page
 
-  constructor(private videoAnalysisService :VideoAnalysisService ,
-              private router:Router
-  ){}
+  constructor(
+    private videoAnalysisService: VideoAnalysisService,
+    private router: Router
+  ) {}
 
-ngOnInit(){
- this.GetVideos();
-}
-
-GetVideos(): void {
-
-  this.videoAnalysisService.GetAllVideoAnalysis().subscribe(
-    (data) => {
-      this.videos = data;
-      console.log("data : ",data)
-    },
-    (error) => {
-      console.error('Error fetching List videos:', error);
-    }
-  );
-}
-
-onSearch() {
-  if (this.searchText.trim() === '') {
+  ngOnInit() {
     this.GetVideos();
-  } else {
-    this.videoAnalysisService.searchByName(this.searchText.trim()).subscribe(
-      res => {
-        this.videos = res;
+  }
+
+  GetVideos(): void {
+    this.videoAnalysisService.GetAllVideoAnalysis().subscribe(
+      (data) => {
+        this.videos = data;
+        console.log("data : ", data);
       },
-      error => {
-        console.log('Search failed', error);
+      (error) => {
+        console.error('Error fetching List videos:', error);
       }
     );
   }
-}
 
+  onSearch() {
+    if (this.searchText.trim() === '') {
+      this.GetVideos();
+    } else {
+      this.videoAnalysisService.searchByName(this.searchText.trim()).subscribe(
+        (res) => {
+          this.videos = res;
+        },
+        (error) => {
+          console.log('Search failed', error);
+        }
+      );
+    }
+  }
 }

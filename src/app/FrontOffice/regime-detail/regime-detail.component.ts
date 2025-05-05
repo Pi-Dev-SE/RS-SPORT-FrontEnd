@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+
+
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RecoveryRegimeService } from '../../services/recovery-regime.service';
 import { TypeStatusRegime } from '../../Models/type-status-regime';
@@ -12,6 +14,10 @@ import html2canvas from 'html2canvas';
   styleUrl: './regime-detail.component.css'
 })
 export class RegimeDetailComponent {
+
+  @ViewChild('signatureCanvas') signatureCanvas!: ElementRef<HTMLCanvasElement>;
+  private context!: CanvasRenderingContext2D;
+  private isDrawing = false;
   
   constructor(private route: ActivatedRoute,private regimeService: RecoveryRegimeService){}
   regimeId:number | undefined;
@@ -34,8 +40,48 @@ loadRegimetData(id: number) {
     this.regime= data;
   });
 }
+
+ngAfterViewInit() {
+  const canvas = this.signatureCanvas.nativeElement;
+  this.context = canvas.getContext('2d')!;
+  this.context.strokeStyle = '#000';
+  this.context.lineWidth = 2;
+
+  canvas.addEventListener('mousedown', this.startDrawing.bind(this));
+  canvas.addEventListener('mousemove', this.draw.bind(this));
+  canvas.addEventListener('mouseup', this.stopDrawing.bind(this));
+  canvas.addEventListener('mouseout', this.stopDrawing.bind(this));
+}
+
+startDrawing(event: MouseEvent) {
+  this.isDrawing = true;
+  this.context.beginPath();
+  this.context.moveTo(event.offsetX, event.offsetY);
+}
+
+draw(event: MouseEvent) {
+  if (!this.isDrawing) return;
+  this.context.lineTo(event.offsetX, event.offsetY);
+  this.context.stroke();
+}
+
+stopDrawing() {
+  if (this.isDrawing) {
+    this.context.closePath();
+    this.isDrawing = false;
+  }
+}
+
+clearSignature() {
+  const canvas = this.signatureCanvas.nativeElement;
+  this.context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
 generatePDF() {
   const doc = new jsPDF();
+
+  const canvas = this.signatureCanvas.nativeElement;
+  const signatureImage = canvas.toDataURL('image/png');
    
   doc.addImage('assets/FrontOffice/images/logo.png', 'PNG', 10, 10, 20, 20);
   
@@ -129,6 +175,7 @@ generatePDF() {
   doc.setFont('helvetica', 'normal');
   const signatureY = yPosition + 60; // Adjust the value as needed
   doc.text('Doctor’s Signature:', 120, signatureY);
+  doc.addImage(signatureImage, 'PNG', 120, signatureY + 2, 60, 30);
   doc.line(120, signatureY + 10, 180, signatureY + 10);
   
   // Pied de page avec numéro de page
