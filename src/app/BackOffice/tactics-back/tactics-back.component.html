@@ -1,0 +1,252 @@
+<main id="main" class="main">
+  <div class="pagetitle">
+    <h1>Tactics board management</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/admin">Home page</a></li>
+        <li class="breadcrumb-item active">Tactics Boards</li>
+      </ol>
+    </nav>
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info" (click)="toggleStats()">
+        <i class="bi" [ngClass]="showStats ? 'bi-eye-slash' : 'bi-eye'"></i>
+        {{ showStats ? 'Hide statistics' : 'View statistics' }}
+      </button>
+    </div>
+  </div><!-- End Page Title -->
+
+  <!-- Alert Messages -->
+  <div *ngIf="alertMessage" class="alert alert-{{alertType}} alert-dismissible fade show" role="alert">
+    {{alertMessage}}
+    <button type="button" class="btn-close" (click)="alertMessage = ''"></button>
+  </div>
+
+  <!-- Section Statistiques -->
+  <section *ngIf="showStats" class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Tactics boards statistics</h5>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <p>Visualization of statistical data on the use of tactics boards.</p>
+
+            </div>
+
+            <div class="row">
+              <!-- Graphique d'engagement -->
+              <div class="col-lg-4">
+                <div class="card shadow mb-4">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <h6 class="card-subtitle text-muted">Engagement rate</h6>
+                      <button class="btn btn-sm btn-outline-secondary" (click)="exportEngagementData()">
+                        <i class="bi bi-download"></i> Export CSV file
+                      </button>
+                    </div>
+                    <div class="chart-container" style="position: relative; height:400px;">
+                      <canvas #engagementChart></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Graphique d'activité mensuelle -->
+              <div class="col-lg-4">
+                <div class="card shadow mb-4">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <h6 class="card-subtitle text-muted">Monthly activity</h6>
+                      <button class="btn btn-sm btn-outline-secondary" (click)="exportMonthlyActivityData()">
+                        <i class="bi bi-download"></i> Export CSV file
+                      </button>
+                    </div>
+                    <div class="chart-container" style="position: relative; height:400px;">
+                      <canvas #activityChart></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Graphique du nombre de joueurs par tableau -->
+              <div class="col-lg-4">
+                <div class="card shadow mb-4">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <h6 class="card-subtitle text-muted">Players per board</h6>
+                      <button class="btn btn-sm btn-outline-secondary" (click)="exportPlayerCountData()">
+                        <i class="bi bi-download"></i> Export CSV file
+                      </button>
+                    </div>
+                    <div class="chart-container" style="position: relative; height:400px;">
+                      <canvas #playerCountChart></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
+              <h5 class="card-title">List of Tactics Boards</h5>
+              <button class="btn btn-primary" (click)="showAddForm = true">
+                <i class="bi bi-plus-circle"></i> Add a Board
+              </button>
+            </div>
+
+            <!-- Search and Sort -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-search"></i></span>
+                  <input type="text" class="form-control" [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" placeholder="Search by name...">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="input-group">
+                  <span class="input-group-text">Order by</span>
+                  <select class="form-select" [(ngModel)]="sortOption" (ngModelChange)="onSortChange()">
+                    <option value="newest">Date ( Most Recent )</option>
+                    <option value="oldest">Date ( Oldest )</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Add Form -->
+            <div *ngIf="showAddForm" class="card mb-3">
+              <div class="card-body">
+                <h5 class="card-title">Add a Tactics Board</h5>
+                <div class="row g-3">
+                  <div class="col-md-12">
+                    <label for="boardName" class="form-label">Board name</label>
+                    <input type="text" class="form-control" id="boardName" [(ngModel)]="newTacticsBoard.name" placeholder="Enter the name of the tactics board">
+                  </div>
+                  <div class="col-12 d-flex justify-content-end">
+                    <button type="button" class="btn btn-secondary me-2" (click)="cancelAdd()">Cancel</button>
+                    <button type="button" class="btn btn-primary" (click)="createNewBoard()">Create</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Update Form -->
+            <div *ngIf="showUpdateForm" class="card mb-3">
+              <div class="card-body">
+                <h5 class="card-title">Modifying the Tactics board</h5>
+                <div class="row g-3">
+                  <div class="col-md-12">
+                    <label for="updateBoardName" class="form-label">New name</label>
+                    <input type="text" class="form-control" id="updateBoardName" [(ngModel)]="updateTacticsBoardName" placeholder="Enter new name">
+                  </div>
+                  <div class="col-12 d-flex justify-content-end">
+                    <button type="button" class="btn btn-secondary me-2" (click)="cancelUpdate()">Cancel</button>
+                    <button type="button" class="btn btn-primary" (click)="updateTacticsBoard()">Update</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Delete Confirmation -->
+            <div *ngIf="showDeleteConfirm" class="card mb-3 border-danger">
+              <div class="card-body">
+                <h5 class="card-title text-danger">Confirm Deletion</h5>
+                <p>Are you sure you want to delete the tactics board? <strong>{{selectedBoard?.name}}</strong>?</p>
+                <p>This action is irreversible. To confirm, please enter the name of the tactics board below.</p>
+                <div class="row g-3">
+                  <div class="col-md-12">
+                    <input type="text" class="form-control" [(ngModel)]="deleteTacticsBoardName" placeholder="Enter the name of the tactics board">
+                  </div>
+                  <div class="col-12 d-flex justify-content-end">
+                    <button type="button" class="btn btn-secondary me-2" (click)="cancelDelete()">Cancel</button>
+                    <button type="button" class="btn btn-danger" (click)="deleteTacticsBoard()">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tactics Boards Table -->
+            <div class="table-responsive">
+              <table class="table table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Creation date</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngIf="tacticsBoards.length === 0">
+                    <td colspan="4" class="text-center">No tactics board found</td>
+                  </tr>
+                  <tr *ngFor="let board of tacticsBoards; let i = index">
+                    <th scope="row">{{(currentPage - 1) * pageSize + i + 1}}</th>
+                    <td>{{board.name}}</td>
+                    <td>{{board.createdAt | date:'dd/MM/yyyy'}}</td>
+                    <td>
+                      <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-info" title="View details" [routerLink]="['/tacticsboard', board.idTactic]">
+                          <i class="bi bi-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-primary" title="Edit" (click)="selectBoard(board); showUpdateForm = true;">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" title="Remove" (click)="selectBoard(board); showDeleteConfirm = true;">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <div>
+                Showing {{tacticsBoards.length}} of {{totalItems}} tactics boards
+              </div>
+              <nav aria-label="Page navigation">
+                <ul class="pagination">
+                  <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" href="javascript:void(0)" (click)="loadTacticsBoards(1)">
+                      <i class="bi bi-chevron-double-left"></i>
+                    </a>
+                  </li>
+                  <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" href="javascript:void(0)" (click)="loadTacticsBoards(currentPage - 1)">
+                      <i class="bi bi-chevron-left"></i>
+                    </a>
+                  </li>
+                  <li class="page-item">
+                    <span class="page-link">Page {{currentPage}} of {{totalPages}}</span>
+                  </li>
+                  <li class="page-item" [class.disabled]="currentPage === totalPages">
+                    <a class="page-link" href="javascript:void(0)" (click)="loadTacticsBoards(currentPage + 1)">
+                      <i class="bi bi-chevron-right"></i>
+                    </a>
+                  </li>
+                  <li class="page-item" [class.disabled]="currentPage === totalPages">
+                    <a class="page-link" href="javascript:void(0)" (click)="loadTacticsBoards(totalPages)">
+                      <i class="bi bi-chevron-double-right"></i>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

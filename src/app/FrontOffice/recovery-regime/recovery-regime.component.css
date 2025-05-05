@@ -1,0 +1,201 @@
+/* Card styling with improved layout */
+.card {
+  padding: 0;
+  font-size: 14px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  border: none;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Espacement et padding dans la carte */
+.card-body {
+  padding: 16px;
+}
+
+/* Style de l'image */
+.report-img {
+  width: 60px;
+  height: 60px;
+  display: block;
+  margin: 0 auto 15px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Style du titre */
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #0275d8;
+}
+
+/* Texte dans la carte */
+.card-body p {
+  margin-bottom: 6px;
+  font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-body p strong {
+  font-weight: 600;
+  color: #555;
+}
+
+/* Ajustement des badges */
+.badge {
+  font-size: 12px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+.bg-warning {
+  background-color: #ffc107 !important;
+  color: #212529;
+}
+
+.bg-success {
+  background-color: #28a745 !important;
+}
+
+/* Style des boutons */
+.btn-sm {
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+  font-weight: 500;
+}
+
+.btn-outline-primary, .btn-outline-danger, .btn-outline-success, .btn-outline-info {
+  border-width: 1.5px;
+}
+
+.btn-outline-primary {
+  color: #0275d8;
+  border-color: #0275d8;
+}
+
+.btn-outline-primary:hover {
+  background-color: #0275d8;
+  color: white;
+}
+
+.btn-outline-danger {
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-outline-success {
+  color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-outline-success:hover {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-outline-info {
+  color: #17a2b8;
+  border-color: #17a2b8;
+}
+
+.btn-outline-info:hover {
+  background-color: #17a2b8;
+  color: white;
+}
+
+/* Button spacing dans les cartes */
+.d-flex.justify-content-between {
+  gap: 8px;
+}
+
+.d-flex.justify-content-between.mt-2 {
+  margin-top: 12px !important;
+}
+
+/* Style pour le bouton View List Report */
+.btn-view-list-regime {
+  background-color: #f7b839 !important;
+  color: white !important;
+  border-color: #f7b839 !important;
+  font-weight: 600;
+  padding: 8px 16px !important;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(247, 184, 57, 0.3);
+  transition: all 0.3s ease;
+  font-size: 14px !important;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-view-list-regime:hover {
+  background-color: #e6a11a !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(247, 184, 57, 0.4);
+}
+
+.btn-view-list-regime i {
+  font-size: 12px;
+}
+
+/* Barre de recherche */
+.input-group {
+  max-width: 400px;
+}
+
+.input-group-text {
+  background-color: #f8f9fa;
+  border-right: none;
+}
+
+.form-control {
+  border-left: none;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #ced4da;
+}
+
+/* Pagination */
+pagination-controls {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .d-flex.justify-content-between {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .input-group.w-50 {
+    width: 100% !important;
+  }
+}

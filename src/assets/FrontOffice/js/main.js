@@ -2,7 +2,7 @@
 *
 * -----------------------------------------------------------------------------
 *
-* Template : Soccer HTML5 Responsive Template 
+* Template : Soccer HTML5 Responsive Template
 * Author : rs-theme
 * Author URI : http://www.rstheme.com/
 *
@@ -12,9 +12,9 @@
 (function($) {
     "use strict";
     // sticky menu
-    
+
     var header = $('.menu-sticky');
-        if(header.length){    
+        if(header.length){
             var win = $(window);
             win.on('scroll', function() {
                 var scroll = win.scrollTop();
@@ -25,7 +25,7 @@
                 }
             });
         }
-    
+
     /*-------------------------------------
      jQuery Main Menu activation code
      --------------------------------------*/
@@ -37,7 +37,7 @@
     wow js active
     ------------------------------ */
     new WOW().init();
-    
+
     //window load
   	$(window).on( 'load', function() {
   		//rs menu
@@ -49,7 +49,7 @@
   		 });
   		}
   	})
-	
+
 	/*-------------------------------------
     OwlCarousel
     -------------------------------------*/
@@ -120,7 +120,7 @@
 
         });
     }
-    
+
     /*-------------------------------------
        Author Slider jQuery activation code
        -------------------------------------*/
@@ -129,17 +129,17 @@
         $("#author-slider-section").owlCarousel({
             items : 3,
             loop:true,
-            autoplay:true,  
+            autoplay:true,
             nav: true,
             navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"],
             dots: false,
             responsive:{
                 0:{
-                  items:1 // In this configuration 1 is enabled from 0px up to 479px screen size 
+                  items:1 // In this configuration 1 is enabled from 0px up to 479px screen size
                 },
                 481:{
-                  items:2, // from 480 to 677 
-                  nav:false // from 480 to max 
+                  items:2, // from 480 to 677
+                  nav:false // from 480 to max
 
                 },
                 678:{
@@ -149,18 +149,18 @@
                 768:{
                   items:3, // from this breakpoint 960 to 1199
                   margin:20, // and so on...
-                  center:false 
+                  center:false
                 },
                 1200:{
                   items:3,
                   loop:false,
                   margin: 0
                 }
-            } 
+            }
         });
     }
-    
-    
+
+
     var firstslider = $('#first-slider');
     if(firstslider.length){
         $("#first-slider").owlCarousel({
@@ -168,7 +168,7 @@
             loop:true,
         })
     }
-    
+
     // Latest News
     var latestnewsslider = $('.latest-news-slider');
     if(latestnewsslider.length){
@@ -182,7 +182,7 @@
             asNavFor: '.latest-news-nav'
         });
     }
-    
+
     var latestnewsnav = $('.latest-news-nav');
     if(latestnewsnav.length){
         $('.latest-news-nav').slick({
@@ -242,8 +242,8 @@
                 var $elemsToanim = $currentItem.find("[data-animation-in]");
                 setAnimation ($elemsToanim, 'in');
             })
-    
-    
+
+
     /*-------------------------------------
        Home page main Slider
        -------------------------------------*/
@@ -289,7 +289,7 @@
                 var $elemsToanim = $currentItem.find("[data-animation-in]");
                 setAnimation ($elemsToanim, 'in');
             })
-      
+
     /*-------------------------------------
        Home page two main Slider
        -------------------------------------*/
@@ -324,7 +324,7 @@
     	}
     /*-------------------------------------
        Video Popup
-    -------------------------------------*/ 
+    -------------------------------------*/
   	var popupyoutube = $('.popup-youtube');
   	if(popupyoutube.length){
   		$('.popup-youtube').magnificPopup({
@@ -332,13 +332,13 @@
   			mainClass: 'mfp-fade',
   			removalDelay: 160,
   			preloader: false,
-  			fixedContentPos: false								
-  		});	
+  			fixedContentPos: false
+  		});
   	}
-    
+
     // Counter Up
 	var rscounter = $('.rs-counter');
-	if(rscounter.length){	
+	if(rscounter.length){
 		$('.rs-counter').counterUp({
 			delay: 20,
 			time: 1500
@@ -368,7 +368,7 @@
             if (item.children("ul").length > 0) {
                 var href = link.attr("href");
                 link.attr("href", "#");
-                setTimeout(function () { 
+                setTimeout(function () {
                     link.attr("href", href);
                 }, 300);
                 e.preventDefault();
@@ -386,19 +386,19 @@
      ScrollTop init Activation Code
     ---------------------------- */
     $(window).scroll(function() {
-        if ($(this).scrollTop() >= 50) {        
-            $('#return-to-top').fadeIn(200);   
+        if ($(this).scrollTop() >= 50) {
+            $('#return-to-top').fadeIn(200);
         } else {
-            $('#return-to-top').fadeOut(200);   
+            $('#return-to-top').fadeOut(200);
         }
     });
-    $('#return-to-top').on('click', function() {     
+    $('#return-to-top').on('click', function() {
         $('body,html').animate({
-            scrollTop : 0                       
+            scrollTop : 0
         }, 500);
     });
-    
-    
+
+
     /*--------------------------
      Flexslider Slider Code
     ---------------------------- */
@@ -414,9 +414,9 @@
             itemMargin: 0,
             asNavFor: '#slider-images'
         });
-    }  
+    }
     var flexslide = $('#slider-images');
-	  if(flexslide.length){    
+	  if(flexslide.length){
         $('#slider-images').flexslider({
             animation: "fade",
             controlNav: false,
@@ -426,7 +426,7 @@
             sync: "#slider-carousel"
         });
     }
-    
+
     /*----------------------------
     single-productjs active
     ------------------------------ */
@@ -451,12 +451,12 @@
             centerMode:true,
         });
     }
-    
+
      /*--------------------------
      Tesitmonial Slider Code
     ---------------------------- */
     var tesitmonialinner = $('.tesitmonial-inner');
-	   if(tesitmonialinner.length){ 
+	   if(tesitmonialinner.length){
         $('.tesitmonial-inner').slick({
               centerMode: true,
               centerPadding: '0',
@@ -477,7 +477,7 @@
               ]
         });
     }
-    
+
     // Google Map
     if ($('#googleMap').length) {
         var initialize = function() {
@@ -503,12 +503,12 @@
         // Add the map initialize function to the window load function
         google.maps.event.addDomListener(window, "load", initialize);
     }
-    
+
     /*==========================================
        CountDownTimer
     ==========================================*/
     var CountTimer = $('.CountDownTimer');
-    if(CountTimer.length){ 
+    if(CountTimer.length){
         $(".CountDownTimer").TimeCircles({
             fg_width: 0.030,
             bg_width: 0.8,
@@ -527,9 +527,9 @@
                     color: "#fbc02d"
                 }
             }
-        });	
+        });
     }
-    
-    
-    
+
+
+
 })(jQuery);

@@ -1,0 +1,108 @@
+<div class="rs-breadcrumbs sec-color">
+  <img src="assets/FrontOffice/images/breadcrumbs/shop.jpg" alt="Breadcrubs" />
+  <div class="breadcrumbs-inner">
+      <div class="container">
+          <div class="row">
+              <div class="col-md-12 text-center">
+                  <h1 class="page-title">CREATE VIDEO ANALYSIS</h1>
+                  <ul>
+                      <li>
+                          <a class="active" routerLink="../getAllVideoAnalysis">ALL VIDEO ANALYSIS</a>
+                      </li>
+
+                  </ul>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- Breadcrumbs Section End -->
+
+
+
+<div class="contact-page-section sec-spacer">
+  <div class="container">
+    <div class="contact-comment-section">
+      <h3>ADD VIDEO ANALYSIS</h3>
+      <div id="form-message"></div>
+      <form [formGroup]="videoForm">
+        <fieldset>
+
+          <div class="row">
+
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label>Title</label>
+                <input formControlName="title" class="form-control" type="text">
+              </div>
+            </div>
+
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label>Video Url</label>
+                <input type="file" formControlName="videoUrl" class="form-control"  (change)="onFileSelected($event)">
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                  <label>Description</label>
+                  <textarea formControlName="description" class="form-control"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label>Analysis Type</label>
+                  <select class="form-control" formControlName="analysisType">
+                    <option value="" disabled selected>Select Analysis Type</option>
+                    <option value="MATCHHIGHLIGHT">MATCH HIGHLIGHT</option>
+                    <option value="TRAININGSESSION">TRAINING SESSION</option>
+                  </select>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label>Status</label>
+                  <select class="form-control" formControlName="status">
+                    <option value="" disabled selected>Select Status Type</option>
+                    <option value="ANALYZED">ANALYZED</option>
+                    <option value="PROCESSING">PROCESSING</option>
+                  </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>reCAPTCHA</label>
+              <re-captcha
+                #captchaElem
+                formControlName="recaptcha"
+                siteKey="6LeGwCorAAAAAPa1uNHwe2yz1ZEGK5XfqISHMlfJ"
+                size="normal">
+              </re-captcha>
+
+            </div>
+
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="form-group mb-0">
+                <input class="btn-send" type="submit" [disabled]="!videoForm.valid" (click)="Savevideo()" value="Submit Now">
+              </div>
+            </div>
+
+          </div>
+
+
+
+
+        </fieldset>
+      </form>
+    </div>
+  </div>
+</div>

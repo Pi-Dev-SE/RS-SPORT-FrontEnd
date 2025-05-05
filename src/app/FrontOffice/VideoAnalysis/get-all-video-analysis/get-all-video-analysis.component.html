@@ -1,0 +1,62 @@
+
+<!-- Breadcrumbs Section Start -->
+		<div class="rs-breadcrumbs sec-color">
+            <img src="assets/FrontOffice/images/breadcrumbs/shop.jpg" alt="Breadcrubs" />
+            <div class="breadcrumbs-inner">
+    			<div class="container">
+    				<div class="row">
+    					<div class="col-md-12 text-center">
+    						<h1 class="page-title">ALL VIDEO ANALYSIS</h1>
+    						<ul>
+    							<li>
+    								<a class="active" routerLink="../addVideoAnalysis">CREATE VIDEO ANALYSIS</a>
+    							</li>
+    						</ul>
+    					</div>
+    				</div>
+    			</div>
+            </div>
+		</div>
+		<!-- Breadcrumbs Section End -->
+
+
+
+
+		<!-- Our Products Start Here-->
+		<div class="our-products-section our-products-page sec-spacer">
+			<div class="container">
+
+
+        <div class="row justify-content-center mb-5">
+          <div class="col-md-6">
+            <input
+              type="text"
+              class="form-control shadow-sm"
+              placeholder="🔍 Search by club name..."
+              [(ngModel)]="searchText"
+              (input)="onSearch()"
+            />
+          </div>
+        </div>
+
+				<div class="row">
+
+					<div class="col-lg-3 col-md-6 col-sm-6" *ngFor="let video of videos">
+						<div class="single-product text-center">
+							<div class="product-image">
+								<div class="overly"></div>
+								<a href="#"><img src="assets/FrontOffice/images/breadcrumbs/a.jpg" alt="Product" /></a>
+							</div>
+							<div class="product-details">
+                <div class="product-tile">
+                  <a href="#">{{video.title}}</a>
+                </div>
+                  <div class="product-cart">
+                    <a routerLink="../getVideoAnalysisById/{{video.videoAnalysisId}}"><i class="fa fa-shopping-cart"></i>View Detail Video</a>
+                  </div>
+              </div>
+						</div>
+					</div>
+        </div>
+      </div>
+    </div>

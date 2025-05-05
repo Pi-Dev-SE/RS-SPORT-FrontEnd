@@ -1,0 +1,8 @@
+<div class="conversations">
+  <app-conversation *ngFor="let messageRoom of messageRooms" 
+    [isSelected]="messageRoom.id === selectedRoomId"
+    [messageRoom]="messageRoom"
+    [currentUser]="currentUser"
+    (selectRoomEvent)="selectRoom($event)">
+  </app-conversation>
+</div>

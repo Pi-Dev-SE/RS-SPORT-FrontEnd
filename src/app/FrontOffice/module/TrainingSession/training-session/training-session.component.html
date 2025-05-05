@@ -619,7 +619,7 @@
             <label for="analyzeCoachId" class="form-label">Coach</label>
             <select id="analyzeCoachId" formControlName="coachId" class="form-select" [ngClass]="{'is-invalid': analyzeCoachForm.get('coachId')?.invalid && analyzeCoachForm.get('coachId')?.touched}">
               <option value="">Sélectionner un coach</option>
-              <option *ngFor="let coach of coaches || []" [value]="coach?.id">{{ coach?.firstname }} {{ coach?.lastname }}</option>
+              <option *ngFor="let coach of coaches || []" [value]="coach.id">{{ coach?.firstname }} {{ coach?.lastname }}</option>
             </select>
             <div class="invalid-feedback" *ngIf="analyzeCoachForm.get('coachId')?.hasError('required') && analyzeCoachForm.get('coachId')?.touched">
               Le coach est requis

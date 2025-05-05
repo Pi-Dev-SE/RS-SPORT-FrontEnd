@@ -1,0 +1,21 @@
+import { UserWithAvatar } from "./user-with-avatar";
+
+export interface MessageContent {
+  id?: string;
+  content?: string;
+  dateSent?: string;
+  messageType?: MessageType;
+  messageRoomId?: string;
+  sender?: UserWithAvatar;
+}
+
+export enum MessageType {
+  TEXT = 'TEXT',
+  NOTIFICATION_CREATE_ROOM = 'NOTIFICATION_CREATE_ROOM',
+  NOTIFICATION_ADD_MEMBER = 'NOTIFICATION_ADD_MEMBER',
+  NOTIFICATION_REMOVE_MEMBER = 'NOTIFICATION_REMOVE_MEMBER',
+  NOTIFICATION_LEAVE_ROOM = 'NOTIFICATION_LEAVE_ROOM',
+  NOTIFICATION_MAKE_ADMIN = 'NOTIFICATION_MAKE_ADMIN',
+  NOTIFICATION_REMOVE_ADMIN = 'NOTIFICATION_REMOVE_ADMIN',
+  NOTIFICATION_CHANGE_NAME = 'NOTIFICATION_CHANGE_NAME'
+}

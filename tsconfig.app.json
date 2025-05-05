@@ -9,6 +9,8 @@
     "src/main.ts"
   ],
   "include": [
+    "src/main.ts",
+    "src/polyfills.ts",
     "src/**/*.d.ts"
   ]
 }

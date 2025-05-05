@@ -1,0 +1,126 @@
+.card {
+  padding: 10px;
+  font-size: 14px;
+}
+
+.card-body {
+  padding: 10px;
+}
+
+.report-img {
+  width: 80px;
+  height: 80px;
+}
+
+.card-text {
+  margin-bottom: 5px;
+}
+
+.badge {
+  font-size: 12px;
+  padding: 4px 6px;
+}
+
+.btn-sm {
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+/* Search bar styling */
+.search-section {
+  position: relative;
+}
+
+.search-bar {
+  width: 250px; /* Reduced width */
+}
+
+/* Notification button styling */
+.btn-primary {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+/* Centered notification popup */
+.notification-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 350px;
+  background-color: white;
+  border-radius: 5px;
+  z-index: 1000;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Overlay background */
+.notification-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.notification-header {
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification-header h5 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.notification-body {
+  max-height: 250px;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.notification-item {
+  padding: 15px;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.notification-empty {
+  padding: 30px 15px;
+  text-align: center;
+  color: #6c757d;
+}
+
+.notification-footer {
+  padding: 15px;
+  border-top: 1px solid #dee2e6;
+}
+
+.notification-footer .btn {
+  width: 100%;
+  padding: 8px;
+}
+
+/* Specific button styles */
+.btn-add-report, 
+.btn-view-list-regime {
+  background-color: #f7b839 !important;
+  color: white !important;
+  border-color: #f7b839 !important;
+  font-weight: bold;
+  transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn-add-report:hover, 
+.btn-view-list-regime:hover {
+  background-color: #d69a2d !important;
+  transform: scale(1.05);
+}
+

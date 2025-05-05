@@ -1,0 +1,97 @@
+<div class="container mt-4">
+    <!-- Barre de recherche -->
+    <div class="d-flex justify-content-between mb-3">
+      <div class="input-group w-50">
+        <span class="input-group-text"><i class="bi bi-search"></i></span>
+        <input type="text" class="form-control" placeholder="Find By..." [(ngModel)]="searchTerm">
+      </div>
+      <div>
+        <button class="btn btn-view-list-regime btn-sm ms-2" routerLink="/report">
+          <i class="bi bi-arrow-right"></i> View List Report
+        </button>
+      </div>
+      <button class="btn btn-view-list-regime btn-sm ms-2" routerLink="/calender">
+        <i class="bi bi-arrow-right"></i> View Calendar
+      </button>
+    </div>
+
+    <!-- Indicateur de chargement -->
+    <div *ngIf="isLoading" class="text-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <!-- Message si aucun régime n'est trouvé -->
+    <div *ngIf="filteredRegimes().length === 0 && !isLoading" class="alert alert-warning text-center">
+      No regimes found.
+    </div>
+
+    <!-- Grille d'affichage -->
+    <div class="row">
+      <div class="col-md-4 mb-4" *ngFor="let regime of filteredRegimes()  ">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <img src="../assets/FrontOffice/images/Recovery.jpg" alt="Recovery Image" class="report-img mb-2">
+
+
+            <h5 class="card-title text-primary">{{ regime.firstname }}</h5>
+            <p><strong>Generate At :</strong> {{ regime.generatedAt }}</p>
+            <p><strong>Recommended Exercise :</strong> {{ regime.recommendedExercise }}</p>
+            <p><strong>progress Tracking :</strong> {{ regime.progressTracking }}</p>
+            <p><strong>Physiotherapy Required :</strong> {{ regime.physiotherapyRequired ? 'Oui' : 'Non' }}</p>
+            <p><strong>Daily Duration :</strong> {{ regime.dailyDuration }} min</p>
+            <p><strong>Diet Recommendation :</strong> {{ regime.dietRecommendation }}</p>
+            <p><strong>Exercise Intensity :</strong> {{ regime.exerciseIntensity }}</p>
+            <p><strong>Status :</strong>
+              <span class="badge"
+                    [ngClass]="{
+                      'bg-danger': regime.status === TypeStatusRegime.Paused,
+                      'bg-warning': regime.status === TypeStatusRegime.Active,
+                      'bg-success': regime.status === TypeStatusRegime.Completed
+                    }">
+                {{ regime.status }}
+              </span>
+            </p>
+            <div class="d-flex justify-content-between">
+              <button class="btn btn-outline-primary btn-sm" (click)="editRegime(regime.regimeId)">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="btn btn-outline-danger btn-sm" (click)="deleteRegime(regime.regimeId)">
+                <i class="bi bi-trash"></i>
+              </button>
+              <button class="btn btn-outline-success btn-sm" (click)="dayRemaining(regime.regimeId)">
+                <i class="bi bi-eye"> view Remaining Days </i>
+              </button>
+            </div>
+            <div class="d-flex justify-content-between mt-2">
+              <button class="btn btn-outline-primary btn-sm w-100 me-1" [routerLink]="['/AddPerformance/', regime.playerId]">
+                <i class="bi bi-plus"></i> Add Performance
+              </button>
+              <button class="btn btn-outline-info btn-sm w-100 ms-1"  [routerLink]="['/DashboardPerformance/', regime.playerId]">
+                <i class="bi bi-graph-up"></i> Performance Monitoring
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Pagination -->
+<div class="d-flex justify-content-center mt-3">
+  <button class="btn btn-orange me-2 mb-3" [disabled]="page === 1" (click)="changePage(page - 1)">
+    « Previous
+  </button>
+
+  <ng-container *ngFor="let p of [].constructor(totalPages); let i = index">
+    <button class="btn me-1 mb-3" [ngClass]="{'btn-orange': page === (i+1), 'btn-outline-orange': page !== (i+1)}"
+            (click)="changePage(i + 1)">
+      {{ i + 1 }}
+    </button>
+  </ng-container>
+
+  <button class="btn btn-orange ms-2 mb-3 " [disabled]="page === totalPages" (click)="changePage(page + 1)">
+    Next »
+  </button>
+</div>

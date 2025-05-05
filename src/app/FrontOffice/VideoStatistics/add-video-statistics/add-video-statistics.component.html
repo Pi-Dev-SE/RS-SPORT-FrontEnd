@@ -1,0 +1,98 @@
+<div class="rs-breadcrumbs sec-color">
+  <img src="assets/FrontOffice/images/breadcrumbs/shop.jpg" alt="Breadcrubs" />
+  <div class="breadcrumbs-inner">
+      <div class="container">
+          <div class="row">
+              <div class="col-md-12 text-center">
+                  <h1 class="page-title">CREATE VIDEO ANALYSIS</h1>
+                  <ul>
+                      <li>
+                          <a class="active" routerLink="../getAllVideoAnalysis">ALL VIDEO ANALYSIS</a>
+                      </li>
+
+                  </ul>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- Breadcrumbs Section End -->
+
+
+
+<div class="contact-page-section sec-spacer">
+  <div class="container">
+    <div class="contact-comment-section">
+      <h3>ADD VIDEO ANALYSIS</h3>
+      <div id="form-message"></div>
+      <form [formGroup]="videoSForm">
+        <fieldset>
+
+          <div class="row">
+
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label>Total Distance Covered (km)</label>
+                <input formControlName="totalDistanceCovered" class="form-control" type="text">
+              </div>
+            </div>
+
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label>Sprint Distance (m)</label>
+                <input formControlName="sprintDistance" class="form-control" type="text">
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row">
+
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label>Top Speed (km/h)</label>
+                <input formControlName="topSpeed" class="form-control" type="text">
+              </div>
+            </div>
+
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label>Pass Accuracy (%)</label>
+                <input formControlName="passAccuracy" class="form-control" type="text">
+              </div>
+            </div>
+
+
+          </div>
+
+          <div class="row">
+
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label>Totale Pass Nombre</label>
+                <input formControlName="passNbr" class="form-control" type="text">
+              </div>
+            </div>
+
+            <div class="col-md-6 col-sm-6 col-xs-12">
+              <div class="form-group">
+                <label>Min Speed (km/h)</label>
+                <input formControlName="minSpeed" class="form-control" type="text">
+              </div>
+            </div>
+
+
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="form-group mb-0">
+                <input class="btn-send" type="submit" [disabled]="!videoSForm.valid" (click)="SavevideoS()" value="Submit Now" >
+              </div>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
+
