@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-matches',
   templateUrl: './matches.component.html',
   styleUrl: './matches.component.css'
+  
 })
 export class MatchesComponent {
 

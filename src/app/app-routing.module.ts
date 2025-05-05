@@ -1,4 +1,5 @@
 
+
 import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './core/auth.guard';
@@ -7,6 +8,10 @@ import { AllTemplateFrontComponent } from './FrontOffice/all-template-front/all-
 import { AllTemplateBackComponent } from './BackOffice/all-template-back/all-template-back.component';
 import { HomeFrontComponent } from './FrontOffice/home-front/home-front.component';
 import { HomeBackComponent } from './BackOffice/home-back/home-back.component';
+import { ExerciseComponent } from './FrontOffice/module/exercises/exercise/exercise.component';
+import { TrainingSessionService } from './FrontOffice/module/TrainingSession/service/training-session.service';
+import { TrainingSessionsComponent } from './FrontOffice/module/TrainingSession/training-session/training-session.component';
+import { CalendarComponent } from './FrontOffice/module/calendar/calendar.component';
 import { AddVideoAnalysisComponent } from './FrontOffice/VideoAnalysis/add-video-analysis/add-video-analysis.component';
 import { GetAllVideoAnalysisComponent } from './FrontOffice/VideoAnalysis/get-all-video-analysis/get-all-video-analysis.component';
 import { GetVideoAnalysisByIdComponent } from './FrontOffice/VideoAnalysis/get-video-analysis-by-id/get-video-analysis-by-id.component';
@@ -39,8 +44,26 @@ const routes: Routes = [
     path:"",
     component: AllTemplateFrontComponent,
     children:[
+      
       {
-        path:"",
+        path:"exercises",
+        component: ExerciseComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path:"training-sessions",
+        component: TrainingSessionsComponent,
+        canActivate: [AuthGuard]
+      },
+      {path:"matches", component: AllTemplateFrontComponent,
+        canActivate: [AuthGuard]},
+     {
+        path: "calendar",
+        component: CalendarComponent,
+        canActivate: [AuthGuard]
+  },
+      
+  { path:"",
         component: HomeFrontComponent
 
       },

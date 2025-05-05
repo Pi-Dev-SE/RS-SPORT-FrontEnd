@@ -1,0 +1,45 @@
+:host {
+  display: block;
+  text-align: center;
+  padding: 24px; /* Increased padding for better spacing */
+}
+
+h2 {
+  font-size: 22px; /* Slightly larger font size */
+  font-weight: bold;
+  margin-bottom: 16px; /* Increased margin for better spacing */
+  color: #c62828; /* Slightly darker red for better contrast */
+}
+
+mat-dialog-content {
+  font-size: 16px;
+  color: #444; /* Darker text color for better readability */
+  margin-bottom: 20px; /* Increased margin for better spacing */
+  display: block;
+}
+
+mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px; /* Increased gap for better spacing */
+  
+  button {
+    padding: 10px 20px; /* Increased padding for better touch target */
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+  }
+
+  button.mat-button {
+    color: #555; /* Slightly darker color for better contrast */
+  }
+
+  button.mat-raised-button {
+    background: #c62828; /* Slightly darker red for better contrast */
+    color: white;
+    
+    &:hover {
+      background: #b71c1c;
+    }
+  }
+}
