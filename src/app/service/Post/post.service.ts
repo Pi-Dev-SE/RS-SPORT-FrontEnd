@@ -46,4 +46,13 @@ export class PostService {
   }
 
 
+
+
+
+  getPaginatedPosts(page: number, size: number): Observable<any> {
+    return this.http.get(`${this.apiBasePath}/getAllPostsPaginated?page=${page}&size=${size}`);
+  }
+
+
+
 }

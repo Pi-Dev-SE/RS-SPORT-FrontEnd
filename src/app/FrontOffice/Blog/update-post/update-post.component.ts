@@ -29,7 +29,7 @@ export class UpdatePostComponent {
       clubName: [null, Validators.required],
       postedBy: [null, Validators.required],
       content: [null, [Validators.required, Validators.maxLength(5000)]],
-      img: [null] 
+      img: [null]
     });
 
     this.loadPostData();
