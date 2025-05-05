@@ -1,73 +1,84 @@
 <div class="health-report-container" id="health-report-container">
-    <h2 class="health-report-title">
-        <i class="bi bi-heart-pulse"></i> Health Report Details
-    </h2>
-  
-    <div *ngIf="report">
-        <div class="health-report-section">
-            <h5><i class="bi bi-bandaid"></i> Injury Type:</h5>
-            <p>{{ report.injuryType }}</p>
-        </div>
-  
-        <div class="health-report-section">
-            <h5><i class="bi bi-thermometer-half"></i> Injury Severity:</h5>
-            <p>{{ report.injurySeverity }}</p>
-        </div>
-  
-        <div class="health-report-section">
-            <h5><i class="bi bi-calendar-check"></i> Diagnosis Date:</h5>
-            <p>{{ report.diagnosisDate | date:'fullDate' }}</p>
-        </div>
-  
-        <div class="health-report-section">
-            <h5><i class="bi bi-calendar-event"></i> Expected Recovery Date:</h5>
-            <p>{{ report.expectedRecoveryDate | date:'fullDate' }}</p>
-        </div>
-  
-        <div class="health-report-section">
-            <h5><i class="bi bi-list-task"></i> Recovery Plan:</h5>
-            <p>{{ report.recoveryPlan }}</p>
-        </div>
-  
-        <div class="health-report-section">
-            <h5><i class="bi bi-fire"></i> Fitness Level:</h5>
-            <p>{{ report.fitnessLevel }}</p>
-        </div>
-  
-        <div class="health-report-section">
-            <h5><i class="bi bi-file-earmark-medical"></i> Medical Notes:</h5>
-            <p>{{ report.medicalNotes }}</p>
-        </div>
-  
-        <div class="health-report-section">
-            <h5><i class="bi bi-info-circle"></i> Health Status:</h5>
-            <span class="health-status-badge" 
-            [ngClass]="{
-                'badge-injured': report.status.toLowerCase() === TypeStatusHealth.Injured,
-                'badge-recovering': report.status.toLowerCase() === TypeStatusHealth.Recovring,
-                'badge-healthy': report.status.toLowerCase() === TypeStatusHealth.Active
-            }">
-                {{ report.status }}
-            </span>
-        </div>
-        
-  
-        <div class="health-report-section">
-            <h5><i class="bi bi-person-circle"></i> Doctor in Charge:</h5>
-            <p>{{ report.firstNameMed }}</p>
-        </div>
-  
-        <div class="health-report-section">
-            <h5><i class="bi bi-person-fill"></i> Player Concerned:</h5>
-            <p>{{ report.firstNamePlay }}</p>
-        </div>
-    </div>
+  <h2 class="health-report-title">
+      <i class="bi bi-heart-pulse"></i> Health Report Details
+  </h2>
+
+  <div *ngIf="report">
+      <div class="health-report-section">
+          <h5><i class="bi bi-bandaid"></i> Injury Type:</h5>
+          <p>{{ report.injuryType }}</p>
+      </div>
+
+      <div class="health-report-section">
+          <h5><i class="bi bi-thermometer-half"></i> Injury Severity:</h5>
+          <p>{{ report.injurySeverity }}</p>
+      </div>
+
+      <div class="health-report-section">
+          <h5><i class="bi bi-calendar-check"></i> Diagnosis Date:</h5>
+          <p>{{ report.diagnosisDate | date:'fullDate' }}</p>
+      </div>
+
+      <div class="health-report-section">
+          <h5><i class="bi bi-calendar-event"></i> Expected Recovery Date:</h5>
+          <p>{{ report.expectedRecoveryDate | date:'fullDate' }}</p>
+      </div>
+
+      <div class="health-report-section">
+          <h5><i class="bi bi-list-task"></i> Recovery Plan:</h5>
+          <p>{{ report.recoveryPlan }}</p>
+      </div>
+
+      <div class="health-report-section">
+          <h5><i class="bi bi-fire"></i> Fitness Level:</h5>
+          <p>{{ report.fitnessLevel }}</p>
+      </div>
+
+      <div class="health-report-section">
+          <h5><i class="bi bi-file-earmark-medical"></i> Medical Notes:</h5>
+          <p>{{ report.medicalNotes }}</p>
+      </div>
+
+      <div class="health-report-section">
+          <h5><i class="bi bi-info-circle"></i> Health Status:</h5>
+          <span class="health-status-badge"
+          [ngClass]="{
+              'badge-injured': report.status.toLowerCase() === TypeStatusHealth.Injured,
+              'badge-recovering': report.status.toLowerCase() === TypeStatusHealth.Recovring,
+              'badge-healthy': report.status.toLowerCase() === TypeStatusHealth.Active
+          }">
+              {{ report.status }}
+          </span>
+      </div>
+
+
+      <div class="health-report-section">
+          <h5><i class="bi bi-person-circle"></i> Doctor in Charge:</h5>
+          <p>{{ report.firstNameMed }}</p>
+      </div>
+
+      <div class="health-report-section">
+          <h5><i class="bi bi-person-fill"></i> Player Concerned:</h5>
+          <p>{{ report.firstNamePlay }}</p>
+      </div>
+  </div>
+
+  <div class="signature-container mt-4 mb-4">
+      <canvas #signatureCanvas width="300" height="100" class="signature-canvas"></canvas>
   </div>
 
   <div class="button-container mb-4">
-    <button class="back-button" routerLink="/report">
-        <i class="bi bi-arrow-left"></i> Back to Reports
-    </button>
-    <button (click)="generatePDF()" class="pdf-button">Generate PDF</button>
+      <button class="btn btn-secondary back-button" routerLink="/report">
+          <i class="bi bi-arrow-left"></i> Back to Reports
+      </button>
+
+      <div class="signature-buttons">
+          <button class="btn btn-outline-danger" (click)="clearSignature()">
+              <i class="bi bi-eraser"></i> Clear Signature
+          </button>
+          <button class="btn btn-primary" (click)="generatePDF()">
+              <i class="bi bi-file-earmark-pdf"></i> Generate PDF
+          </button>
+      </div>
+  </div>
 </div>
-  

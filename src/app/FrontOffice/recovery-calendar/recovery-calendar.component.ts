@@ -81,7 +81,7 @@ export class RecoveryCalendarComponent implements OnInit {
     this.loading = true;
     this.error = false;
 
-    this.http.get<any[]>('http://localhost:8089/spr01/RecoveryRegime/events')
+    this.http.get<any[]>('http://localhost:8088/spr01/RecoveryRegime/events')
       .subscribe({
         next: (data) => {
           try {

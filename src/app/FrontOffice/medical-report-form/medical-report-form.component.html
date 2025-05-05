@@ -1,130 +1,127 @@
-<div class="contact-page-section sec-spacer">
-    <div class="container">
-        <div class="contact-comment-section">
-            <h3>Medical Report Form</h3>
-            <div id="form-message"></div>
-            <form [formGroup]="aForm!" (ngSubmit)="onSubmit()">
-                <fieldset>
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>Injury Severity</label>
-                                <select class="form-control" formControlName="injurySeverity">
-                                    <option *ngFor="let type of injuryTypes" [value]="type">{{ type }}</option>
-                                </select>
-                                <div *ngIf="aForm?.get('injurySeverity')?.invalid && aForm?.get('injurySeverity')?.touched" class="text-danger mt-1">
-                                    <small><i class="bi bi-exclamation-triangle-fill"></i> This field is required.</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>Injury Type</label>
-                                <input formControlName="injuryType" class="form-control" type="text" placeholder="Ex: Minor, Severe">
-                                <div *ngIf="aForm?.get('injuryType')?.invalid && aForm?.get('injuryType')?.touched" class="text-danger mt-1">
-                                    <small><i class="bi bi-exclamation-triangle-fill"></i> This field is required.</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>Diagnosis Date</label>
-                                <input formControlName="diagnosisDate" class="form-control" type="date">
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>Expected Recovery Date</label>
-                                <input formControlName="expectedRecoveryDate" class="form-control" type="date">
-                                <div *ngIf="aForm?.errors?.['invalidDateRange']" class="text-danger mt-1">
-                                    <small><i class="bi bi-exclamation-triangle-fill"></i> The recovery date must be after the diagnosis date.</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>Fitness Level</label>
-                                <input formControlName="fitnessLevel" class="form-control" type="text" placeholder="Low, Medium, High">
-                                
-                                <div *ngIf="aForm?.get('fitnessLevel')?.touched" class="text-danger mt-1">
-                                    <small *ngIf="aForm?.get('fitnessLevel')?.hasError('required'); else patternError">
-                                        <i class="bi bi-exclamation-triangle-fill"></i> This field is required.
-                                    </small>
-                                </div>
-                                
-                                <ng-template #patternError>
-                                    <small *ngIf="aForm?.get('fitnessLevel')?.hasError('pattern')">
-                                        <i class="bi bi-exclamation-triangle-fill"></i> Please enter 'Low', 'Medium', or 'High'.
-                                    </small>
-                                </ng-template>
-                            </div>
-                            
-                        </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>Recovery Plan</label>
-                                <textarea formControlName="recoveryPlan" class="form-control"></textarea>
-                                <div *ngIf="aForm?.get('recoveryPlan')?.invalid && aForm?.get('recoveryPlan')?.touched" class="text-danger mt-1">
-                                    <small><i class="bi bi-exclamation-triangle-fill"></i> This field is required.</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>Medical Notes</label>
-                                <textarea formControlName="medicalNotes" class="form-control"></textarea>
-                                <div *ngIf="aForm?.get('medicalNotes')?.invalid && aForm?.get('medicalNotes')?.touched" class="text-danger mt-1">
-                                    <small><i class="bi bi-exclamation-triangle-fill"></i> This field is required.</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>Status</label>
-                                <select class="form-control" formControlName="status">
-                                    <option *ngFor="let status of statusList" [value]="status">{{ status }}</option>
-                                </select>
-                                <div *ngIf="aForm?.get('status')?.invalid && aForm?.get('status')?.touched" class="text-danger mt-1">
-                                    <small><i class="bi bi-exclamation-triangle-fill"></i> This field is required.</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>Staff Medical</label>
-                                <select class="form-control" formControlName="staffId">
-                                    <option *ngFor="let staff of staffList" [value]="staff.id">{{ staff.firstname }} {{ staff.lastname }}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label>Player</label>
-                                <select class="form-control" formControlName="playerId">
-                                    <option *ngFor="let player of playerList" [value]="player.id">{{ player.firstname }} {{ player.lastname }}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <div class="form-group mb-0 d-flex gap-2">
-                            <input class="btn-send" type="submit" value="Submit Now" [disabled]="aForm?.invalid || aForm?.errors?.['invalidDateRange']">
-                            <input class="btn-send" type="button" value="Cancel" [routerLink]="'/report'">
 
-                        </div>
-                    </div>
-                    
-                    
-                </fieldset>
-            </form>
-        </div>
-    </div>
+<div class="contact-page-section sec-spacer">
+  <div class="container">
+      <div class="contact-comment-section">
+          <h3>Medical Report Form</h3>
+          <div id="form-message"></div>
+          <form [formGroup]="aForm!" (ngSubmit)="onSubmit()">
+              <fieldset>
+                  <div class="row">
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div class="form-group">
+                              <label>Injury Severity</label>
+                              <select class="form-control" formControlName="injurySeverity">
+                                  <option *ngFor="let type of injuryTypes" [value]="type">{{ type }}</option>
+                              </select>
+                              <div *ngIf="aForm?.get('injurySeverity')?.invalid && aForm?.get('injurySeverity')?.touched" class="text-danger mt-1">
+                                  <small><i class="bi bi-exclamation-triangle-fill"></i> This field is required.</small>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div class="form-group">
+                              <label>Injury Type</label>
+                              <input formControlName="injuryType" class="form-control" type="text" placeholder="Ex: Minor, Severe">
+                              <div *ngIf="aForm?.get('injuryType')?.invalid && aForm?.get('injuryType')?.touched" class="text-danger mt-1">
+                                  <small><i class="bi bi-exclamation-triangle-fill"></i> This field is required.</small>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div class="form-group">
+                              <label>Diagnosis Date</label>
+                              <input formControlName="diagnosisDate" class="form-control" type="date">
+                          </div>
+                      </div>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div class="form-group">
+                              <label>Expected Recovery Date</label>
+                              <input formControlName="expectedRecoveryDate" class="form-control" type="date">
+
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div class="form-group">
+                              <label>Fitness Level</label>
+                              <input formControlName="fitnessLevel" class="form-control" type="text" placeholder="Low, Medium, High">
+
+                              <div *ngIf="aForm?.get('fitnessLevel')?.touched" class="text-danger mt-1">
+                                  <small *ngIf="aForm?.get('fitnessLevel')?.hasError('required'); else patternError">
+                                      <i class="bi bi-exclamation-triangle-fill"></i> This field is required.
+                                  </small>
+                              </div>
+
+                              <ng-template #patternError>
+                                  <small *ngIf="aForm?.get('fitnessLevel')?.hasError('pattern')">
+                                      <i class="bi bi-exclamation-triangle-fill"></i> Please enter 'Low', 'Medium', or 'High'.
+                                  </small>
+                              </ng-template>
+                          </div>
+
+                      </div>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div class="form-group">
+                              <label>Recovery Plan</label>
+                              <textarea formControlName="recoveryPlan" class="form-control"></textarea>
+
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div class="form-group">
+                              <label>Medical Notes</label>
+                              <textarea formControlName="medicalNotes" class="form-control"></textarea>
+                              <div *ngIf="aForm?.get('medicalNotes')?.invalid && aForm?.get('medicalNotes')?.touched" class="text-danger mt-1">
+                                  <small><i class="bi bi-exclamation-triangle-fill"></i> This field is required.</small>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div class="form-group">
+                              <label>Status</label>
+                              <select class="form-control" formControlName="status">
+                                  <option *ngFor="let status of statusList" [value]="status">{{ status }}</option>
+                              </select>
+                              <div *ngIf="aForm?.get('status')?.invalid && aForm?.get('status')?.touched" class="text-danger mt-1">
+                                  <small><i class="bi bi-exclamation-triangle-fill"></i> This field is required.</small>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div class="form-group">
+                              <label>Staff Medical</label>
+                              <select class="form-control" formControlName="staffId">
+                                  <option *ngFor="let staff of staffList" [value]="staff.id">{{ staff.firstname }} {{ staff.lastName }}</option>
+                              </select>
+                          </div>
+                      </div>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                          <div class="form-group">
+                              <label>Player</label>
+                              <select class="form-control" formControlName="playerId">
+                                  <option *ngFor="let player of playerList" [value]="player.id">{{ player.firstname }} {{ player.lastName }}</option>
+                              </select>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-12 col-sm-12 col-xs-12">
+                      <div class="form-group mb-0 d-flex gap-2">
+                          <input class="btn-send" type="submit" value="Submit Now" [disabled]="aForm?.invalid || aForm?.errors?.['invalidDateRange']">
+                          <input class="btn-send" type="button" value="Cancel" [routerLink]="'/report'">
+
+                      </div>
+                  </div>
+
+
+              </fieldset>
+          </form>
+      </div>
+  </div>
 </div>
