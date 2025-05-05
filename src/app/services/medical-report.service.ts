@@ -8,7 +8,7 @@ import { HealthReport } from '../Models/HealthReport';
   providedIn: 'root'
 })
 export class MedicalReportService {
-  private apiUrl = 'http://localhost:8089/spr01/HealthReport';
+  private apiUrl = 'http://localhost:8088/spr01/HealthReport';
 
 
   constructor(private http: HttpClient) {}

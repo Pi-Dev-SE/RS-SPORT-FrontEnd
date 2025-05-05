@@ -55,6 +55,7 @@ import { ChatboxComponent } from './FrontOffice/chatbox/chatbox.component';
 import { CommonModule, DatePipe } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { MedicalArchivesComponent } from './FrontOffice/medical-archives/medical-archives.component';
 
 const FullCalendarPlugins = [ // define plugins array
   dayGridPlugin
@@ -101,6 +102,7 @@ const FullCalendarPlugins = [ // define plugins array
     BodyPartLabelComponent,
     ChatboxComponent,
     RecoveryCalendarComponent,
+    MedicalArchivesComponent,
   ],
   imports: [
     BrowserModule,

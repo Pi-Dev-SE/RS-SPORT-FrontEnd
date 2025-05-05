@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class RecoveryRegimeService {
 
-  private apiUrl = 'http://localhost:8089/spr01/RecoveryRegime';
+  private apiUrl = 'http://localhost:8088/spr01/RecoveryRegime';
   
 
   constructor(private http: HttpClient) {}

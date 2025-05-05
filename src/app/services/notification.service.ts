@@ -17,7 +17,7 @@ export class NotificationService {
   }
 
   private initializeConnection() {
-    const socket = new SockJS('http://localhost:8089/spr01/ws'); // Utilisation de SockJS
+    const socket = new SockJS('http://localhost:8088/spr01/ws'); // Utilisation de SockJS
     this.stompClient = Stomp.over(socket);
 
     this.stompClient.reconnectDelay = 5000; // Auto-reconnexion
