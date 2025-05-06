@@ -1,0 +1,165 @@
+<div class="container mt-5 mb-5">
+  <div class="row">
+    <div class="col-lg-8 col-md-10 mx-auto">
+      <div class="card border-0 shadow-lg rounded-3">
+        <div class="card-header bg-gradient-primary text-white py-3 rounded-top">
+          <h3 class="mb-0 font-weight-bold">
+            <i class="fas fa-{{ isEditMode ? 'edit' : 'plus-circle' }} me-2"></i>
+            {{ isEditMode ? 'Edit Club' : 'Add New Club' }}
+          </h3>
+        </div>
+        
+        <div class="card-body p-4">
+          <form [formGroup]="clubForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+            <div class="row">
+              <div class="col-md-12 mb-4">
+                <label for="clubName" class="form-label fw-bold">
+                  Club Name <span class="text-danger">*</span>
+                </label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light"><i class="fas fa-signature"></i></span>
+                  <input 
+                    type="text" 
+                    id="clubName" 
+                    formControlName="clubName" 
+                    class="form-control form-control-lg" 
+                    placeholder="Enter club name"
+                    [ngClass]="{'is-invalid': submitted && clubForm.get('clubName')?.errors,
+                               'is-valid': submitted && !clubForm.get('clubName')?.errors}"
+                  >
+                </div>
+                <div *ngIf="submitted && clubForm.get('clubName')?.errors" class="text-danger mt-1 small">
+                  <div *ngIf="clubForm.get('clubName')?.errors?.['required']">
+                    <i class="fas fa-exclamation-circle me-1"></i>Club name is required
+                  </div>
+                  <div *ngIf="clubForm.get('clubName')?.errors?.['minlength']">
+                    <i class="fas fa-exclamation-circle me-1"></i>Club name must be at least 3 characters
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mb-4">
+              <label for="clubDescription" class="form-label fw-bold">
+                Description <span class="text-danger">*</span>
+              </label>
+              <div class="input-group">
+                <span class="input-group-text bg-light"><i class="fas fa-align-left"></i></span>
+                <textarea 
+                  id="clubDescription" 
+                  formControlName="clubDescription" 
+                  class="form-control" 
+                  rows="4"
+                  placeholder="Describe your club"
+                  [ngClass]="{'is-invalid': submitted && clubForm.get('clubDescription')?.errors,
+                             'is-valid': submitted && !clubForm.get('clubDescription')?.errors}"
+                ></textarea>
+              </div>
+              <div *ngIf="submitted && clubForm.get('clubDescription')?.errors" class="text-danger mt-1 small">
+                <div *ngIf="clubForm.get('clubDescription')?.errors?.['required']">
+                  <i class="fas fa-exclamation-circle me-1"></i>Description is required
+                </div>
+              </div>
+            </div>
+            
+            <div class="mb-4 p-3 bg-light rounded-3">
+              <label for="clubImage" class="form-label fw-bold">
+                Club Image <span class="text-danger">*</span>
+              </label>
+              
+              <div class="input-group mb-2">
+                <span class="input-group-text bg-white"><i class="fas fa-image"></i></span>
+                <input 
+                  type="file" 
+                  id="clubImage" 
+                  class="form-control" 
+                  (change)="onFileSelected($event)"
+                  accept="image/*"
+                  [ngClass]="{'is-invalid': submitted && !selectedFile && !this.isEditMode,
+                             'is-valid': submitted && (selectedFile || this.isEditMode)}"
+                >
+              </div>
+              <div *ngIf="submitted && !selectedFile && !this.isEditMode" class="text-danger mt-1 small">
+                <i class="fas fa-exclamation-circle me-1"></i>Club image is required
+              </div>
+              
+              <div *ngIf="imagePreview" class="mt-3 text-center image-preview-container">
+                <div class="image-preview-wrapper">
+                  <img [src]="imagePreview" alt="Club image preview" class="img-fluid rounded shadow-sm"
+                      (error)="handleImageError($event)">
+                </div>
+              </div>
+              
+              <div *ngIf="!imagePreview && !selectedFile" class="mt-3 text-center text-muted">
+                <i class="fas fa-image fa-3x mb-2"></i>
+                <p>Image preview will appear here</p>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-4">
+                <label for="clubAddress" class="form-label fw-bold">
+                  Address <span class="text-danger">*</span>
+                </label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light"><i class="fas fa-map-marker-alt"></i></span>
+                  <input 
+                    type="text" 
+                    id="clubAddress" 
+                    formControlName="clubAddress" 
+                    class="form-control" 
+                    placeholder="Street address"
+                    [ngClass]="{'is-invalid': submitted && clubForm.get('clubAddress')?.errors,
+                               'is-valid': submitted && !clubForm.get('clubAddress')?.errors}"
+                  >
+                </div>
+                <div *ngIf="submitted && clubForm.get('clubAddress')?.errors" class="text-danger mt-1 small">
+                  <div *ngIf="clubForm.get('clubAddress')?.errors?.['required']">
+                    <i class="fas fa-exclamation-circle me-1"></i>Address is required
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-6 mb-4">
+                <label for="clubCity" class="form-label fw-bold">
+                  City <span class="text-danger">*</span>
+                </label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light"><i class="fas fa-city"></i></span>
+                  <input 
+                    type="text" 
+                    id="clubCity" 
+                    formControlName="clubCity" 
+                    class="form-control" 
+                    placeholder="City name"
+                    [ngClass]="{'is-invalid': submitted && clubForm.get('clubCity')?.errors,
+                               'is-valid': submitted && !clubForm.get('clubCity')?.errors}"
+                  >
+                </div>
+                <div *ngIf="submitted && clubForm.get('clubCity')?.errors" class="text-danger mt-1 small">
+                  <div *ngIf="clubForm.get('clubCity')?.errors?.['required']">
+                    <i class="fas fa-exclamation-circle me-1"></i>City is required
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+              <button type="button" class="btn btn-outline-secondary btn-lg px-4" [routerLink]="['/club/clubs']">
+                <i class="fas fa-arrow-left me-2"></i> Cancel
+              </button>
+              <button type="submit" class="btn btn-primary btn-lg px-5" [disabled]="loading">
+                <i class="fas fa-{{ isEditMode ? 'save' : 'plus-circle' }} me-2"></i>
+                <span *ngIf="!loading">{{ isEditMode ? 'Update Club' : 'Create Club' }}</span>
+                <span *ngIf="loading">
+                  <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  Saving...
+                </span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

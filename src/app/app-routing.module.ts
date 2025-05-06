@@ -38,6 +38,10 @@ import { SignInComponent } from './FrontOffice/sign-in/sign-in.component';
 import { SignUpComponent } from './FrontOffice/sign-up/sign-up.component';
 import { LogoutComponent } from './FrontOffice/logout/logout.component';
 import { MedicalArchivesComponent } from './FrontOffice/medical-archives/medical-archives.component';
+import { TeamDetailComponent } from './FrontOffice/team-detail/team-detail.component';
+import { TeamFormComponent } from './FrontOffice/team-form/team-form.component';
+import { TeamManagementComponent } from './FrontOffice/team-management/team-management.component';
+import { TeamComponent } from './FrontOffice/team/team.component';
 
 const routes: Routes = [
   {
@@ -136,7 +140,30 @@ const routes: Routes = [
       { path: 'simulation', component: SimulationViewerComponent ,canActivate: [AuthGuard]},
       { path: 'calender', component: RecoveryCalendarComponent ,canActivate: [AuthGuard]},
       { path: 'archives', component: MedicalArchivesComponent ,canActivate: [AuthGuard]},
-
+      { path: 'team', component: TeamComponent ,canActivate: [AuthGuard]},
+      { path: 'team-form', component: TeamFormComponent ,canActivate: [AuthGuard]},
+      { path: 'team-form/:id', component: TeamFormComponent ,canActivate: [AuthGuard]},
+      { path: 'team-detail/:id/:idclub', component: TeamDetailComponent ,canActivate: [AuthGuard]},
+      { path: 'team-management/:id', component: TeamManagementComponent ,canActivate: [AuthGuard]},
+      {
+        path: 'players',
+        loadChildren: () => import('./FrontOffice/player/player.module').then(m => m.PlayerModule)
+        ,canActivate: [AuthGuard]},
+      {
+        path: 'coaches',
+        loadChildren: () => import('./FrontOffice/coach/coach.module').then(m => m.CoachModule)     ,canActivate: [AuthGuard]},
+      {
+        path: 'club',
+        loadChildren: () => import('./FrontOffice/club/club.module').then(m => m.ClubModule)
+        ,canActivate: [AuthGuard]},
+      {
+        path: 'games',
+        loadChildren: () => import('./FrontOffice/game/game.module').then(m => m.GameModule)
+        ,canActivate: [AuthGuard]},
+      {
+        path: 'game-sheets',
+        loadChildren: () => import('./FrontOffice/game-sheet/game-sheet.module').then(m => m.GameSheetModule)
+        ,canActivate: [AuthGuard]}
     ]
   },
   {

@@ -1,0 +1,394 @@
+<!-- Main container -->
+<div class="player-container">
+  <!-- Header Section -->
+  <header class="header">
+    <div class="header-content">
+      <h1>
+        Player Management
+       
+      </h1>
+      <button class="btn-primary" (click)="addPlayer()">
+        <i class="fas fa-plus"></i> Add New Player
+      </button>
+    </div>
+    
+    <!-- Alert Messages -->
+    <div *ngIf="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+  </header>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="loading" class="loading-spinner">
+    <div class="spinner"></div>
+    <p>Loading...</p>
+  </div>
+
+  <div class="content-container" *ngIf="!loading">
+    <!-- Player List Section -->
+    <section class="players-list">
+      <h2>Players</h2>
+      <div class="search-box">
+        <input type="text" [(ngModel)]="searchTerm" placeholder="Search players..." #searchInput (keyup)="filterPlayers(searchTerm)">
+        <button class="search-button" (click)="performSearch()">
+          <i class="fas fa-search"></i>
+        </button>
+        <button class="clear-button" *ngIf="searchTerm" (click)="clearSearch()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="players-grid" *ngIf="filteredPlayers.length > 0">
+        <div class="player-card" *ngFor="let player of filteredPlayers" (click)="viewPlayerDetails(player)">
+          <div class="player-avatar">
+            <span>{{ player.jerseyNumber }}</span>
+          </div>
+          <div class="player-info">
+            <h3>{{ getFullName(player) }}</h3>
+            <p>{{ player.position }}</p>
+            <span class="health-status" [ngClass]="'status-' + (player.healthStatus ? player.healthStatus.toLowerCase() : 'unknown')">
+              {{ getStatusDisplay(player.healthStatus || '') }}
+            </span>
+          </div>
+          <div class="player-actions">
+            <button class="btn-icon" (click)="editPlayer(player); $event.stopPropagation()">
+              <i class="fas fa-edit"></i>
+            </button>
+            <!-- <button class="btn-icon danger" (click)="deletePlayer(player.id); $event.stopPropagation()">
+              <i class="fas fa-trash"></i>
+            </button> -->
+          </div>
+        </div>
+      </div>
+      
+      <div class="no-players" *ngIf="filteredPlayers.length === 0">
+        <p *ngIf="players.length === 0">No players found. Add your first player!</p>
+        <p *ngIf="players.length > 0">No players match your search criteria.</p>
+      </div>
+    </section>
+
+    <!-- Player Form Section -->
+    <section class="player-form-section" *ngIf="isEditing || isAdding || (selectedPlayer === null && playerForm.dirty)">
+      <h2>{{ isEditing ? 'Edit Player' : 'Add New Player' }}</h2>
+      
+      <form [formGroup]="playerForm" (ngSubmit)="onSubmit()" class="player-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstname">First Name</label>
+            <input type="text" id="firstname" formControlName="firstname" placeholder="Enter first name">
+            <div class="error-message" *ngIf="playerForm.get('firstname')?.invalid && playerForm.get('firstname')?.touched">
+              First name is required
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="lastname">Last Name</label>
+            <input type="text" id="lastname" formControlName="lastname" placeholder="Enter last name">
+            <div class="error-message" *ngIf="playerForm.get('lastname')?.invalid && playerForm.get('lastname')?.touched">
+              Last name is required
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" formControlName="email" placeholder="Enter player's email">
+          <div class="error-message" *ngIf="playerForm.get('email')?.invalid && playerForm.get('email')?.touched">
+            Valid email is required
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Password <span *ngIf="isEditing">(Leave blank to keep current)</span></label>
+          <input type="password" id="password" formControlName="password" placeholder="{{ isEditing ? 'Leave blank to keep current password' : 'Enter password' }}">
+          <div class="error-message" *ngIf="playerForm.get('password')?.invalid && playerForm.get('password')?.touched">
+            Password must be at least 6 characters
+          </div>
+          <div class="error-message" *ngIf="!isEditing && playerForm.get('password')?.hasError('required') && playerForm.get('password')?.touched">
+            Password is required for new players
+          </div>
+        </div>
+
+        <!-- Added Date of Birth field -->
+        <div class="form-group">
+          <label for="dateOfBirth">Date of Birth</label>
+          <input type="date" id="dateOfBirth" formControlName="dateOfBirth">
+          <div class="error-message" *ngIf="playerForm.get('dateOfBirth')?.invalid && playerForm.get('dateOfBirth')?.touched">
+            Date of birth is required
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="position">Position</label>
+            <input type="text" id="position" formControlName="position" placeholder="Enter player's position">
+            <div class="error-message" *ngIf="playerForm.get('position')?.invalid && playerForm.get('position')?.touched">
+              Position is required
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="jerseyNumber">Jersey Number</label>
+            <input type="number" id="jerseyNumber" formControlName="jerseyNumber" placeholder="Enter jersey number">
+            <div class="error-message" *ngIf="playerForm.get('jerseyNumber')?.invalid && playerForm.get('jerseyNumber')?.touched">
+              Jersey number (1-99) is required
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="healthStatus">Health Status</label>
+          <select id="healthStatus" formControlName="healthStatus">
+            <option *ngFor="let status of healthStatusOptions" [value]="status">{{ getStatusDisplay(status) }}</option>
+          </select>
+        </div>
+
+        <!-- Added Player Image Upload field -->
+        <div class="form-group">
+          <label for="playerImage">Player Image</label>
+          <div class="image-upload-container">
+            <input type="file" id="playerImage" accept="image/*" (change)="onFileSelected($event)" class="file-input">
+            <div class="image-preview" *ngIf="previewUrl">
+              <img [src]="previewUrl" alt="Player Image Preview">
+            </div>
+            <div *ngIf="!previewUrl" class="no-image">
+              <p>No image selected</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" (click)="cancelEdit()">Cancel</button>
+          <button type="submit" class="btn-primary" [disabled]="playerForm.invalid">
+            {{ isEditing ? 'Update' : 'Save' }}
+          </button>
+        </div>
+      </form>
+    </section>
+    
+    <!-- Player Details Section -->
+    <section class="player-details" *ngIf="selectedPlayer && !isEditing && !isAdding">
+      <h2>Player Details</h2>
+      
+      <div class="player-profile">
+        <div class="profile-header">
+          <div class="player-number">{{ selectedPlayer.jerseyNumber }}</div>
+          <div class="player-name">{{ getFullName(selectedPlayer) }}</div>
+        </div>
+        
+        <div class="profile-details">
+          <div class="detail-item">
+            <span class="label">First Name</span>
+            <span class="value">{{ selectedPlayer.firstname }}</span>
+          </div>
+          
+          <div class="detail-item">
+            <span class="label">Last Name</span>
+            <span class="value">{{ selectedPlayer.lastname }}</span>
+          </div>
+          
+          <div class="detail-item">
+            <span class="label">Position</span>
+            <span class="value">{{ selectedPlayer.position }}</span>
+          </div>
+          
+          <div class="detail-item">
+            <span class="label">Email</span>
+            <span class="value">{{ selectedPlayer.email }}</span>
+          </div>
+
+          <!-- Added Date of Birth display -->
+          <div class="detail-item" *ngIf="selectedPlayer.dateOfBirth">
+            <span class="label">Date of Birth</span>
+            <span class="value">{{ selectedPlayer.dateOfBirth | date:'mediumDate' }}</span>
+          </div>
+          
+          <div class="detail-item">
+            <span class="label">Health Status</span>
+            <span class="value health-badge" [ngClass]="'status-' + (selectedPlayer.healthStatus ? selectedPlayer.healthStatus.toLowerCase() : 'unknown')">
+              {{ getStatusDisplay(selectedPlayer.healthStatus || '') }}
+            </span>
+          </div>
+          
+          <div class="detail-item" *ngIf="selectedPlayer.team">
+            <span class="label">Team</span>
+            <span class="value">{{ selectedPlayer.team.name }}</span>
+          </div>
+          
+          <div class="detail-item" *ngIf="selectedPlayer.club">
+            <span class="label">Club</span>
+            <span class="value">{{ selectedPlayer.club.clubName }}</span>
+          </div>
+        </div>
+
+        <!-- Added Player Image display -->
+        <div class="player-image-container" *ngIf="selectedPlayer.playerImage">
+          <img [src]="'http://localhost:8088/spr01/api/clubs/images/' + selectedPlayer.playerImage" alt="Player Image" class="player-detail-image">
+        </div>
+        
+        <div class="profile-actions">
+          <button class="btn-primary" (click)="editPlayer(selectedPlayer)">
+            <i class="fas fa-edit"></i> Edit
+          </button>
+          <button class="btn-danger" (click)="deletePlayer(selectedPlayer.id)">
+            <i class="fas fa-trash"></i> Delete
+          </button>
+          <button class="btn-secondary" (click)="downloadPlayerReport(selectedPlayer.id)">
+            <i class="fas fa-download"></i> Download Report
+          </button>
+        </div>
+      </div>
+
+      <!-- New Player Statistics Section -->
+      <div class="player-statistics-section">
+        <div class="statistics-header">
+          <h3>Player Performance Statistics</h3>
+          <button class="btn-primary" (click)="addStatistics()">
+            <i class="fas fa-plus"></i> Add Statistics
+          </button>
+        </div>
+
+        <!-- Statistics Summary Cards -->
+        <div class="stats-summary">
+          <div class="stat-card">
+            <div class="stat-value">{{ getAveragePerformance() }}</div>
+            <div class="stat-label">Avg. Performance</div>
+            <div class="stat-icon performance-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">{{ getTotalGoals() }}</div>
+            <div class="stat-label">Total Goals</div>
+            <div class="stat-icon goals-icon">
+              <i class="fas fa-futbol"></i>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">{{ getTotalAssists() }}</div>
+            <div class="stat-label">Total Assists</div>
+            <div class="stat-icon assists-icon">
+              <i class="fas fa-hands-helping"></i>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">{{ playerStatistics.length }}</div>
+            <div class="stat-label">Games Recorded</div>
+            <div class="stat-icon games-icon">
+              <i class="fas fa-clipboard-list"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Statistics Form -->
+        <div class="stats-form-container" *ngIf="isAddingStats || isEditingStats">
+          <h4>{{ isEditingStats ? 'Edit Statistics' : 'Add New Statistics' }}</h4>
+          
+          <form [formGroup]="statsForm" (ngSubmit)="onStatisticsSubmit()" class="stats-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" id="date" formControlName="date">
+                <div class="error-message" *ngIf="statsForm.get('date')?.invalid && statsForm.get('date')?.touched">
+                  Date is required
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="performanceRate">Performance Rating (0-10)</label>
+                <input type="number" id="performanceRate" formControlName="performanceRate" min="0" max="10" step="0.1">
+                <div class="error-message" *ngIf="statsForm.get('performanceRate')?.invalid && statsForm.get('performanceRate')?.touched">
+                  Valid rating between 0-10 is required
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="goalsScored">Goals Scored</label>
+                <input type="number" id="goalsScored" formControlName="goalsScored" min="0">
+                <div class="error-message" *ngIf="statsForm.get('goalsScored')?.invalid && statsForm.get('goalsScored')?.touched">
+                  Goals must be a positive number
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="assists">Assists</label>
+                <input type="number" id="assists" formControlName="assists" min="0">
+                <div class="error-message" *ngIf="statsForm.get('assists')?.invalid && statsForm.get('assists')?.touched">
+                  Assists must be a positive number
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-actions">
+              <button type="button" class="btn-secondary" (click)="cancelStatisticsEdit()">Cancel</button>
+              <button type="submit" class="btn-primary" [disabled]="statsForm.invalid">
+                {{ isEditingStats ? 'Update' : 'Save' }} Statistics
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Loading Spinner for Statistics -->
+        <div *ngIf="statsLoading" class="loading-spinner">
+          <div class="spinner"></div>
+          <p>Loading statistics...</p>
+        </div>
+
+        <!-- Statistics Table -->
+        <div class="stats-table-container" *ngIf="!statsLoading && !isAddingStats && !isEditingStats">
+          <div class="empty-state" *ngIf="playerStatistics.length === 0">
+            <div class="empty-icon"><i class="fas fa-chart-area"></i></div>
+            <p>No statistics recorded for this player yet.</p>
+            <button class="btn-primary" (click)="addStatistics()">
+              Add First Statistic
+            </button>
+          </div>
+
+          <table class="stats-table" *ngIf="playerStatistics.length > 0">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Performance</th>
+                <th>Goals</th>
+                <th>Assists</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let stat of playerStatistics">
+                <td>{{ stat.date | date:'mediumDate' }}</td>
+                <td>
+                  <div class="performance-meter">
+                    <div class="meter-bar" [style.width.%]="stat.performanceRate * 10" 
+                      [ngClass]="{
+                        'low': stat.performanceRate < 4,
+                        'medium': stat.performanceRate >= 4 && stat.performanceRate < 7,
+                        'high': stat.performanceRate >= 7
+                      }">
+                    </div>
+                    <span class="meter-value">{{ stat.performanceRate }}</span>
+                  </div>
+                </td>
+                <td>{{ stat.goalsScored }}</td>
+                <td>{{ stat.assists }}</td>
+                <td class="action-buttons">
+                  <button class="btn-icon" (click)="editStatistics(stat)">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn-icon danger" (click)="deleteStatistics(stat.plystaId!)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
