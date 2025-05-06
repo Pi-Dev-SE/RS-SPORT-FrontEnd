@@ -1,0 +1,118 @@
+<!-- Coach Form Container -->
+<div class="coach-form-container animated fadeIn">
+  <!-- Form Card -->
+  <div class="form-card">
+    <!-- Form Header -->
+    <div class="form-header">
+      <h1>{{ isEditMode ? 'Edit' : 'Add New' }} <span>Coach</span></h1>
+      <p class="subtitle">{{ isEditMode ? 'Update coach information' : 'Create a new coach profile' }}</p>
+    </div>
+
+    <!-- Loading Container -->
+    <div class="loading-container" *ngIf="isLoading">
+      <div class="spinner-border"></div>
+      <p>{{ isEditMode ? 'Loading coach data...' : 'Preparing form...' }}</p>
+    </div>
+
+    <!-- Error Message -->
+    <div class="error-container" *ngIf="errorMessage">
+      <div class="error-message">
+        <i class="fas fa-exclamation-circle"></i>
+        <p>{{ errorMessage }}</p>
+      </div>
+    </div>
+
+    <!-- Form Content -->
+    <form [formGroup]="coachForm" (ngSubmit)="onSubmit()" *ngIf="!isLoading">
+      <!-- Personal Information Section -->
+      <div class="form-section">
+        <h3>Personal Information</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstname"><i class="fas fa-user"></i> First Name</label>
+            <input type="text" id="firstname" formControlName="firstname" class="form-control" 
+                  [ngClass]="{'is-invalid': submitted && coachForm.get('firstname')?.errors}" placeholder="Enter first name">
+            <span class="error-message" *ngIf="submitted && coachForm.get('firstname')?.errors?.['required']">First name is required</span>
+          </div>
+          
+          <div class="form-group">
+            <label for="lastname"><i class="fas fa-user"></i> Last Name</label>
+            <input type="text" id="lastname" formControlName="lastname" class="form-control" 
+                  [ngClass]="{'is-invalid': submitted && coachForm.get('lastname')?.errors}" placeholder="Enter last name">
+            <span class="error-message" *ngIf="submitted && coachForm.get('lastname')?.errors?.['required']">Last name is required</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+            <input type="email" id="email" formControlName="email" class="form-control" 
+                  [ngClass]="{'is-invalid': submitted && coachForm.get('email')?.errors}" placeholder="Enter email address">
+            <span class="error-message" *ngIf="submitted && coachForm.get('email')?.errors?.['required']">Email is required</span>
+            <span class="error-message" *ngIf="submitted && coachForm.get('email')?.errors?.['email']">Please enter a valid email address</span>
+          </div>
+          
+          <div class="form-group">
+            <label for="dateOfBirth"><i class="fas fa-calendar-alt"></i> Date of Birth</label>
+            <input type="date" id="dateOfBirth" formControlName="dateOfBirth" class="form-control" 
+                  [ngClass]="{'is-invalid': submitted && coachForm.get('dateOfBirth')?.errors}">
+            <span class="error-message" *ngIf="submitted && coachForm.get('dateOfBirth')?.errors?.['required']">Date of birth is required</span>
+          </div>
+        </div>
+
+        <div class="form-group" *ngIf="!isEditMode">
+          <label for="password"><i class="fas fa-lock"></i> Password</label>
+          <div class="password-input-wrapper">
+            <input type="password" id="password" formControlName="password" class="form-control" 
+                  [ngClass]="{'is-invalid': submitted && coachForm.get('password')?.errors}" placeholder="Enter password">
+          </div>
+          <span class="error-message" *ngIf="submitted && coachForm.get('password')?.errors?.['required']">Password is required</span>
+        </div>
+      </div>
+
+      <!-- Professional Information Section -->
+      <div class="form-section">
+        <h3>Professional Information</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="specializationCoach"><i class="fas fa-certificate"></i> Specialization</label>
+            <input type="text" id="specializationCoach" formControlName="specializationCoach" class="form-control" 
+                  [ngClass]="{'is-invalid': submitted && coachForm.get('specializationCoach')?.errors}" placeholder="Enter specialization">
+            <span class="error-message" *ngIf="submitted && coachForm.get('specializationCoach')?.errors?.['required']">Specialization is required</span>
+          </div>
+          
+          <div class="form-group">
+            <label for="diplome"><i class="fas fa-graduation-cap"></i> Diplôme</label>
+            <input type="text" id="diplome" formControlName="diplome" class="form-control" 
+                  [ngClass]="{'is-invalid': submitted && coachForm.get('diplome')?.errors}" placeholder="Enter diplôme">
+            <span class="error-message" *ngIf="submitted && coachForm.get('diplome')?.errors?.['required']">Diplôme is required</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Club Information Section -->
+      <div class="form-section">
+        <h3>Club Information</h3>
+        <div class="form-group">
+          <label for="clubId"><i class="fas fa-building"></i> Club ID</label>
+          <input type="number" id="clubId" formControlName="clubId" class="form-control" 
+                [ngClass]="{'is-invalid': submitted && coachForm.get('clubId')?.errors}" placeholder="Enter club ID">
+          <span class="error-message" *ngIf="submitted && coachForm.get('clubId')?.errors?.['required']">Club ID is required</span>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="onCancel()">
+          <i class="fas fa-times"></i> Cancel
+        </button>
+        <button type="submit" class="btn-submit" [disabled]="isSubmitting">
+          <i class="fas fa-save"></i> {{ isEditMode ? 'Update' : 'Save' }} Coach
+          <span *ngIf="isSubmitting">
+            <i class="fas fa-spinner fa-spin"></i>
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

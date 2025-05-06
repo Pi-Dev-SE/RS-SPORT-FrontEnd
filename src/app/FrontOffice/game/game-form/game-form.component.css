@@ -1,0 +1,99 @@
+/* Game Form Component Styles */
+.team-selection {
+  margin-bottom: 25px;
+}
+
+.team-logo {
+  height: 60px;
+  width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  border-radius: 50%;
+  background-color: #f8f9fa;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.form-section {
+  margin-bottom: 30px;
+}
+
+.form-section-title {
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eee;
+  color: #17a2b8;
+}
+
+.date-time-picker {
+  max-width: 250px;
+}
+
+/* Status badge styles */
+.status-badge {
+  padding: 8px 15px;
+  border-radius: 50px;
+  margin-right: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  opacity: 0.6;
+  transition: all 0.2s;
+}
+
+.status-badge:hover {
+  opacity: 0.8;
+}
+
+.status-badge.active {
+  opacity: 1;
+}
+
+.status-scheduled {
+  background-color: #6c757d;
+  color: white;
+}
+
+.status-live {
+  background-color: #28a745;
+  color: white;
+}
+
+.status-finished {
+  background-color: #17a2b8;
+  color: white;
+}
+
+/* Form validation styles */
+.ng-invalid:not(form).ng-touched {
+  border-color: #dc3545;
+}
+
+.invalid-feedback {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 80%;
+  color: #dc3545;
+}
+
+/* Teams preview section */
+.teams-preview {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 25px;
+}
+
+.vs-badge {
+  background-color: #e9ecef;
+  color: #495057;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin: 0 auto;
+  font-weight: bold;
+}

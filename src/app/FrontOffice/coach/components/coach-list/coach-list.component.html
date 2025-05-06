@@ -1,0 +1,238 @@
+<!-- Main container -->
+<div class="coach-container">
+  <!-- Header Section -->
+  <header class="header">
+    <div class="header-content">
+      <h1>
+        Coach Management
+      </h1>
+      <button class="btn-primary" (click)="addNewCoach()">
+        <i class="fas fa-plus"></i> Add New Coach
+      </button>
+    </div>
+    
+    <!-- Alert Messages -->
+    <div *ngIf="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+  </header>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading-spinner">
+    <div class="spinner"></div>
+    <p>Loading...</p>
+  </div>
+
+  <div class="content-container" *ngIf="!isLoading">
+    <!-- Coach List Section -->
+    <section class="coaches-list">
+      <h2>Coaches</h2>
+      <div class="search-box">
+        <input type="text" [(ngModel)]="searchTerm" placeholder="Search coaches..." #searchInput (keyup)="filterCoaches()">
+        <button class="search-button" (click)="filterCoaches()">
+          <i class="fas fa-search"></i>
+        </button>
+        <button class="clear-button" *ngIf="searchTerm" (click)="clearSearch()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="coaches-grid" *ngIf="filteredCoaches.length > 0">
+        <div class="coach-card" *ngFor="let coach of filteredCoaches" (click)="viewCoachDetails(coach.id || 0)">
+          <div class="coach-avatar">
+            <span>{{ coach.firstname.charAt(0) || '' }}</span>
+          </div>
+          <div class="coach-info">
+            <h3>{{ coach.firstname }} {{ coach.lastname }}</h3>
+            <p>{{ coach.specializationCoach }}</p>
+            <span class="coach-diploma">{{ coach.diplome }}</span>
+          </div>
+          <div class="coach-actions">
+            <button class="btn-icon" (click)="editCoach(coach.id || 0); $event.stopPropagation()">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn-icon danger" (click)="deleteCoach(coach.id || 0); $event.stopPropagation()">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="no-coaches" *ngIf="filteredCoaches.length === 0">
+        <p *ngIf="coaches.length === 0">No coaches found. Add your first coach!</p>
+        <p *ngIf="coaches.length > 0">No coaches match your search criteria.</p>
+      </div>
+    </section>
+
+    <!-- Coach Form Section -->
+    <section class="coach-form-section" *ngIf="isEditing || isAdding">
+      <h2>{{ isEditing ? 'Edit Coach' : 'Add New Coach' }}</h2>
+      
+      <form [formGroup]="coachForm" (ngSubmit)="onSubmit()" class="coach-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstname">First Name</label>
+            <input type="text" id="firstname" formControlName="firstname" placeholder="Enter first name">
+            <div class="error-message" *ngIf="coachForm.get('firstname')?.invalid && coachForm.get('firstname')?.touched">
+              First name is required
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="lastname">Last Name</label>
+            <input type="text" id="lastname" formControlName="lastname" placeholder="Enter last name">
+            <div class="error-message" *ngIf="coachForm.get('lastname')?.invalid && coachForm.get('lastname')?.touched">
+              Last name is required
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" formControlName="email" placeholder="Enter coach's email">
+          <div class="error-message" *ngIf="coachForm.get('email')?.invalid && coachForm.get('email')?.touched">
+            Valid email is required
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Password <span *ngIf="isEditing">(Leave blank to keep current)</span></label>
+          <input type="password" id="password" formControlName="password" placeholder="{{ isEditing ? 'Leave blank to keep current password' : 'Enter password' }}">
+          <div class="error-message" *ngIf="coachForm.get('password')?.invalid && coachForm.get('password')?.touched && !isEditing">
+            Password must be at least 6 characters
+          </div>
+        </div>
+
+        <!-- Date of Birth field -->
+        <div class="form-group">
+          <label for="dateOfBirth">Date of Birth</label>
+          <input type="date" id="dateOfBirth" formControlName="dateOfBirth">
+          <div class="error-message" *ngIf="coachForm.get('dateOfBirth')?.invalid && coachForm.get('dateOfBirth')?.touched">
+            Date of birth is required
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="specializationCoach">Specialization</label>
+            <input type="text" id="specializationCoach" formControlName="specializationCoach" placeholder="Enter specialization">
+            <div class="error-message" *ngIf="coachForm.get('specializationCoach')?.invalid && coachForm.get('specializationCoach')?.touched">
+              Specialization is required
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="diplome">Diplôme</label>
+            <input type="text" id="diplome" formControlName="diplome" placeholder="Enter diplôme">
+            <div class="error-message" *ngIf="coachForm.get('diplome')?.invalid && coachForm.get('diplome')?.touched">
+              Diplôme is required
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="clubId">Club ID</label>
+          <input type="number" id="clubId" formControlName="clubId" placeholder="Enter club ID">
+          <div class="error-message" *ngIf="coachForm.get('clubId')?.invalid && coachForm.get('clubId')?.touched">
+            Club ID is required
+          </div>
+        </div>
+
+        <!-- Coach Image Upload field -->
+        <div class="form-group">
+          <label for="coachImage">Coach Image</label>
+          <div class="image-upload-container">
+            <input type="file" id="coachImage" accept="image/*" (change)="onFileSelected($event)" class="file-input">
+            <div class="image-preview" *ngIf="previewUrl">
+              <img [src]="previewUrl" alt="Coach Image Preview">
+            </div>
+            <div *ngIf="!previewUrl" class="no-image">
+              <p>No image selected</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" (click)="onCancel()">Cancel</button>
+          <button type="submit" class="btn-primary" [disabled]="coachForm.invalid || isSubmitting">
+            <span *ngIf="isSubmitting"><i class="fas fa-spinner fa-spin"></i></span>
+            {{ isEditing ? 'Update' : 'Save' }}
+          </button>
+        </div>
+      </form>
+    </section>
+    
+    <!-- Coach Details Section -->
+    <section class="coach-details" *ngIf="selectedCoach && !isEditing && !isAdding">
+      <h2>Coach Details</h2>
+      
+      <div class="coach-profile">
+        <div class="profile-header">
+          <div class="coach-avatar-large">
+            <span>{{ selectedCoach.firstname.charAt(0) || '' }}</span>
+          </div>
+          <div class="coach-name">{{ selectedCoach.firstname }} {{ selectedCoach.lastname }}</div>
+          <div class="coach-specialization">{{ selectedCoach.specializationCoach }}</div>
+        </div>
+        
+        <div class="profile-details">
+          <div class="detail-item">
+            <span class="label">First Name</span>
+            <span class="value">{{ selectedCoach.firstname }}</span>
+          </div>
+          
+          <div class="detail-item">
+            <span class="label">Last Name</span>
+            <span class="value">{{ selectedCoach.lastname }}</span>
+          </div>
+          
+          <div class="detail-item">
+            <span class="label">Specialization</span>
+            <span class="value">{{ selectedCoach.specializationCoach }}</span>
+          </div>
+          
+          <div class="detail-item">
+            <span class="label">Email</span>
+            <span class="value">{{ selectedCoach.email }}</span>
+          </div>
+
+          <!-- Date of Birth display -->
+          <div class="detail-item" *ngIf="selectedCoach.dateOfBirth">
+            <span class="label">Date of Birth</span>
+            <span class="value">{{ selectedCoach.dateOfBirth | date:'mediumDate' }}</span>
+          </div>
+          
+          <div class="detail-item">
+            <span class="label">Diplôme</span>
+            <span class="value diploma-badge">{{ selectedCoach.diplome }}</span>
+          </div>
+          
+          <div class="detail-item" *ngIf="selectedCoach.club">
+            <span class="label">Club</span>
+            <span class="value">{{ selectedCoach.club.clubName || 'Not assigned' }}</span>
+          </div>
+        </div>
+
+        <!-- Coach Image display -->
+        <div class="coach-image-container" *ngIf="selectedCoach.coachImage">
+          <img [src]="selectedCoach.coachImage" alt="Coach Image" class="coach-detail-image">
+        </div>
+        
+        <div class="profile-actions">
+          <button class="btn-primary" (click)="editCoach(selectedCoach.id || 0)">
+            <i class="fas fa-edit"></i> Edit
+          </button>
+          <button class="btn-danger" (click)="deleteCoach(selectedCoach.id || 0)">
+            <i class="fas fa-trash"></i> Delete
+          </button>
+          <button class="btn-secondary" (click)="backToList()">
+            <i class="fas fa-arrow-left"></i> Back to List
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

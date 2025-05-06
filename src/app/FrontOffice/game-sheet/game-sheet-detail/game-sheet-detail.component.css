@@ -1,0 +1,86 @@
+/* GameSheet Detail Component Styles */
+.match-header {
+  margin-bottom: 40px;
+}
+
+.team-logo {
+  height: 100px;
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  border-radius: 50%;
+  background-color: #f8f9fa;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.score-display {
+  font-weight: bold;
+}
+
+.winner-badge, .draw-badge {
+  padding: 8px 15px;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+.winner-badge {
+  background-color: rgba(40, 167, 69, 0.1);
+}
+
+.draw-badge {
+  background-color: rgba(23, 162, 184, 0.1);
+}
+
+/* Stats bars styling */
+.stat-item {
+  margin-bottom: 25px;
+}
+
+.stat-label {
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.stat-bar {
+  height: 15px;
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+
+/* Match analysis section */
+.analysis-item {
+  margin-bottom: 20px;
+}
+
+.analysis-item h6 {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #495057;
+}
+
+.analysis-item p {
+  color: #6c757d;
+  line-height: 1.5;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 767.98px) {
+  .team-logo {
+    height: 70px;
+    width: 70px;
+  }
+  
+  .score-display {
+    margin: 20px 0;
+  }
+  
+  .stat-value {
+    font-size: 1rem;
+  }
+}

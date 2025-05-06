@@ -1,0 +1,590 @@
+<div class="container mt-5" *ngIf="club">
+  <!-- Header with gradient background -->
+  <div class="page-header mb-5 p-4 rounded-4 shadow-sm bg-gradient-light">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <button class="btn btn-light btn-icon me-3 shadow-sm" (click)="goBack()">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <h1 class="mb-0 fw-bold">{{ club.clubName }}</h1>
+      </div>
+      <button class="btn btn-primary" (click)="editClub(club.clubId??0)">
+        <i class="fas fa-edit"></i> Edit Club
+      </button>
+    </div>
+  </div>
+  
+  <!-- Loading spinner with improved animation -->
+  <div *ngIf="loading" class="text-center my-5 py-5">
+    <div class="spinner-container">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-3 text-muted">Loading club details...</p>
+    </div>
+  </div>
+  
+  <!-- Club Details with modern UI -->
+  <div class="row g-4" *ngIf="!loading && club">
+    <!-- Club Image and Basic Info -->
+    <div class="col-md-4">
+      <div class="card h-100 shadow-lg">
+        <div class="image-container">
+          <img [src]="'http://localhost:8088/spr01/api/clubs/images/' + (club.clubImage || 'assets/images/default-club.jpg')" class="card-img-top" alt="{{ club.clubName }}">
+        </div>
+        <div class="card-body">
+          <h2 class="card-title">{{ club.clubName }}</h2>
+          <div class="d-flex align-items-center mb-3">
+            <span class="badge bg-primary me-2">
+              <i class="fas fa-map-marker-alt"></i>
+            </span>
+            <p class="mb-0 fs-5">{{ club.clubAddress }}, {{ club.clubCity }}</p>
+          </div>
+          <div class="mt-4">
+            <h6 class="text-uppercase text-muted fw-bold mb-3">Club Statistics</h6>
+            <div class="row g-3">
+              <div class="col-4">
+                <div class="stat-card bg-light p-3 rounded-4 text-center">
+                  <div class="stat-icon mb-2">
+                    <i class="fas fa-users text-primary"></i>
+                  </div>
+                  <div class="stat-value fw-bold">{{ players?.length || 0 }}</div>
+                  <div class="stat-label small text-muted">Players</div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="stat-card bg-light p-3 rounded-4 text-center">
+                  <div class="stat-icon mb-2">
+                    <i class="fas fa-user-tie text-success"></i>
+                  </div>
+                  <div class="stat-value fw-bold">{{ coaches?.length || 0 }}</div>
+                  <div class="stat-label small text-muted">Coaches</div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="stat-card bg-light p-3 rounded-4 text-center">
+                  <div class="stat-icon mb-2">
+                    <i class="fas fa-trophy text-warning"></i>
+                  </div>
+                  <div class="stat-value fw-bold">{{ club.teams?.length || 0 }}</div>
+                  <div class="stat-label small text-muted">Teams</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Club Details Tabs -->
+    <div class="col-md-8">
+      <div class="card shadow-lg h-100">
+        <div class="card-header bg-white">
+          <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+              <a class="nav-link" [class.active]="activeTab === 'info'" (click)="setActiveTab('info')">
+                <i class="fas fa-info-circle"></i> Info
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [class.active]="activeTab === 'players'" (click)="setActiveTab('players')">
+                <i class="fas fa-users"></i> Players
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [class.active]="activeTab === 'coaches'" (click)="setActiveTab('coaches')">
+                <i class="fas fa-user-tie"></i> Coaches
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [class.active]="activeTab === 'teams'" (click)="setActiveTab('teams')">
+                <i class="fas fa-trophy"></i> Teams
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="card-body">
+          <!-- Info Tab -->
+          <div *ngIf="activeTab === 'info'" class="tab-info">
+            <h4 class="mb-4 fw-bold">About the Club</h4>
+            <div class="p-4 bg-light rounded-4">
+              <div class="mb-4">
+                <h6 class="text-uppercase text-muted fw-bold mb-3">Description</h6>
+                <p class="lead">{{ club.clubDescription }}</p>
+              </div>
+              
+              <div class="mt-4">
+                <h6 class="text-uppercase text-muted fw-bold mb-3">Location Details</h6>
+                <div class="d-flex align-items-center mb-2">
+                  <i class="fas fa-map-marked-alt text-primary me-3 fa-lg"></i>
+                  <span>{{ club.clubAddress }}</span>
+                </div>
+                <div class="d-flex align-items-center mb-2">
+                  <i class="fas fa-city text-primary me-3 fa-lg"></i>
+                  <span>{{ club.clubCity }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Players Tab -->
+          <div *ngIf="activeTab === 'players'" class="tab-players">
+            <!-- Player Details View (when a player is selected) -->
+            <div *ngIf="viewingPlayerDetails && selectedPlayer" class="mb-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="fw-bold">Player Details</h4>
+                <button class="btn btn-outline-secondary" (click)="closePlayerDetails()">
+                  <i class="fas fa-times"></i> Close
+                </button>
+              </div>
+              
+              <div class="card border-0 shadow-sm">
+                <div class="card-header bg-gradient-light">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                      <div class="player-avatar me-3">
+                        {{ selectedPlayer.jerseyNumber || '#' }}
+                      </div>
+                      <div>
+                        <h5 class="mb-0 fw-bold">{{ getFullName(selectedPlayer) }}</h5>
+                        <span class="text-muted">{{ selectedPlayer.position || 'Position not specified' }}</span>
+                      </div>
+                    </div>
+                    <span class="badge" 
+                          [ngClass]="{
+                            'bg-success': selectedPlayer.healthStatus === 'ACTIVE',
+                            'bg-danger': selectedPlayer.healthStatus === 'INJURED',
+                            'bg-warning': selectedPlayer.healthStatus === 'RECOVERING',
+                            'bg-secondary': !selectedPlayer.healthStatus
+                          }">
+                      {{ getStatusDisplay(selectedPlayer.healthStatus || 'UNKNOWN') }}
+                    </span>
+                  </div>
+                </div>
+                <div class="card-body p-4">
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <div class="p-3 bg-light rounded-3">
+                        <h6 class="text-uppercase text-muted fw-bold mb-3 small">Personal Info</h6>
+                        <ul class="list-unstyled">
+                          <li class="mb-2 d-flex align-items-center">
+                            <i class="fas fa-user text-primary me-2"></i>
+                            <span class="fw-medium">{{ selectedPlayer.firstname || 'N/A' }} {{ selectedPlayer.lastname || 'N/A' }}</span>
+                          </li>
+                          <li class="mb-2 d-flex align-items-center">
+                            <i class="fas fa-envelope text-primary me-2"></i>
+                            <span>{{ selectedPlayer.email || 'Email not provided' }}</span>
+                          </li>
+                          <li class="mb-2 d-flex align-items-center">
+                            <i class="fas fa-id-badge text-primary me-2"></i>
+                            <span>ID: {{ selectedPlayer.id }}</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="p-3 bg-light rounded-3">
+                        <h6 class="text-uppercase text-muted fw-bold mb-3 small">Player Info</h6>
+                        <ul class="list-unstyled">
+                          <li class="mb-2 d-flex align-items-center">
+                            <i class="fas fa-running text-primary me-2"></i>
+                            <span>Position: {{ selectedPlayer.position || 'Not specified' }}</span>
+                          </li>
+                          <li class="mb-2 d-flex align-items-center">
+                            <i class="fas fa-tshirt text-primary me-2"></i>
+                            <span>Jersey #: {{ selectedPlayer.jerseyNumber || 'Not assigned' }}</span>
+                          </li>
+                          <li class="mb-2 d-flex align-items-center">
+                            <i class="fas fa-heartbeat text-primary me-2"></i>
+                            <span>Health: {{ getStatusDisplay(selectedPlayer.healthStatus || 'UNKNOWN') }}</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Players List & Management Button -->
+            <div *ngIf="!viewingPlayerDetails">
+              <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="fw-bold">Players</h4>
+                <div class="d-flex gap-2">
+                  <div class="input-group">
+                    <input type="number" class="form-control" placeholder="Player ID" [(ngModel)]="playerIdToAdd">
+                    <button class="btn btn-primary" (click)="assignPlayer()">
+                      <i class="fas fa-plus"></i> Add
+                    </button>
+                  </div>
+                  <button class="btn btn-outline-primary" (click)="goToPlayerManagement()">
+                    <i class="fas fa-users-cog"></i> View All
+                  </button>
+                </div>
+              </div>
+            
+              <!-- Loading indicator for players -->
+              <div *ngIf="loadingPlayers" class="text-center my-4">
+                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                  <span class="visually-hidden">Loading players...</span>
+                </div>
+                <p class="mt-2 text-muted">Loading players...</p>
+              </div>
+              
+              <!-- No players message -->
+              <div *ngIf="!loadingPlayers && (!players || players.length === 0)" class="text-center my-5 py-5 bg-light rounded-4">
+                <div class="empty-state">
+                  <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                  <h5 class="text-muted">No Players Assigned</h5>
+                  <p class="mb-4">This club doesn't have any players assigned yet.</p>
+                  <button class="btn btn-primary btn-sm" (click)="goToPlayerManagement()">
+                    <i class="fas fa-plus-circle me-2"></i> Add Players
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Players List -->
+              <div *ngIf="!loadingPlayers && players && players.length > 0" class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Player</th>
+                      <th>Position</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let player of players">
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="player-number rounded-circle me-3 d-flex align-items-center justify-content-center">
+                            {{ player.jerseyNumber || '#' }}
+                          </div>
+                          <div>
+                            <p class="mb-0 fw-medium">{{ getFullName(player) }}</p>
+                            <small class="text-muted">ID: {{ player.id }}</small>
+                          </div>
+                        </div>
+                      </td>
+                      <td>{{ player.position || 'Not specified' }}</td>
+                      <td>
+                        <span class="badge" 
+                              [ngClass]="{
+                                'bg-success': player.healthStatus === 'ACTIVE',
+                                'bg-danger': player.healthStatus === 'INJURED',
+                                'bg-warning': player.healthStatus === 'RECOVERING',
+                                'bg-secondary': !player.healthStatus
+                              }">
+                          {{ getStatusDisplay(player.healthStatus || 'UNKNOWN') }}
+                        </span>
+                      </td>
+                      <td>
+                        <div class="d-flex gap-2">
+                          <button class="btn btn-info btn-sm" (click)="viewPlayerDetails(player)">
+                            <i class="fas fa-eye"></i>
+                          </button>
+                          <button class="btn btn-danger btn-sm" (click)="removePlayer(player.id)">
+                            <i class="fas fa-user-minus"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Coaches Tab -->
+          <div *ngIf="activeTab === 'coaches'" class="tab-coaches">
+            <!-- Coach Details View (when a coach is selected) -->
+            <div *ngIf="viewingCoachDetails && selectedCoach" class="mb-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="fw-bold">Coach Details</h4>
+                <button class="btn btn-outline-secondary" (click)="closeCoachDetails()">
+                  <i class="fas fa-times"></i> Close
+                </button>
+              </div>
+              
+              <div class="card border-0 shadow-sm">
+                <div class="card-header bg-gradient-light">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                      <div class="coach-avatar me-3">
+                        <i class="fas fa-user-tie"></i>
+                      </div>
+                      <div>
+                        <h5 class="mb-0 fw-bold">{{ selectedCoach.firstname || '' }} {{ selectedCoach.lastname || '' }}</h5>
+                        <span class="badge bg-info mt-1">{{ selectedCoach.specializationCoach || 'No specialization' }}</span>
+                      </div>
+                    </div>
+                    <span class="badge" [ngClass]="selectedCoach.enabled ? 'bg-success' : 'bg-danger'">
+                      {{ selectedCoach.enabled ? 'Active' : 'Inactive' }}
+                    </span>
+                  </div>
+                </div>
+                <div class="card-body p-4">
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <div class="p-3 bg-light rounded-3">
+                        <h6 class="text-uppercase text-muted fw-bold mb-3 small">Personal Info</h6>
+                        <ul class="list-unstyled">
+                          <li class="mb-2 d-flex align-items-center">
+                            <i class="fas fa-user text-primary me-2"></i>
+                            <span class="fw-medium">{{ selectedCoach.firstname || 'N/A' }} {{ selectedCoach.lastname || 'N/A' }}</span>
+                          </li>
+                          <li class="mb-2 d-flex align-items-center">
+                            <i class="fas fa-envelope text-primary me-2"></i>
+                            <span>{{ selectedCoach.email || 'Email not provided' }}</span>
+                          </li>
+                          <li class="mb-2 d-flex align-items-center">
+                            <i class="fas fa-id-badge text-primary me-2"></i>
+                            <span>ID: {{ selectedCoach.id }}</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="p-3 bg-light rounded-3">
+                        <h6 class="text-uppercase text-muted fw-bold mb-3 small">Professional Info</h6>
+                        <ul class="list-unstyled">
+                          <li class="mb-2 d-flex align-items-center">
+                            <i class="fas fa-graduation-cap text-primary me-2"></i>
+                            <span>Diploma: {{ selectedCoach.diplome || 'Not specified' }}</span>
+                          </li>
+                          <li class="mb-2 d-flex align-items-center">
+                            <i class="fas fa-briefcase text-primary me-2"></i>
+                            <span>Specialization: {{ selectedCoach.specializationCoach || 'Not specified' }}</span>
+                          </li>
+                          <li class="mb-2 d-flex align-items-center">
+                            <i class="fas fa-lock text-primary me-2"></i>
+                            <span>Account: {{ selectedCoach.accountLocked ? 'Locked' : 'Unlocked' }}</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div *ngIf="!viewingCoachDetails">
+              <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="fw-bold">Coaches</h4>
+                <div class="d-flex gap-2">
+                  <div class="input-group">
+                    <input type="number" class="form-control" placeholder="Coach ID" [(ngModel)]="coachIdToAdd">
+                    <button class="btn btn-primary" (click)="assignCoach()">
+                      <i class="fas fa-plus"></i> Add
+                    </button>
+                  </div>
+                  <button class="btn btn-outline-primary" (click)="goToCoachManagement()">
+                    <i class="fas fa-users-cog"></i> View All
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Loading indicator for coaches -->
+              <div *ngIf="loadingCoaches" class="text-center my-4">
+                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                  <span class="visually-hidden">Loading coaches...</span>
+                </div>
+                <p class="mt-2 text-muted">Loading coaches...</p>
+              </div>
+              
+              <!-- No coaches message -->
+              <div *ngIf="!loadingCoaches && (!coaches || coaches.length === 0)" class="text-center my-5 py-5 bg-light rounded-4">
+                <div class="empty-state">
+                  <i class="fas fa-user-tie fa-3x text-muted mb-3"></i>
+                  <h5 class="text-muted">No Coaches Assigned</h5>
+                  <p class="mb-4">This club doesn't have any coaches assigned yet.</p>
+                  <button class="btn btn-primary btn-sm" (click)="goToCoachManagement()">
+                    <i class="fas fa-plus-circle me-2"></i> Add Coaches
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Coaches List -->
+              <div *ngIf="!loadingCoaches && coaches && coaches.length > 0" class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Coach</th>
+                      <th>Specialization</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let coach of coaches">
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="coach-avatar me-3 small">
+                            <i class="fas fa-user-tie"></i>
+                          </div>
+                          <div>
+                            <p class="mb-0 fw-medium">{{ coach.firstname || '' }} {{ coach.lastname || '' }}</p>
+                            <small class="text-muted">ID: {{ coach.id }}</small>
+                          </div>
+                        </div>
+                      </td>
+                      <td>{{ coach.specializationCoach || 'Not specified' }}</td>
+                      <td>
+                        <span class="badge" [ngClass]="coach.enabled ? 'bg-success' : 'bg-danger'">
+                          {{ coach.enabled ? 'Active' : 'Inactive' }}
+                        </span>
+                      </td>
+                      <td>
+                        <div class="d-flex gap-2">
+                          <button class="btn btn-info btn-sm" (click)="viewCoachDetails(coach)">
+                            <i class="fas fa-eye"></i>
+                          </button>
+                          <button class="btn btn-danger btn-sm" (click)="removeCoach(coach.id)">
+                            <i class="fas fa-user-minus"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Teams Tab -->
+          <div *ngIf="activeTab === 'teams'" class="tab-teams">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h4 class="fw-bold">Teams</h4>
+              <button class="btn btn-primary" (click)="goToTeamManagement()">
+                <i class="fas fa-plus-circle me-2"></i> Manage Teams
+              </button>
+            </div>
+            
+            <!-- Loading indicator for teams -->
+            <div *ngIf="loadingTeams" class="text-center my-4">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading teams...</span>
+              </div>
+              <p class="mt-3 text-muted">Loading team data...</p>
+            </div>
+            
+            <!-- No teams message -->
+            <div *ngIf="!loadingTeams && (!teams || teams.length === 0)" class="text-center my-5 py-5 bg-light rounded-4">
+              <div class="empty-state">
+                <i class="fas fa-trophy fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">No Teams</h5>
+                <p class="mb-4">This club doesn't have any teams yet.</p>
+                <button class="btn btn-primary" (click)="goToTeamManagement()">
+                  <i class="fas fa-plus-circle me-2"></i> Create a Team
+                </button>
+              </div>
+            </div>
+            
+            <!-- Teams List -->
+            <div *ngIf="!loadingTeams && teams && teams.length > 0" class="row g-4">
+              <div class="col-md-6" *ngFor="let team of teams">
+                <div class="card team-card h-100 shadow-sm border-0">
+                  <div class="card-header bg-light py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <h5 class="card-title fw-bold mb-0">{{ team.teamName }}</h5>
+                      <span class="badge" [ngClass]="getCategoryClass(team.categorie)">{{ team.categorie }}</span>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="team-info mb-3">
+                      <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div>
+                          <i class="fas fa-user-tie text-success me-2"></i>
+                          <strong>Coach:</strong>
+                        </div>
+                        <span>{{ team.coachName || 'Not assigned' }}</span>
+                      </div>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                          <i class="fas fa-users text-info me-2"></i>
+                          <strong>Players:</strong>
+                        </div>
+                        <span class="badge badge-pill bg-info">{{ team.playerCount || 0 }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer bg-white border-0 pt-0">
+                    <div class="d-flex">
+                      <button class="btn btn-info flex-grow-1 me-2" (click)="viewTeamDetails(team.teamId)">
+                        <i class="fas fa-eye me-2"></i> View Details
+                      </button>
+                      <button class="btn btn-warning flex-grow-1" (click)="editTeam(team.teamId)">
+                        <i class="fas fa-edit me-2"></i> Edit
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Additional CSS classes for components -->
+  <style>
+    .bg-gradient-light {
+      background: linear-gradient(120deg, #f8f9fa, #e9ecef);
+    }
+    
+    .player-number, .coach-number {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      color: white;
+      font-weight: bold;
+      min-width: 40px;
+    }
+    
+    .empty-state {
+      opacity: 0.7;
+    }
+    
+    .team-card {
+      transition: all 0.3s ease;
+    }
+    
+    .team-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
+    }
+    
+    .btn-icon {
+      width: 46px;
+      height: 46px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+    }
+    
+    .stat-icon {
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .stat-icon i {
+      font-size: 1.2rem;
+    }
+    
+    .spinner-container {
+      position: relative;
+      height: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</div>

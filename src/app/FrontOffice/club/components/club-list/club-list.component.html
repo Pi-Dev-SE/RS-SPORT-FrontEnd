@@ -1,0 +1,102 @@
+<div class="container mt-5">
+  <!-- Alert messages -->
+  <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ successMessage }}
+    <button type="button" class="btn-close" (click)="successMessage = null" aria-label="Close"></button>
+  </div>
+  
+  <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ errorMessage }}
+    <button type="button" class="btn-close" (click)="errorMessage = null" aria-label="Close"></button>
+  </div>
+  
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <h2 class="text-primary fw-bold">Clubs</h2>
+    </div>
+    <div class="col-md-6 text-end">
+      <button class="btn btn-primary" [routerLink]="['/club/add-club']">
+        <i class="fas fa-plus"></i> Add New Club
+      </button>
+    </div>
+  </div>
+
+  <!-- Search Box -->
+  <div class="row mb-4">
+    <div class="col-md-8 mx-auto">
+      <div class="input-group">
+        <input 
+          type="text" 
+          class="form-control" 
+          placeholder="Search clubs by name..." 
+          [(ngModel)]="searchTerm"
+          (keyup.enter)="searchClubs()"
+        >
+        <button class="btn btn-outline-primary" type="button" (click)="searchClubs()">
+          <i class="fas fa-search"></i> Search
+        </button>
+        <button class="btn btn-outline-secondary" type="button" (click)="loadAllClubs()">
+          <i class="fas fa-redo"></i> Reset
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading spinner -->
+  <div *ngIf="loading" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Club Cards with Enhanced Design -->
+  <div class="row g-4" *ngIf="!loading">
+    <div class="col-12 col-md-6 col-lg-4" *ngFor="let club of clubs">
+      <div class="card h-100 border-0 shadow-sm club-card">
+        <div class="card-img-wrapper">
+          <img [src]="'http://localhost:8088/spr01/api/clubs/images/' + (club.clubImage || 'assets/images/default-club.jpg')" class="card-img-top" alt="{{ club.clubName }}">
+          <div class="club-overlay">
+            <span class="badge bg-primary position-absolute top-0 end-0 m-2">{{ club.clubCity }}</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title fw-bold text-primary">{{ club.clubName }}</h5>
+          <p class="card-text text-muted small mb-2">
+            <i class="fas fa-map-marker-alt me-2"></i>{{ club.clubCity }}
+          </p>
+          <p class="card-text description-text">{{ (club.clubDescription && club.clubDescription.length > 100) ? (club.clubDescription | slice:0:100) + '...' : club.clubDescription }}</p>
+        </div>
+        <div class="card-footer bg-white border-0 pt-0">
+          <div class="d-flex justify-content-between">
+            <button class="btn btn-sm btn-primary" (click)="viewClubDetails(club.clubId ?? 0)">
+              <i class="fas fa-info-circle me-1"></i> Details
+            </button>
+            <div>
+              <button class="btn btn-sm btn-outline-secondary me-1" (click)="editClub(club.clubId ?? 0)">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteClub(club.clubId ?? 0)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Enhanced Empty State -->
+  <div *ngIf="!loading && clubs.length === 0" class="text-center my-5">
+    <div class="empty-state p-5 rounded shadow-sm">
+      <i class="fas fa-search fa-3x text-muted mb-3"></i>
+      <h4 class="text-primary">No Clubs Found</h4>
+      <p class="text-muted mb-4">We couldn't find any clubs matching your criteria.</p>
+      <button class="btn btn-outline-primary" (click)="loadAllClubs()">
+        <i class="fas fa-redo me-2"></i>Show All Clubs
+      </button>
+    </div>
+  </div>
+
+  <!-- Add Club Modal - Fixed for accessibility -->
+ 
+</div>

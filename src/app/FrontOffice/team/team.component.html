@@ -1,0 +1,197 @@
+<div class="container mt-5">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="section-title">Teams Management</h2>
+    </div>
+  </div>
+
+  <!-- Success Message -->
+  <div class="alert alert-success alert-dismissible fade show" *ngIf="successMessage">
+    <strong>Success!</strong> {{ successMessage }}
+    <button type="button" class="close" (click)="successMessage = ''">
+      <span>&times;</span>
+    </button>
+  </div>
+
+  <!-- Error Alert -->
+  <div class="alert alert-danger alert-dismissible fade show" *ngIf="error">
+    <strong>Error!</strong> {{ error }}
+    <button type="button" class="close" (click)="error = ''">
+      <span>&times;</span>
+    </button>
+  </div>
+
+  <!-- Club Selection -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="clubSelect"><strong>Select Club</strong></label>
+            <select class="form-control" id="clubSelect" [(ngModel)]="selectedClubId" (change)="onClubChange()">
+              <option [value]="0" disabled>Select a club</option>
+              <option *ngFor="let club of clubOptions" [value]="club.id">{{ club.name }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6 d-flex align-items-end justify-content-end">
+          <button class="btn btn-primary" (click)="addNewTeam()" [disabled]="!selectedClubId">
+            <i class="fa fa-plus"></i> Add New Team
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Club Players Section -->
+  <div class="card mb-4" *ngIf="selectedClubId && players.length > 0">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">Club Players</h4>
+    </div>
+    <div class="card-body">
+      <!-- Loading Spinner for Players -->
+      <div class="text-center my-3" *ngIf="loadingPlayers">
+        <div class="spinner-border text-primary" role="status">
+          <span class="sr-only">Loading players...</span>
+        </div>
+        <p class="mt-2">Loading player data...</p>
+      </div>
+
+      <!-- Players List -->
+      <div class="table-responsive" *ngIf="!loadingPlayers">
+        <table class="table table-striped table-hover">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">Image</th>
+              <th scope="col">Name</th>
+              <th scope="col">Position</th>
+              <th scope="col">Health Status</th>
+              <th scope="col">Jersey #</th>
+              <th scope="col">Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let player of players">
+              <td>
+                <div class="player-avatar">
+                  <img *ngIf="player.imageUrl || player.playerImage" 
+                       [src]="player.imageUrl || 'http://localhost:8088/spr01/webapp/images/' + player.playerImage" 
+                       alt="{{ player.firstname }} {{ player.lastname }}" 
+                       class="rounded-circle" width="40" height="40">
+                  <div *ngIf="!player.imageUrl && !player.playerImage" 
+                       class="rounded-circle bg-light d-flex align-items-center justify-content-center" 
+                       style="width: 40px; height: 40px;">
+                    <i class="fa fa-user text-secondary"></i>
+                  </div>
+                </div>
+              </td>
+              <td>{{ player.firstname }} {{ player.lastname }}</td>
+              <td>{{ player.position || 'Not specified' }}</td>
+              <td>
+                <span class="badge" 
+                      [ngClass]="{'badge-success': player.healthStatus === 'ACTIVE', 
+                                'badge-danger': player.healthStatus === 'INJURED',
+                                'badge-warning': player.healthStatus === 'RECOVERING',
+                                'badge-secondary': !player.healthStatus}">
+                  {{ player.healthStatus || 'Unknown' }}
+                </span>
+              </td>
+              <td>{{ player.jerseyNumber || 'N/A' }}</td>
+              <td>{{ player.email }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- No Players Message -->
+      <div class="alert alert-info text-center" *ngIf="!loadingPlayers && players.length === 0">
+        <i class="fa fa-info-circle"></i> No players found for this club.
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div class="text-center my-5" *ngIf="loading">
+    <div class="spinner-border text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <p class="mt-2">Loading teams data...</p>
+  </div>
+
+  <!-- Teams List -->
+  <div *ngIf="!loading && teams.length > 0">
+    <div class="row">
+      <div class="col-md-4 mb-4" *ngFor="let team of teams | slice: (currentPage-1) * itemsPerPage : currentPage * itemsPerPage">
+        <div class="card team-card h-100">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">{{ team.teamName }}</h5>
+            <span class="badge" [ngClass]="getCategoryClass(team.categorie)">{{ getCategoryString(team.categorie) }}</span>
+          </div>
+          <div class="card-body">
+            <div class="text-center mb-3">
+              <div class="logo-placeholder py-4">
+                <i class="fa fa-users fa-3x text-muted"></i>
+              </div>
+            </div>
+            <div class="team-info">
+              <p><strong>Club:</strong> {{ team.clubName || 'Not assigned' }}</p>
+              <p><strong>Coach:</strong> {{ team.coachName || 'Not assigned' }}</p>
+              <p><strong>Players:</strong> {{ team.playerCount || 0 }}</p>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="btn-group w-100">
+              <button class="btn btn-info" (click)="viewTeamDetails(team.teamId)" [disabled]="!team.teamId">
+                <i class="fa fa-eye"></i> Details
+              </button>
+              <button class="btn btn-warning" (click)="editTeam(team.teamId)" [disabled]="!team.teamId">
+                <i class="fa fa-edit"></i> Edit
+              </button>
+              <button class="btn btn-danger" (click)="deleteTeam(team.teamId)" [disabled]="!team.teamId">
+                <i class="fa fa-trash"></i> Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="d-flex justify-content-center mt-4" *ngIf="teams.length > itemsPerPage">
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <a class="page-link" href="javascript:void(0)" (click)="currentPage = 1">First</a>
+          </li>
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <a class="page-link" href="javascript:void(0)" (click)="currentPage = currentPage - 1">Previous</a>
+          </li>
+          <li class="page-item" *ngFor="let page of getPageNumbers()" [class.active]="currentPage === page">
+            <a class="page-link" href="javascript:void(0)" (click)="currentPage = page">{{ page }}</a>
+          </li>
+          <li class="page-item" [class.disabled]="currentPage === getTotalPages()">
+            <a class="page-link" href="javascript:void(0)" (click)="currentPage = currentPage + 1">Next</a>
+          </li>
+          <li class="page-item" [class.disabled]="currentPage === getTotalPages()">
+            <a class="page-link" href="javascript:void(0)" (click)="currentPage = getTotalPages()">Last</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <!-- No Teams Message -->
+  <div class="alert alert-info text-center py-4" *ngIf="!loading && teams.length === 0 && selectedClubId">
+    <h5><i class="fa fa-info-circle"></i> No teams found for this club</h5>
+    <p class="mb-3">This club doesn't have any teams yet.</p>
+    <button class="btn btn-primary" (click)="addNewTeam()">
+      <i class="fa fa-plus"></i> Add New Team
+    </button>
+  </div>
+
+  <!-- Select Club Message -->
+  <div class="alert alert-warning text-center py-4" *ngIf="!loading && !selectedClubId">
+    <h5><i class="fa fa-exclamation-triangle"></i> Please select a club first</h5>
+    <p class="mb-0">Teams are organized by clubs. Please select a club to view its teams.</p>
+  </div>
+</div>
