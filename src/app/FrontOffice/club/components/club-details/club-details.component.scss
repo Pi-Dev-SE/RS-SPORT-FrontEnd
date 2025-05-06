@@ -1,0 +1,504 @@
+// Modern Card & Container styling
+.container {
+  padding: 2rem 1.5rem;
+  max-width: 1400px;
+}
+.gap-2 {
+  display: flex
+;
+  gap: .5rem !important;
+  flex-direction: column;
+}
+// Card styling with glassmorphism effects
+.card {
+  border: none;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: hidden;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+  }
+  
+  .card-header {
+    border-bottom: none;
+    background: linear-gradient(to right, #f8f9fa, #ffffff);
+    padding: 1.5rem;
+  }
+  
+  .card-body {
+    padding: 1.75rem;
+  }
+  
+  .card-img-top {
+    height: 300px;
+    object-fit: cover;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    transition: transform 0.7s ease;
+    
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+  
+  .card-title {
+    font-size: 1.9rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(90deg, #2c3e50, #3498db);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+// Modern Navigation tabs with active animations
+.nav-tabs {
+  border-bottom: none;
+  gap: 10px;
+  display: flex;
+  
+  .nav-item {
+    margin: 0;
+    
+    .nav-link {
+      border: none;
+      color: #6c757d;
+      padding: 0.9rem 1.5rem;
+      border-radius: 12px;
+      font-weight: 600;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      
+      &:before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 0;
+        background: linear-gradient(to top, rgba(52, 152, 219, 0.1), transparent);
+        transition: height 0.3s ease;
+        z-index: -1;
+      }
+      
+      &:hover {
+        color: #3498db;
+        transform: translateY(-2px);
+        
+        &:before {
+          height: 100%;
+        }
+      }
+      
+      &.active {
+        color: #ffffff;
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        box-shadow: 0 6px 15px rgba(52, 152, 219, 0.35);
+        border: none;
+        transform: translateY(-3px);
+        
+        &:before {
+          height: 0;
+        }
+        
+        i {
+          transform: scale(1.2);
+        }
+      }
+      
+      i {
+        margin-right: 8px;
+        transition: transform 0.3s ease;
+      }
+    }
+  }
+}
+
+// Modern Buttons with animation and hover effects
+.btn {
+  border-radius: 12px;
+  font-weight: 600;
+  padding: 0.7rem 1.5rem;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: -1;
+    transform: scale(0);
+    border-radius: 50%;
+    transition: transform 0.5s ease;
+  }
+  
+  &:hover:after {
+    transform: scale(2.5);
+  }
+  
+  &-primary {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    border: none;
+    box-shadow: 0 6px 15px rgba(52, 152, 219, 0.3);
+    
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+    }
+    
+    &:active {
+      transform: translateY(1px);
+    }
+  }
+  
+  &-outline-primary {
+    border: 2px solid #3498db;
+    color: #3498db;
+    background: transparent;
+    
+    &:hover {
+      background-color: #3498db;
+      color: #ffffff;
+      box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+    }
+  }
+
+  &-outline-secondary {
+    border: 2px solid #95a5a6;
+    color: #7f8c8d;
+    background: transparent;
+    
+    &:hover {
+      background-color: #95a5a6;
+      color: #ffffff;
+      box-shadow: 0 5px 15px rgba(127, 140, 141, 0.3);
+    }
+  }
+  
+  &-danger {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    border: none;
+    
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(231, 76, 60, 0.3);
+    }
+  }
+  
+  &-info {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    border: none;
+    color: white;
+    
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(46, 204, 113, 0.3);
+    }
+  }
+  
+  &-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 10px;
+  }
+  
+  i {
+    margin-right: 8px;
+    transition: transform 0.3s ease;
+  }
+  
+  &:hover i {
+    transform: translateX(-3px);
+  }
+}
+
+// Tables with modern style and hover effects
+.table {
+  border-collapse: separate;
+  border-spacing: 0 12px;
+  margin-top: -12px;
+  
+  thead th {
+    border-bottom: none;
+    color: #7f8c8d;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    padding: 15px 20px;
+    opacity: 0.8;
+  }
+  
+  tbody {
+    tr {
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      background-color: #ffffff;
+      
+      &:hover {
+        transform: translateY(-4px) scale(1.01);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.07);
+        z-index: 1;
+        position: relative;
+      }
+      
+      td {
+        padding: 18px 20px;
+        vertical-align: middle;
+        border-top: none;
+        border: none;
+        
+        &:first-child {
+          border-top-left-radius: 12px;
+          border-bottom-left-radius: 12px;
+        }
+        
+        &:last-child {
+          border-top-right-radius: 12px;
+          border-bottom-right-radius: 12px;
+        }
+      }
+    }
+  }
+}
+
+// Badges with gradient styling
+.badge {
+  padding: 0.6em 1em;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  
+  &.bg-success {
+    background: linear-gradient(135deg, #2ecc71, #27ae60) !important;
+  }
+  
+  &.bg-danger {
+    background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+  }
+  
+  &.bg-warning {
+    background: linear-gradient(135deg, #f39c12, #e67e22) !important;
+    color: white;
+  }
+  
+  &.bg-secondary {
+    background: linear-gradient(135deg, #95a5a6, #7f8c8d) !important;
+  }
+  
+  &.bg-primary {
+    background: linear-gradient(135deg, #3498db, #2980b9) !important;
+  }
+  
+  &.bg-info {
+    background: linear-gradient(135deg, #1abc9c, #16a085) !important;
+  }
+}
+
+// Spinner with gradient animation
+.spinner-border {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-width: 0.25em;
+  animation: spinner-border 1s linear infinite, gradient-spin 3s ease infinite;
+  background: linear-gradient(90deg, #3498db, #2980b9, #9b59b6, #3498db);
+  background-size: 300% 300%;
+  border-radius: 50%;
+  border-color: transparent;
+}
+
+@keyframes gradient-spin {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+// Layout spacing improvements
+.row {
+  margin: 0 -15px;
+  
+  > [class*="col-"] {
+    padding: 0 15px;
+  }
+}
+
+// Player/Coach detail cards with improved visuals
+.player-details, .coach-details {
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.75rem;
+    background: linear-gradient(to right, #f1f5f9, #f8fafc);
+  }
+}
+
+// Tab content animation with staggered effect
+[class*="tab-"] {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+// Player/user avatar styling
+.player-avatar, .coach-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  background: linear-gradient(45deg, #3498db, #2980b9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+}
+
+// Responsive adjustments with better mobile experience
+@media (max-width: 992px) {
+  .card-img-top {
+    height: 250px;
+  }
+  
+  .content-container {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 767px) {
+  .card-img-top {
+    height: 220px;
+  }
+  
+  .nav-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 5px;
+    
+    &::-webkit-scrollbar {
+      height: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(52, 152, 219, 0.3);
+      border-radius: 10px;
+    }
+    
+    .nav-item .nav-link {
+      padding: 0.6rem 1rem;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+  }
+  
+  .table {
+    font-size: 0.9rem;
+    
+    td, th {
+      padding: 12px 15px;
+    }
+  }
+}
+
+// Input group styling with modern focus states
+.input-group {
+  .form-control {
+    border-radius: 12px 0 0 12px;
+    border: 2px solid #e1e5eb;
+    padding: 0.7rem 1.2rem;
+    font-size: 1rem;
+    box-shadow: none;
+    transition: all 0.3s ease;
+    
+    &:focus {
+      box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.15);
+      border-color: #3498db;
+    }
+  }
+  
+  .btn {
+    border-radius: 0 12px 12px 0;
+  }
+}
+
+// Body background with subtle pattern
+body {
+  background-color: #f8fafc;
+  background-image: 
+    radial-gradient(circle at 25px 25px, rgba(52, 152, 219, 0.03) 2%, transparent 0%), 
+    radial-gradient(circle at 75px 75px, rgba(52, 152, 219, 0.03) 2%, transparent 0%);
+  background-size: 100px 100px;
+  background-attachment: fixed;
+}
+
+// Status indicator pulse animation
+.status-active {
+  position: relative;
+  
+  &:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background-color: #2ecc71;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(46, 204, 113, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
+  }
+}
+
+// Image container with zoom effect
+.image-container {
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  
+  img {
+    transition: transform 0.6s ease;
+    
+    &:hover {
+      transform: scale(1.08);
+    }
+  }
+}

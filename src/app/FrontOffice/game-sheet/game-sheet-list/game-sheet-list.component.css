@@ -1,0 +1,84 @@
+/* GameSheet List Component Styles */
+.game-sheet-card {
+  transition: transform 0.3s, box-shadow 0.3s;
+  border: 1px solid #eee;
+  margin-bottom: 20px;
+}
+
+.game-sheet-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.team-logo {
+  height: 50px;
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.score-display {
+  padding: 5px 15px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.score-home-win {
+  background-color: rgba(40, 167, 69, 0.1);
+  color: #28a745;
+}
+
+.score-away-win {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+
+.score-draw {
+  background-color: rgba(23, 162, 184, 0.1);
+  color: #17a2b8;
+}
+
+.stats-row {
+  padding: 5px 0;
+  border-bottom: 1px dotted #eee;
+}
+
+.stats-row:last-child {
+  border-bottom: none;
+}
+
+.search-container {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.search-clear {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #6c757d;
+}
+
+.possession-bar {
+  height: 8px;
+  margin: 5px 0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.home-possession {
+  background-color: #007bff;
+  height: 100%;
+  float: left;
+}
+
+.away-possession {
+  background-color: #dc3545;
+  height: 100%;
+  float: left;
+}

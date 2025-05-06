@@ -124,3 +124,16 @@
   transform: scale(1.05);
 }
 
+
+.btn-orange-important {
+  background-color: #ff7300; /* orange vif */
+  color: white;
+  font-weight: bold;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-orange-important:hover {
+  background-color: #e86400;
+}
+

@@ -78,6 +78,13 @@ import { BodyPartLabelComponent } from './FrontOffice/body-part-label/body-part-
 import { RecoveryCalendarComponent } from './FrontOffice/recovery-calendar/recovery-calendar.component';
 import { ChatboxComponent } from './FrontOffice/chatbox/chatbox.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+
+import { MedicalArchivesComponent } from './FrontOffice/medical-archives/medical-archives.component';
+import { TeamFormComponent } from './FrontOffice/team-form/team-form.component';
+import { TeamManagementComponent } from './FrontOffice/team-management/team-management.component';
+import { TeamDetailComponent } from './FrontOffice/team-detail/team-detail.component';
+import { TeamComponent } from './FrontOffice/team/team.component';
+
 const FullCalendarPlugins = [ // define plugins array
   dayGridPlugin
 ];
@@ -129,6 +136,11 @@ const FullCalendarPlugins = [ // define plugins array
     BodyPartLabelComponent,
     ChatboxComponent,
     RecoveryCalendarComponent,
+    MedicalArchivesComponent,
+    TeamFormComponent,
+    TeamManagementComponent,
+    TeamDetailComponent,
+    TeamComponent
   ],
   imports: [
     CommonModule,

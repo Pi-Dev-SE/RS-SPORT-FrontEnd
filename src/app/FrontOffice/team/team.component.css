@@ -1,0 +1,105 @@
+.section-title {
+  color: #343a40;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.team-card {
+  transition: transform 0.3s;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border: none;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.team-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.team-logo {
+  max-height: 120px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.logo-placeholder {
+  background-color: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.team-info {
+  margin-top: 15px;
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+}
+
+.team-info p {
+  margin-bottom: 5px;
+}
+
+.description-text {
+  font-style: italic;
+  color: #6c757d;
+  max-height: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.badge {
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  color: white;
+}
+
+.badge.bg-danger {
+  background-color: #dc3545;
+}
+
+.badge.bg-success {
+  background-color: #28a745;
+}
+
+.badge.bg-info {
+  background-color: #17a2b8;
+}
+
+.badge.bg-warning {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.btn-group .btn {
+  flex: 1;
+  padding: 8px 0;
+  font-size: 14px;
+}
+
+.alert {
+  border-radius: 8px;
+}
+
+.alert-dismissible .close {
+  padding: 0.5rem 1.25rem;
+}
+
+.card-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  padding: 15px;
+}
