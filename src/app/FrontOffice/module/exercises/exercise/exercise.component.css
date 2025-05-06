@@ -563,7 +563,7 @@ body {
 }
 
 .average-rating {
-  background-color: rgba(0, 0, 0, 0.5); /* Fond sombre pour la note moyenne */
+  background-color: rgba(224, 243, 10, 0.5); /* Fond sombre pour la note moyenne */
   color: white;
   padding: 0.25rem;
   border-radius: var(--radius-sm);

@@ -1,3 +1,4 @@
+import { NgChartsModule } from 'ng2-charts';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -38,7 +39,6 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatListModule } from '@angular/material/list';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { GenerateTrainingPlanWizardComponent } from './generate-training-plan-wizard/generate-training-plan-wizard.component';
 import { ExerciseComponent } from './FrontOffice/module/exercises/exercise/exercise.component';
@@ -78,7 +78,6 @@ import { BodyPartLabelComponent } from './FrontOffice/body-part-label/body-part-
 import { RecoveryCalendarComponent } from './FrontOffice/recovery-calendar/recovery-calendar.component';
 import { ChatboxComponent } from './FrontOffice/chatbox/chatbox.component';
 import { NgxPaginationModule } from 'ngx-pagination';
-
 const FullCalendarPlugins = [ // define plugins array
   dayGridPlugin
 ];
@@ -155,7 +154,6 @@ const FullCalendarPlugins = [ // define plugins array
     MatListModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
-    NgxChartsModule,
     AppRoutingModule,
     FullCalendarModule,
     DragDropModule,
@@ -167,7 +165,10 @@ const FullCalendarPlugins = [ // define plugins array
     AccordionModule.forRoot(),
     NgxPaginationModule,
     CommonModule,
-    FullCalendarModule
+    FullCalendarModule,
+    NgChartsModule   
+    
+
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
