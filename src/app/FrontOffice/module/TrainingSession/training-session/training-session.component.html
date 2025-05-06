@@ -201,119 +201,134 @@
       </button>
     </div>
   </div>
-</div>  <!-- Modal de création de session -->
-  <div class="modal fade" [ngClass]="{'show d-block': showCreateModal}" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Créer une nouvelle session d'entraînement</h5>
-          <button type="button" class="btn-close" (click)="closeModals()"></button>
+</div> <!-- Modal de création de session -->
+<div class="modal fade" [ngClass]="{'show d-block': showCreateModal}" tabindex="-1" role="dialog" style="overflow-y: auto;">
+  <div class="modal-dialog modal-lg" style="max-height: 85vh; margin-top: 5vh; margin-bottom: 5vh;">
+    <div class="modal-content h-100">
+      <div class="modal-header">
+        <h5 class="modal-title">Créer une nouvelle session d'entraînement</h5>
+        <button type="button" class="btn-close" (click)="closeModals()"></button>
+      </div>
+      
+      <div class="modal-body" style="overflow-y: auto; max-height: 65vh;">
+        <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+          {{ errorMessage }}
         </div>
         
-        <div class="modal-body">
-          <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
-            {{ errorMessage }}
+        <form [formGroup]="sessionForm" (ngSubmit)="createSession()">
+          <!-- Section Dates -->
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label for="startDate" class="form-label">Date de début</label>
+              <input type="date" class="form-control" id="startDate" formControlName="startDate" 
+                     [ngClass]="{'is-invalid': sessionForm.get('startDate')?.invalid && sessionForm.get('startDate')?.touched}">
+              <div class="invalid-feedback" *ngIf="sessionForm.get('startDate')?.hasError('required') && sessionForm.get('startDate')?.touched">
+                La date de début est requise
+              </div>
+            </div>
+            
+            <div class="col-md-6">
+              <label for="endDate" class="form-label">Date de fin</label>
+              <input type="date" class="form-control" id="endDate" formControlName="endDate" 
+                     [ngClass]="{'is-invalid': sessionForm.get('endDate')?.invalid && sessionForm.get('endDate')?.touched}">
+              <div class="invalid-feedback" *ngIf="sessionForm.get('endDate')?.hasError('required') && sessionForm.get('endDate')?.touched">
+                La date de fin est requise
+              </div>
+            </div>
           </div>
-          <form [formGroup]="sessionForm" (ngSubmit)="createSession()">
-            <div class="row g-3 mb-3">
-              <div class="col-md-6">
-                <label for="startDate" class="form-label">Date de début</label>
-                <input type="date" class="form-control" id="startDate" formControlName="startDate" [ngClass]="{'is-invalid': sessionForm.get('startDate')?.invalid && sessionForm.get('startDate')?.touched}">
-                <div class="invalid-feedback" *ngIf="sessionForm.get('startDate')?.hasError('required') && sessionForm.get('startDate')?.touched">
-                  La date de début est requise
-                </div>
-              </div>
-              
-              <div class="col-md-6">
-                <label for="endDate" class="form-label">Date de fin</label>
-                <input type="date" class="form-control" id="endDate" formControlName="endDate" [ngClass]="{'is-invalid': sessionForm.get('endDate')?.invalid && sessionForm.get('endDate')?.touched}">
-                <div class="invalid-feedback" *ngIf="sessionForm.get('endDate')?.hasError('required') && sessionForm.get('endDate')?.touched">
-                  La date de fin est requise
-                </div>
+          
+          <!-- Section Heure et Statut -->
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label for="time" class="form-label">Heure</label>
+              <input type="text" class="form-control" id="time" formControlName="time" placeholder="ex. 14:00-16:00" 
+                     [ngClass]="{'is-invalid': sessionForm.get('time')?.invalid && sessionForm.get('time')?.touched}">
+              <div class="invalid-feedback" *ngIf="sessionForm.get('time')?.hasError('required') && sessionForm.get('time')?.touched">
+                L'heure est requise
               </div>
             </div>
             
-            <div class="row g-3 mb-3">
-              <div class="col-md-6">
-                <label for="time" class="form-label">Heure</label>
-                <input type="text" class="form-control" id="time" formControlName="time" placeholder="ex. 14:00-16:00" [ngClass]="{'is-invalid': sessionForm.get('time')?.invalid && sessionForm.get('time')?.touched}">
-                <div class="invalid-feedback" *ngIf="sessionForm.get('time')?.hasError('required') && sessionForm.get('time')?.touched">
-                  L'heure est requise
-                </div>
-              </div>
-              
-              <div class="col-md-6">
-                <label for="status" class="form-label">Statut</label>
-                <select class="form-select" id="status" formControlName="status" [ngClass]="{'is-invalid': sessionForm.get('status')?.invalid && sessionForm.get('status')?.touched}">
-                  <option value="Scheduled">Prévu</option>
-                  <option value="In Progress">En cours</option>
-                  <option value="Completed">Terminé</option>
-                  <option value="Canceled">Annulé</option>
-                </select>
-                <div class="invalid-feedback" *ngIf="sessionForm.get('status')?.hasError('required') && sessionForm.get('status')?.touched">
-                  Le statut est requis
-                </div>
-              </div>
-            </div>
-            
-            <div class="mb-3">
-              <label for="objective" class="form-label">Objectif</label>
-              <textarea class="form-control" id="objective" formControlName="objective" rows="3" [ngClass]="{'is-invalid': sessionForm.get('objective')?.invalid && sessionForm.get('objective')?.touched}"></textarea>
-              <div class="invalid-feedback" *ngIf="sessionForm.get('objective')?.hasError('required') && sessionForm.get('objective')?.touched">
-                L'objectif est requis
-              </div>
-            </div>
-            
-            <div class="mb-3">
-              <label for="playerAvailability" class="form-label">Disponibilité des joueurs</label>
-              <textarea class="form-control" id="playerAvailability" formControlName="playerAvailability" rows="2" [ngClass]="{'is-invalid': sessionForm.get('playerAvailability')?.invalid && sessionForm.get('playerAvailability')?.touched}"></textarea>
-              <div class="invalid-feedback" *ngIf="sessionForm.get('playerAvailability')?.hasError('required') && sessionForm.get('playerAvailability')?.touched">
-                La disponibilité des joueurs est requise
-              </div>
-            </div>
-            
-            <div class="mb-3">
-              <label for="coachId" class="form-label">Assigner un entraîneur</label>
-              <select class="form-select" id="coachId" formControlName="coachId" [ngClass]="{'is-invalid': sessionForm.get('coachId')?.invalid && sessionForm.get('coachId')?.touched}">
-                <option value="">Sélectionner un entraîneur</option>
-                <option *ngFor="let coach of coaches" [value]="coach.id">{{ coach.firstname }} {{ coach.lastname }}</option>
+            <div class="col-md-6">
+              <label for="status" class="form-label">Statut</label>
+              <select class="form-select" id="status" formControlName="status" 
+                      [ngClass]="{'is-invalid': sessionForm.get('status')?.invalid && sessionForm.get('status')?.touched}">
+                <option value="Scheduled">Prévu</option>
+                <option value="In Progress">En cours</option>
+                <option value="Completed">Terminé</option>
+                <option value="Canceled">Annulé</option>
               </select>
-              <div class="invalid-feedback" *ngIf="sessionForm.get('coachId')?.hasError('required') && sessionForm.get('coachId')?.touched">
-                L'assignation d'un entraîneur est requise
+              <div class="invalid-feedback" *ngIf="sessionForm.get('status')?.hasError('required') && sessionForm.get('status')?.touched">
+                Le statut est requis
               </div>
             </div>
-            <div class="mb-3">
-              <label for="city" class="form-label">Ville</label>
-              <input type="text" class="form-control" id="city" formControlName="city" placeholder="ex. Paris" [ngClass]="{'is-invalid': sessionForm.get('city')?.invalid && sessionForm.get('city')?.touched}">
-              <div class="invalid-feedback" *ngIf="sessionForm.get('city')?.hasError('required') && sessionForm.get('city')?.touched">
-                La ville est requise
-              </div>
+          </div>
+          
+          <!-- Section Objectif -->
+          <div class="mb-3">
+            <label for="objective" class="form-label">Objectif</label>
+            <textarea class="form-control" id="objective" formControlName="objective" rows="3" 
+                      [ngClass]="{'is-invalid': sessionForm.get('objective')?.invalid && sessionForm.get('objective')?.touched}"></textarea>
+            <div class="invalid-feedback" *ngIf="sessionForm.get('objective')?.hasError('required') && sessionForm.get('objective')?.touched">
+              L'objectif est requis
             </div>
-            <div class="mb-3">
-              <button type="button" class="btn btn-secondary" (click)="checkWeather()" [disabled]="isLoadingWeather">
-                {{ isLoadingWeather ? 'Vérification...' : 'Vérifier la météo' }}
+          </div>
+          
+          <!-- Section Disponibilité -->
+          <div class="mb-3">
+            <label for="playerAvailability" class="form-label">Disponibilité des joueurs</label>
+            <textarea class="form-control" id="playerAvailability" formControlName="playerAvailability" rows="2" 
+                      [ngClass]="{'is-invalid': sessionForm.get('playerAvailability')?.invalid && sessionForm.get('playerAvailability')?.touched}"></textarea>
+            <div class="invalid-feedback" *ngIf="sessionForm.get('playerAvailability')?.hasError('required') && sessionForm.get('playerAvailability')?.touched">
+              La disponibilité des joueurs est requise
+            </div>
+          </div>
+          
+          <!-- Section Ville (seulement) -->
+          <div class="mb-3">
+            <label for="city" class="form-label">Ville</label>
+            <div class="input-group">
+              <input type="text" class="form-control" id="city" formControlName="city" placeholder="ex. Paris" 
+                     [ngClass]="{'is-invalid': sessionForm.get('city')?.invalid && sessionForm.get('city')?.touched}">
+              <button type="button" class="btn btn-outline-secondary" (click)="checkWeather()" [disabled]="isLoadingWeather">
+                <i class="bi bi-cloud-sun"></i> {{ isLoadingWeather ? 'Vérification...' : 'Météo' }}
               </button>
             </div>
-            <div *ngIf="weatherData" class="weather-info mb-3">
-              <h6>Prévisions météo</h6>
-              <p>Température : {{ weatherData.temperature }}°C</p>
-              <p>Condition : {{ weatherData.condition }}</p>
-              <p>Précipitation : {{ weatherData.precipitationProbability * 100 }}%</p>
-              <p>Recommandation : {{ weatherData.recommendation }}</p>
+            <div class="invalid-feedback" *ngIf="sessionForm.get('city')?.hasError('required') && sessionForm.get('city')?.touched">
+              La ville est requise
             </div>
-          </form>
-        </div>
+          </div>
+          
+          <!-- Section Météo -->
+          <div *ngIf="weatherData" class="weather-info mb-3 p-3 bg-light rounded">
+            <h6 class="fw-bold"><i class="bi bi-cloud-sun me-2"></i>Prévisions météo</h6>
+            <div class="row">
+              <div class="col-md-6">
+                <p><i class="bi bi-thermometer me-2"></i>Température: {{ weatherData.temperature }}°C</p>
+                <p><i class="bi bi-cloud me-2"></i>Condition: {{ weatherData.condition }}</p>
+              </div>
+              <div class="col-md-6">
+                <p><i class="bi bi-droplet me-2"></i>Précipitation: {{ weatherData.precipitationProbability * 100 }}%</p>
+                <p class="fw-bold"><i class="bi bi-lightbulb me-2"></i>Recommandation: {{ weatherData.recommendation }}</p>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
 
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" (click)="closeModals()">Annuler</button>
-          <button type="button" class="btn btn-primary" (click)="createSession()" [disabled]="sessionForm.invalid">Créer la session</button>
-        </div>
+      <!-- Boutons en bas -->
+      <div class="modal-footer sticky-bottom bg-white pt-3 pb-3 border-top">
+        <button type="button" class="btn btn-outline-secondary" (click)="closeModals()">
+          <i class="bi bi-x-circle me-1"></i> Annuler
+        </button>
+        <button type="button" class="btn btn-primary" (click)="createSession()" [disabled]="sessionForm.invalid">
+          <i class="bi bi-check-circle me-1"></i> Créer la session
+        </button>
       </div>
     </div>
   </div>
-  <div class="modal-backdrop fade" [ngClass]="{'show': showCreateModal}" *ngIf="showCreateModal"></div>
+</div>
 
-  <!-- Modal de mise à jour de session -->
+<div class="modal-backdrop fade" [ngClass]="{'show': showCreateModal}" *ngIf="showCreateModal"></div>  <!-- Modal de mise à jour de session -->
   <div class="modal fade" [ngClass]="{'show d-block': showUpdateModal}" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -576,150 +591,118 @@
   </div>
   <div class="modal-backdrop fade" [ngClass]="{'show': showAssignCriteriaModal}" *ngIf="showAssignCriteriaModal"></div>
 
-  <!-- Modal de génération de plan d'entraînement -->
-  <div class="modal fade" [ngClass]="{'show d-block': showGeneratePlanModal}" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-sm">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Générer un plan d'entraînement</h5>
-          <button type="button" class="btn-close" (click)="closeModals()"></button>
-        </div>
-        <div class="modal-body">
-          <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
-            {{ errorMessage }}
-          </div>
-          <p>Êtes-vous sûr de vouloir générer un plan d'entraînement pour la session du <strong>{{ selectedSession?.startDate | date:'mediumDate' }}</strong> ?</p>
-          <div *ngIf="generatingPlan" class="text-center">
-            <div class="spinner-border" role="status">
-              <span class="visually-hidden">Génération en cours...</span>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" (click)="closeModals()">Annuler</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="modal-backdrop fade" [ngClass]="{'show': showGeneratePlanModal}" *ngIf="showGeneratePlanModal"></div>
-<!-- Modal d'analyse des performances du coach -->
+ <!-- Modal d'analyse des performances -->
 <div class="modal fade" [ngClass]="{'show d-block': showAnalyzeCoachModal}" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-xl modal-analyze-coach">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Analyser les performances d'un coach</h5>
+      <div class="modal-header bg-warning-subtle border-0 rounded-top">
+        <div>
+          <h5 class="modal-title fw-bold text-dark">
+            <i class="bi bi-bar-chart-line-fill me-2 text-warning"></i> Analyse des performances du coach
+          </h5>
+          <p class="mb-0 text-muted small">Générez un rapport détaillé entre deux dates.</p>
+        </div>
         <button type="button" class="btn-close" (click)="closeModals()"></button>
       </div>
-      <div class="modal-body">
+
+      <div class="modal-body p-4">
+        <!-- Erreur -->
         <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
           {{ errorMessage }}
         </div>
-        <form [formGroup]="analyzeCoachForm" (ngSubmit)="analyzeCoachPerformance()">
-          <div class="mb-3">
-            <label for="analyzeCoachId" class="form-label">Coach</label>
-            <select id="analyzeCoachId" formControlName="coachId" class="form-select" [ngClass]="{'is-invalid': analyzeCoachForm.get('coachId')?.invalid && analyzeCoachForm.get('coachId')?.touched}">
-              <option value="">Sélectionner un coach</option>
-              <option *ngFor="let coach of coaches || []" [value]="coach.id">{{ coach?.firstname }} {{ coach?.lastname }}</option>
-            </select>
-            <div class="invalid-feedback" *ngIf="analyzeCoachForm.get('coachId')?.hasError('required') && analyzeCoachForm.get('coachId')?.touched">
-              Le coach est requis
-            </div>
-          </div>
-          <div class="row g-3 mb-3">
+
+        <!-- Formulaire de sélection -->
+        <form [formGroup]="analyzeForm">
+          <div class="row g-3 mb-4">
             <div class="col-md-6">
               <label for="analyzeStartDate" class="form-label">Date de début</label>
-              <input type="date" class="form-control" id="analyzeStartDate" formControlName="startDate" [ngClass]="{'is-invalid': analyzeCoachForm.get('startDate')?.invalid && analyzeCoachForm.get('startDate')?.touched}">
-              <div class="invalid-feedback" *ngIf="analyzeCoachForm.get('startDate')?.hasError('required') && analyzeCoachForm.get('startDate')?.touched">
+              <input type="date" class="form-control" id="analyzeStartDate" formControlName="startDate"
+                [ngClass]="{'is-invalid': analyzeForm.get('startDate')?.invalid && analyzeForm.get('startDate')?.touched}">
+              <div class="invalid-feedback" *ngIf="analyzeForm.get('startDate')?.hasError('required') && analyzeForm.get('startDate')?.touched">
                 La date de début est requise
               </div>
             </div>
             <div class="col-md-6">
               <label for="analyzeEndDate" class="form-label">Date de fin</label>
-              <input type="date" class="form-control" id="analyzeEndDate" formControlName="endDate" [ngClass]="{'is-invalid': analyzeCoachForm.get('endDate')?.invalid && analyzeCoachForm.get('endDate')?.touched}">
-              <div class="invalid-feedback" *ngIf="analyzeCoachForm.get('endDate')?.hasError('required') && analyzeCoachForm.get('endDate')?.touched">
+              <input type="date" class="form-control" id="analyzeEndDate" formControlName="endDate"
+                [ngClass]="{'is-invalid': analyzeForm.get('endDate')?.invalid && analyzeForm.get('endDate')?.touched}">
+              <div class="invalid-feedback" *ngIf="analyzeForm.get('endDate')?.hasError('required') && analyzeForm.get('endDate')?.touched">
                 La date de fin est requise
               </div>
             </div>
           </div>
-          <div *ngIf="isLoading" class="text-center">
-            <div class="spinner-border" role="status">
-              <span class="visually-hidden">Analyse en cours...</span>
-            </div>
-          </div>
         </form>
 
-        <!-- Affichage du rapport d'analyse des performances du coach -->
-        <div *ngIf="coachPerformanceReport" id="coachPerformanceReport" class="coach-performance-report">
-          <div class="card-header">
-            <img src="assets/image/logo.png" alt="Logo" class="report-logo">
-            <h5 class="card-title">Rapport d’analyse des performances du coach</h5>
+        <!-- Chargement -->
+        <div *ngIf="isLoading" class="text-center my-4">
+          <div class="spinner-border text-warning" role="status">
+            <span class="visually-hidden">Chargement...</span>
           </div>
-          <div class="card-body">
-            <pre class="report-text">{{ coachPerformanceReport }}</pre>
-            <div class="charts-container">
-              <!-- Bar Chart for Total and Completed Sessions -->
-              <div class="chart-wrapper">
-                <h6>Sessions</h6>
-                <ngx-charts-bar-horizontal
-                  [results]="barChartData"
-                  [scheme]="colorScheme"
-                  [legend]="showLegend"
-                  [yAxis]="true"
-                  [xAxis]="true"
-                  [yAxisLabel]="'Nombre de sessions'"
-                  [maxXAxisTickLength]="16"
-                  [maxYAxisTickLength]="16"
-                  style="height: 200px">
-                </ngx-charts-bar-horizontal>
-              </div>
-              <!-- Pie Chart for Completion Rate -->
-              <div class="chart-wrapper">
-                <h6>Taux de complétion</h6>
-                <ngx-charts-pie-chart
-                  [results]="pieChartData"
-                  [scheme]="colorScheme"
-                  [labels]="showLabels"
-                  [legend]="showLegend"
-                  [doughnut]="true"
-                  style="height: 200px;">
-                </ngx-charts-pie-chart>
-              </div>
-              <!-- Line Chart for Progression Statistics -->
-              <div class="chart-wrapper">
-                <h6>Progression des sessions</h6>
-                <ngx-charts-line-chart
-                  [results]="progressionChartData"
-                  [scheme]="colorScheme"
-                  [legend]="showLegend"
-                  [xAxis]="true"
-                  [yAxis]="true"
-                  [xAxisLabel]="'Date'"
-                  [yAxisLabel]="'Complétion'"
-                  style="height: 200px">
-                </ngx-charts-line-chart>
-                <ngx-charts-bar-horizontal
-  [results]="chartData"
-  [scheme]="colorScheme"
-  [xAxis]="true"
-  [yAxis]="true"
-  [legend]="false"
-  [showDataLabel]="true"
-  [animations]="true">
-</ngx-charts-bar-horizontal>
+          <p class="mt-2 text-muted">Analyse en cours...</p>
+        </div>
 
+        <!-- Rapport généré -->
+        <div *ngIf="performanceReport" class="report-container mt-4">
+
+          <!-- Résumé en haut -->
+          <div class="card border-start border-4 border-warning mb-4 shadow-sm">
+            <div class="card-body d-flex justify-content-between align-items-center">
+              <div>
+                <h5 class="card-title text-warning fw-bold mb-0">Rapport prêt</h5>
+                <small class="text-muted">Généré le : {{ today | date:'dd/MM/yyyy' }}</small>
+              </div>
+              <button class="btn btn-success" (click)="downloadReportAsPDF()">
+                <i class="bi bi-file-earmark-pdf me-1"></i> Télécharger PDF
+              </button>
+            </div>
+          </div>
+
+          <!-- Contenu PDF à capturer -->
+          <div id="performanceReport" class="performance-report">
+            <div class="report-header">
+              <div class="header-left d-flex align-items-center">
+                <img src="assets/image/logo.png" alt="Logo" class="report-logo me-3" style="height: 50px;">
+                <span class="company-label fw-bold">IS SPORTS</span>
+              </div>
+              <div class="header-right text-end">
+                <h1 class="report-title mb-1">PERFORMANCE ANALYSIS REPORT</h1>
+                <p class="report-date text-muted">Généré le : {{ today | date:'dd/MM/yyyy' }}</p>
               </div>
             </div>
+
+            <div class="report-content mt-4">
+              <div class="report-section bg-light p-4 rounded shadow-sm">
+                <pre class="report-text m-0">{{ performanceReport }}</pre>
+              </div>
+            </div>
+
+            <div class="report-footer mt-5 pt-3 border-top">
+              <div class="footer-left">
+                <p class="footer-text mb-1">Préparé par :</p>
+                <p class="footer-text fw-semibold">IS Sports Team</p>
+              </div>
+              <div class="footer-right">
+                <p class="footer-text mb-1">Signature :</p>
+                <p class="signature-line mt-3">___________________________</p>
+              </div>
+            </div>
+
+            <p class="page-number text-end mt-3 text-muted">Page 1/1 - REP 01</p>
           </div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" (click)="closeModals()">Fermer</button>
-        <button type="button" class="btn btn-primary" (click)="analyzeCoachPerformance()" [disabled]="!analyzeCoachForm.valid || isLoading">
-          Analyser
+
+      <div class="modal-footer bg-light border-top-0">
+        <button type="button" class="btn btn-outline-secondary" (click)="closeModals()">
+          <i class="bi bi-x-circle me-1"></i> Fermer
         </button>
-        <button *ngIf="coachPerformanceReport" class="btn btn-primary" (click)="downloadReportAsPDF()">Télécharger en PDF</button>
+        <button type="button" class="btn btn-warning text-white" (click)="analyzePerformance()" [disabled]="!analyzeForm.valid || isLoading">
+          <i class="bi bi-graph-up me-1"></i> Analyser
+        </button>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Backdrop -->
 <div class="modal-backdrop fade" [ngClass]="{'show': showAnalyzeCoachModal}" *ngIf="showAnalyzeCoachModal"></div>

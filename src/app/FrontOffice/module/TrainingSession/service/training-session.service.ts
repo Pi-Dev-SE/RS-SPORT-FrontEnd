@@ -26,9 +26,10 @@ export class TrainingSessionService {
     return this.http.get<any>(`${this.baseUrl}/getById/${id}`);
   }
 
-  createSession(session: any, coachId: number): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/create/${coachId}`, session);
+  createSession(session: any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/create`, session);
   }
+  
 
   updateSession(id: number, session: any): Observable<any> {
     return this.http.put<any>(`${this.baseUrl}/Update/${id}`, session);
@@ -78,17 +79,13 @@ checkWeatherBeforeCreatingSession(city: string, date: string): Observable<Weathe
   return this.http.get<WeatherData>(`${this.baseUrl}/check-weather?city=${city}&date=${date}`);
 }
 // Nouvelle méthode : Analyser les performances d'un coach
-analyzeCoachPerformance(coachId: number, startDate: string, endDate: string): Observable<string> {
-  const url = `${this.baseUrl}/analyze-coach-performance/${coachId}?startDate=${startDate}&endDate=${endDate}`;
-  return this.http.get(url, { headers: this.getHeaders(), responseType: 'text' })
-    .pipe(
-      tap(response => console.log('Raw response:', response)),
-      catchError(error => {
-        console.error('Error:', error);
-        return throwError(() => new Error('Failed to analyze coach performance'));
-      })
-    );
+analyzePerformance(startDate: string, endDate: string): Observable<string> {
+  const params = new HttpParams()
+    .set('startDate', startDate)
+    .set('endDate', endDate);
+
+  return this.http.get(this.baseUrl + '/analyze', { params, responseType: 'text' });
+}
 }
 
 
-}

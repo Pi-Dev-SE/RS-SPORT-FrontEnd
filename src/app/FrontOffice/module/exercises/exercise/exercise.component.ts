@@ -19,7 +19,8 @@ export class ExerciseComponent implements OnInit {
   exercises: Exercise[] = [];
   totalPages: number = 0;
   currentPage: number = 0;
-  pageSize: number = 5; // Nombre d'exercices par page
+  pageSize: number = 3; // Nombre d'exercices par page
+  itemsperpage: number = 3;
   filteredExercises: Exercise[] = [];
   loading = true;
   searchTerm = '';
@@ -88,6 +89,7 @@ export class ExerciseComponent implements OnInit {
     .subscribe((data: PageResponse<Exercise>) => {
       this.exercises = data.content;
       this.totalPages = data.totalPages;
+      this.currentPage = data.number;
     });
     this.loading = true;
     this.exerciseService.findAll().subscribe(

@@ -74,10 +74,21 @@ export class TrainingSessionsComponent implements OnInit, AfterViewInit {
   isLoadingExercises = false;
   weatherData: WeatherData | null = null;
   isLoadingWeather = false;
+
+  weatherChartData: ChartData<'bar'> = {
+    labels: ['Temperature'],
+    datasets: [
+      {
+        label: 'Weather Data',
+        data: [],
+        backgroundColor: ['#4299e1']
+      }
+    ]
+  };
   sortField = 'startDate';
   sortDirection = 'asc';
   errorMessage: string | null = null;
-  coachPerformanceReport: string | null = null;
+  performanceReport: string | null = null;
   generatingPlan = false;
   analyzing: boolean = false;
   showLabels: boolean = true;
@@ -85,90 +96,47 @@ export class TrainingSessionsComponent implements OnInit, AfterViewInit {
   showGeneratePlanWizard = false;
   sessionDate = 'Apr 8, 2025';
 
-  // Chart.js configurations (for barChart and doughnutChart)
-  public barChartOptions: ChartConfiguration<'bar'>['options'] = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      y: {
-        beginAtZero: true,
-        max: 10,
-        title: {
-          display: true,
-          text: 'Number of Sessions'
-        }
-      }
-    },
-    plugins: {
-      legend: {
-        display: false
-      }
-    }
+
+  barChartData: ChartConfiguration['data'] = {
+    datasets: [],
+    labels: []
+  };
+  lineChartData: ChartData<'line'> = {
+    datasets: [],
+    labels: []
+  };
+  doughnutChartData: ChartData<'doughnut'> = {
+    datasets: [],
+    labels: ['Complétés', 'Non complétés']
   };
 
-  public barChartData: ChartData<'bar'> = {
-    labels: ['Sessions'],
-    datasets: [
-      { data: [0], label: 'Total', backgroundColor: '#4299e1' },
-      { data: [0], label: 'Complétées', backgroundColor: '#38a169' }
-    ]
-  };
-
-  public barChartType: ChartType = 'bar';
-
-  public doughnutChartOptions: ChartConfiguration<'doughnut'>['options'] = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false
-      },
-      tooltip: {
-        enabled: false
-      }
-    }
-  };
-
-  public doughnutChartData: ChartData<'doughnut'> = {
-    labels: ['Complétées', 'Restantes'],
-    datasets: [
-      { data: [0, 100], backgroundColor: ['#38a169', '#e2e8f0'] }
-    ]
-  };
-
-  public doughnutChartType: ChartType = 'doughnut';
-
-  public weatherChartData: ChartConfiguration['data'] = {
-    datasets: [
-      {
-        data: [],
-        label: 'Température (°C)',
-        backgroundColor: 'rgba(0, 123, 255, 0.5)',
-        borderColor: '#007bff',
-        borderWidth: 1
-      }
-    ],
-    labels: ['Actuelle']
-  };
-
-  public weatherChartOptions: ChartConfiguration['options'] = {
+  barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     scales: {
-      y: {
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: 'Température (°C)'
-        }
-      }
+      y: { beginAtZero: true, title: { display: true, text: 'Durée (minutes)' } }
     },
     plugins: {
-      legend: {
-        display: true
-      }
+      legend: { position: 'top' },
+      title: { display: true, text: 'Répartition des durées par type d\'exercice' }
     }
   };
-
+  lineChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      title: { display: true, text: 'Évolution du taux de complétion par semaine' }
+    },
+    scales: {
+      y: { beginAtZero: true, max: 100, title: { display: true, text: 'Taux de complétion (%)' } }
+    }
+  };
+  doughnutChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      title: { display: true, text: 'Taux de complétion global' }
+    }
+  };
   // Color scheme for ngx-charts
   colorScheme: any = {
     domain: ['#38a169', '#e2e8f0', '#4299e1', '#A10A28']
@@ -183,6 +151,9 @@ exerciseTypeCompletion: any;
 recommendations: any;
 completedSessions: any;
 
+  analyzeForm: FormGroup; // Define analyzeForm
+  today: Date = new Date(); // Add today property to store the current date
+
   constructor(
     private sessionService: TrainingSessionService,
     private exerciseService: ExerciseService,
@@ -190,6 +161,10 @@ completedSessions: any;
     private cdr: ChangeDetectorRef,
     private toastr: ToastrService // Inject ToastrService
   ) {
+    this.analyzeForm = this.fb.group({ // Initialize analyzeForm
+      startDate: ['', Validators.required],
+      endDate: ['', Validators.required]
+    });
     this.sessionForm = this.fb.group({
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
@@ -197,7 +172,6 @@ completedSessions: any;
       objective: ['', Validators.required],
       status: ['Scheduled', Validators.required],
       playerAvailability: ['', Validators.required],
-      coachId: ['', Validators.required],
       city: ['', Validators.required]
     });
 
@@ -209,7 +183,6 @@ completedSessions: any;
     });
 
     this.analyzeCoachForm = this.fb.group({
-      coachId: ['', Validators.required],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required]
     });
@@ -497,7 +470,7 @@ completedSessions: any;
   openAnalyzeCoachModal(): void {
     this.analyzeCoachForm.reset();
     this.showAnalyzeCoachModal = true;
-    this.coachPerformanceReport = null;
+    this.performanceReport = null;
     this.errorMessage = null;
     this.barChartDataArray = []; // Reset chart data
     this.pieChartData = [];
@@ -518,7 +491,7 @@ completedSessions: any;
     this.selectedSession = null;
     this.currentSessionForCriteria = null;
     this.selectedExercises = [];
-    this.coachPerformanceReport = null;
+    this.performanceReport = null;
     this.errorMessage = null;
   }
 
@@ -587,15 +560,15 @@ completedSessions: any;
         playerAvailability: formValues.playerAvailability,
         city: formValues.city
       };
-
-      this.sessionService.createSession(newSession, formValues.coachId).subscribe({
+  
+      this.sessionService.createSession(newSession).subscribe({
         next: () => {
           this.loadSessions();
           this.closeModals();
           this.toastr.success('Session créée avec succès !');
         },
         error: (error: HttpErrorResponse) => {
-          console.error('Error creating session:', error.message);
+          console.error('Erreur lors de la création de la session :', error.message);
           this.errorMessage = 'Erreur lors de la création de la session.';
           this.toastr.error('Erreur lors de la création de la session.');
         }
@@ -605,8 +578,7 @@ completedSessions: any;
       this.toastr.error('Veuillez remplir tous les champs requis.');
     }
   }
-
-  updateSession(): void {
+    updateSession(): void {
     if (this.sessionForm.valid && this.selectedSession) {
       const formValues = this.sessionForm.value;
       const updatedSession: Session = {
@@ -794,128 +766,32 @@ completedSessions: any;
     });
   }
 
-  analyzeCoachPerformance(): void {
+  analyzePerformance(): void {
     this.isLoading = true;
+    this.errorMessage = '';
+    this.performanceReport = null;
 
-    const coachId = this.analyzeCoachForm.get('coachId')?.value;
-    const startDate = this.analyzeCoachForm.get('startDate')?.value;
-    const endDate = this.analyzeCoachForm.get('endDate')?.value;
+    const startDate = this.analyzeForm.get('startDate')?.value;
+    const endDate = this.analyzeForm.get('endDate')?.value;
 
-    if (!coachId || !startDate || !endDate) {
+    if (!startDate || !endDate) {
       this.errorMessage = 'Veuillez remplir tous les champs du formulaire.';
       this.toastr.error('Veuillez remplir tous les champs du formulaire.');
       this.isLoading = false;
       return;
     }
 
-    // Find the coach's name for the report
-    const selectedCoach = this.coaches.find(coach => coach.id === +coachId);
-    const coachName = selectedCoach ? `${selectedCoach.firstname} ${selectedCoach.lastname}` : `Coach (ID: ${coachId})`;
-
-    // Filter sessions for the selected coach and date range
-    const coachSessions = this.sessions.filter(session =>
-      session.coach?.id === +coachId &&
-      new Date(session.startDate).getTime() >= new Date(startDate).getTime() &&
-      new Date(session.endDate).getTime() <= new Date(endDate).getTime()
-    );
-
-    const totalSessions = coachSessions.length || 0;
-    const completedSessions = coachSessions.filter(s => s.sessionStatus.toLowerCase() === 'completed').length || 0;
-    const overallCompletionRate = totalSessions > 0 ? (completedSessions / totalSessions) * 100 : 0;
-
-    // Mock exercise data (replace with real data from your service if available)
-    const totalExercises = coachSessions.reduce((sum, session) => sum + (session.exercises?.length || 0), 0);
-    const completedExercises = coachSessions.reduce((sum, session) => 
-      sum + (session.exercises?.filter(e => e.completed).length || 0), 0);
-    const exerciseTypeCompletion: { [key: string]: number } = {
-      TECHNICAL: 0,
-      TACTICAL: 0,
-      PHYSICAL: 0,
-      CONDITIONING: 0
-    };
-
-    // Calculate completion rates by exercise type
-    this.availableExerciseTypes.forEach(type => {
-      const exercisesOfType = coachSessions.flatMap(session => 
-        session.exercises?.filter(e => e.type === type) || []
-      );
-      const totalOfType = exercisesOfType.length;
-      const completedOfType = exercisesOfType.filter(e => e.completed).length;
-      exerciseTypeCompletion[type] = totalOfType > 0 ? (completedOfType / totalOfType) * 100 : 0;
-    });
-
-    // Calculate exercise type distribution (duration in minutes)
-    const exerciseTypeDistribution: { [key: string]: number } = {
-      TECHNICAL: 0,
-      TACTICAL: 0,
-      PHYSICAL: 0,
-      CONDITIONING: 0
-    };
-    coachSessions.forEach(session => {
-      session.exercises?.forEach(exercise => {
-        const duration = exercise.duration || 0; // Assuming duration is in minutes
-        exerciseTypeDistribution[exercise.type] = (exerciseTypeDistribution[exercise.type] || 0) + Number(duration);
-      });
-    });
-
-    // Progression statistics over time
-    const progressionData = this.calculateProgressionStats(coachSessions);
-
-    // Generate recommendations
-    const recommendations: string[] = [];
-    if (overallCompletionRate < 50) {
-      recommendations.push(`Overall completion rate is low (${overallCompletionRate.toFixed(2)}%). Consider increasing intensity or providing additional support.`);
-    }
-    this.availableExerciseTypes.forEach(type => {
-      const rate = exerciseTypeCompletion[type];
-      if (rate < 30) {
-        recommendations.push(`Players are struggling with ${type.toLowerCase()} exercises (Completion Rate: ${rate.toFixed(2)}%). Consider adding more ${type.toLowerCase()}-focused drills or reducing difficulty.`);
+    this.sessionService.analyzePerformance(startDate, endDate).subscribe({
+      next: (report) => {
+        this.performanceReport = report;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.errorMessage = error.error || 'Erreur lors de l\'analyse des performances.';
+        this.toastr.error(this.errorMessage || 'An unknown error occurred.');
+        this.isLoading = false;
       }
     });
-
-    // Generate the report
-    this.coachPerformanceReport = `
-Rapport d’analyse des performances du coach
-Performance Analysis Report for Coach: ${coachName} (ID: ${coachId})
-Period: ${startDate} to ${endDate}
-
-Total Sessions: ${totalSessions}
-Total Exercises: ${totalExercises}
-Completed Exercises: ${completedExercises}
-Overall Completion Rate: ${overallCompletionRate.toFixed(2)}%
-
-Exercise Type Distribution (Duration in Minutes):
-${this.availableExerciseTypes.map(type => `- ${type}: ${exerciseTypeDistribution[type] || 0} minutes`).join('\n')}
-
-Completion Rates by Exercise Type:
-${this.availableExerciseTypes.map(type => `- ${type}: ${exerciseTypeCompletion[type].toFixed(2)}%`).join('\n')}
-
-Recommendations for Future Sessions:
-${recommendations.length > 0 ? recommendations.join('\n') : '- No specific recommendations at this time.'}
-
-Progression Statistics:
-- Session completion trend: ${progressionData.trend}
-`;
-
-    // Prepare chart data for ngx-charts
-    this.barChartDataArray = [
-      { name: 'Total Sessions', value: totalSessions },
-      { name: 'Completed Sessions', value: completedSessions }
-    ];
-
-    this.pieChartData = [
-      { name: 'Completed', value: completedSessions },
-      { name: 'Remaining', value: totalSessions - completedSessions }
-    ];
-
-    this.progressionChartData = progressionData.chartData;
-
-   
-
-  
-
-    this.updateCharts();
-    this.isLoading = false;
   }
 
   calculateProgressionStats(sessions: Session[]): { trend: string; chartData: any[] } {
@@ -942,19 +818,69 @@ Progression Statistics:
   }
 
   downloadReportAsPDF(): void {
-    const doc = new jsPDF();
-  
-    const report = this.coachPerformanceReport;
-  
-    if (!report) {
-      this.errorMessage = 'Aucun rapport à exporter.';
+    if (!this.performanceReport) {
+      this.errorMessage = "Aucun rapport à exporter.";
       return;
     }
   
-    const lines = doc.splitTextToSize(report, 180); // largeur max du texte
-    doc.setFontSize(12);
-    doc.text(lines, 10, 20); // position : x=10mm, y=20mm
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const lineHeight = 7;
+    const marginLeft = 20;
+    let y = 25;
   
-    doc.save('rapport-performances-coach.pdf');
+    // Logo & Titre
+    pdf.addImage('assets/FrontOffice/images/logo.png', 'PNG', 10, 10, 20, 20);
+    pdf.setFontSize(22);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Performance Report', 105, 20, { align: 'center' });
+  
+    y += 20;
+    pdf.setLineWidth(0.5);
+    pdf.line(15, y, 195, y);
+    y += 10;
+  
+    // Date
+    const generatedDate = new Date().toLocaleDateString('fr-FR');
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(`Généré le : ${generatedDate}`, 140, y);
+    y += 10;
+  
+    // Contenu du rapport (texte brut contenu dans performanceReport)
+    const textLines = pdf.splitTextToSize(this.performanceReport, 170); // max width: 170mm
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'normal');
+    pdf.setTextColor(33, 37, 41); // Couleur texte sombre
+  
+    for (let i = 0; i < textLines.length; i++) {
+      if (y > 270) {
+        pdf.addPage();
+        y = 20;
+      }
+      pdf.text(textLines[i], marginLeft, y);
+      y += lineHeight;
+    }
+  
+    // Signature
+    if (y + 30 > 280) {
+      pdf.addPage();
+      y = 20;
+    }
+  
+    y += 10;
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'italic');
+    pdf.text('Préparé par :', marginLeft, y);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('IS Sports Team', marginLeft, y + 7);
+  
+    // Footer
+    pdf.setFontSize(8);
+    pdf.text(`Page 1/1 | Ref: REP-2025-01`, 105, 285, { align: 'center' });
+  
+    // Téléchargement
+    const filename = `rapport-performances-${this.today.toISOString().split('T')[0]}.pdf`;
+    pdf.save(filename);
   }
-}  
+}
+  

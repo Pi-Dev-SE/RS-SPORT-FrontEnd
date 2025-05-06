@@ -129,9 +129,18 @@
     </div>
   </div>
 </div>
-<div class="pagination-buttons">
-  <button (click)="prevPage()" [disabled]="currentPage === 0">Précédent</button>
-  <span>Page {{ currentPage + 1 }} / {{ totalPages }}</span>
-  <button (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">Suivant</button>
+ <!-- Pagination -->
+ <div class="d-flex justify-content-center mt-3">
+  <button class="btn btn-orange me-2 mb-3" (click)="prevPage()" [disabled]="currentPage === 0">
+    « Previous
+  </button>
+
+  <span class="pagination-number align-self-center mx-2 mb-3">
+    <span class="active-page">{{ currentPage + 1 }}</span>
+  </span>
+
+  <button class="btn btn-orange ms-2 mb-3" (click)="nextPage()" [disabled]="currentPage + 1 >= totalPages">
+    Next »
+  </button>
 </div>
 
