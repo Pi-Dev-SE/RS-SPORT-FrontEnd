@@ -90,6 +90,8 @@ const FullCalendarPlugins = [ // define plugins array
 ];
 
 
+const toastrModule = ToastrModule.forRoot();
+
 @NgModule({
   declarations: [ // ✅ Move components here
     AppComponent,
@@ -148,9 +150,8 @@ const FullCalendarPlugins = [ // define plugins array
     ReactiveFormsModule,
     BrowserModule,
     RouterModule,
-    AccordionModule.forRoot(),
+    AccordionModule,
     AppRoutingModule,
-
     HttpClientModule,
     MatIconModule,
     MatDialogModule,
@@ -163,23 +164,17 @@ const FullCalendarPlugins = [ // define plugins array
     MatSelectModule,
     MatTooltipModule,
     MatChipsModule,
-    MatListModule,
+    toastrModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot(),
-    AppRoutingModule,
     FullCalendarModule,
     DragDropModule,
-    HttpClientModule,
     PrimengModule,
-    BrowserAnimationsModule,
     RecaptchaModule,
     RecaptchaFormsModule,
-    AccordionModule.forRoot(),
     NgxPaginationModule,
     CommonModule,
-    FullCalendarModule,
-    NgChartsModule   
-    
+    NgChartsModule
+
 
   ],
   providers: [

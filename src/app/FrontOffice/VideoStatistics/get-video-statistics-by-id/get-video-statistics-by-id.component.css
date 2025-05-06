@@ -144,3 +144,32 @@
   }
 }
 
+/*==========================
+  Yellow Dropdown Button Styling
+===========================*/
+
+.btn-yellow {
+  background: linear-gradient(135deg, #FBC02D, #F9A825);
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(251, 192, 45, 0.3);
+  transition: background 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-yellow:hover {
+  background: linear-gradient(135deg, #F9A825, #F57F17);
+  transform: translateY(-2px);
+}
+
+/* Optional dropdown icon positioning */
+.btn-yellow::after {
+  margin-left: auto;
+  vertical-align: middle;
+}

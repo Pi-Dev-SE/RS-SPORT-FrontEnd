@@ -27,11 +27,11 @@
           </table>
 
           <!-- Grouped Dropdown Button -->
+          
           <div class="dropdown mt-4">
-          <!-- Add an icon if using something like Font Awesome or Bootstrap Icons -->
-          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-gear-fill"></i> Actions
-          </button>
+            <button class="btn btn-yellow dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-gear-fill"></i> Actions
+            </button>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" (click)="delete(videoData.videoStatisticsId)">Delete</a></li>
               <li><a class="dropdown-item" (click)="downloadPDF()">Download PDF</a></li>
@@ -39,6 +39,7 @@
               <li><a class="dropdown-item" (click)="generateQRCode()">Generate QR Code</a></li>
             </ul>
           </div>
+
 
 
           <!-- Display Team Performance Result -->

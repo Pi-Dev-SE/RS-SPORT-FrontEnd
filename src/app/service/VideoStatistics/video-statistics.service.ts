@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class VideoStatisticsService {
-private apiBasePath ="http://localhost:8089/spr01/api/video-statistics";
+private apiBasePath ="http://localhost:8088/spr01/api/video-statistics";
 
   constructor(private http:HttpClient) { }
 
