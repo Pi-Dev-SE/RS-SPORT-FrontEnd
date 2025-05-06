@@ -1,82 +1,93 @@
 <div class="recovery-regime-container" id="recovery-regime">
-    <h2 class="recovery-regime-title">
-        <i class="bi bi-clipboard-heart"></i> Recovery Regime Details
-    </h2>
-  
-    <div *ngIf="regime">
-        <!-- Date de génération -->
-        <div class="regime-section">
-            <h5><i class="bi bi-person-fill"></i> Player Concerned:</h5>
-            <p>{{ regime.firstname }}</p>
-        </div>
+  <h2 class="recovery-regime-title">
+      <i class="bi bi-clipboard-heart"></i> Recovery Regime Details
+  </h2>
 
-        <div class="regime-section">
-            <h5><i class="bi bi-calendar-check"></i> Generated At:</h5>
-            <p>{{ regime.generatedAt | date:'fullDate' }}</p>
-        </div>
-  
-        <!-- Durée quotidienne -->
-        <div class="regime-section">
-            <h5><i class="bi bi-clock"></i> Daily Duration:</h5>
-            <p>{{ regime.dailyDuration }} minutes</p>
-        </div>
-  
-        <!-- Exercice recommandé -->
-        <div class="regime-section">
-            <h5><i class="bi bi-bar-chart-line"></i> Recommended Exercise:</h5>
-            <p>{{ regime.recommendedExercise }}</p>
-        </div>
-  
-        <!-- Intensité de l'exercice -->
-        <div class="regime-section">
-            <h5><i class="bi bi-lightning"></i> Exercise Intensity:</h5>
-            <p>{{ regime.exerciseIntensity }}</p>
-        </div>
-  
-        <!-- Recommandation diététique -->
-        <div class="regime-section">
-            <h5><i class="bi bi-nutrition"></i> Diet Recommendation:</h5>
-            <p>{{ regime.dietRecommendation }}</p>
-        </div>
-  
-        <!-- Physiothérapie requise -->
-        <div class="regime-section">
-            <h5><i class="bi bi-clipboard-pulse"></i> Physiotherapy Required:</h5>
-            <p>
-                <span *ngIf="regime.physiotherapyRequired" class="text-success fw-bold">
-                    Yes <i class="bi bi-check-circle-fill"></i>
-                </span>
-                <span *ngIf="!regime.physiotherapyRequired" class="text-danger fw-bold">
-                    No <i class="bi bi-x-circle-fill"></i>
-                </span>
-            </p>
-        </div>
-  
-        <!-- Suivi des progrès -->
-        <div class="regime-section">
-            <h5><i class="bi bi-graph-up-arrow"></i> Progress Tracking:</h5>
-            <p>{{ regime.progressTracking }}</p>
-        </div>
-  
-        <!-- Statut -->
-        <div class="regime-section">
-          <h5><i class="bi bi-info-circle"></i> Status:</h5>
-          <span class="status-badge" [ngClass]="{
-              'status-active': regime.status === TypeStatusRegime.Active,
-              'status-completed': regime.status === TypeStatusRegime.Completed,
-              'status-paused': regime.status === TypeStatusRegime.Paused
-          }">
-              {{ regime.status }}
-          </span>
+  <div *ngIf="regime">
+      <!-- Date de génération -->
+      <div class="regime-section">
+          <h5><i class="bi bi-person-fill"></i> Player Concerned:</h5>
+          <p>{{ regime.firstname }}</p>
       </div>
+
+      <div class="regime-section">
+          <h5><i class="bi bi-calendar-check"></i> Generated At:</h5>
+          <p>{{ regime.generatedAt | date:'fullDate' }}</p>
+      </div>
+
+      <!-- Durée quotidienne -->
+      <div class="regime-section">
+          <h5><i class="bi bi-clock"></i> Daily Duration:</h5>
+          <p>{{ regime.dailyDuration }} minutes</p>
+      </div>
+
+      <!-- Exercice recommandé -->
+      <div class="regime-section">
+          <h5><i class="bi bi-bar-chart-line"></i> Recommended Exercise:</h5>
+          <p>{{ regime.recommendedExercise }}</p>
+      </div>
+
+      <!-- Intensité de l'exercice -->
+      <div class="regime-section">
+          <h5><i class="bi bi-lightning"></i> Exercise Intensity:</h5>
+          <p>{{ regime.exerciseIntensity }}</p>
+      </div>
+
+      <!-- Recommandation diététique -->
+      <div class="regime-section">
+          <h5><i class="bi bi-nutrition"></i> Diet Recommendation:</h5>
+          <p>{{ regime.dietRecommendation }}</p>
+      </div>
+
+      <!-- Physiothérapie requise -->
+      <div class="regime-section">
+          <h5><i class="bi bi-clipboard-pulse"></i> Physiotherapy Required:</h5>
+          <p>
+              <span *ngIf="regime.physiotherapyRequired" class="text-success fw-bold">
+                  Yes <i class="bi bi-check-circle-fill"></i>
+              </span>
+              <span *ngIf="!regime.physiotherapyRequired" class="text-danger fw-bold">
+                  No <i class="bi bi-x-circle-fill"></i>
+              </span>
+          </p>
+      </div>
+
+      <!-- Suivi des progrès -->
+      <div class="regime-section">
+          <h5><i class="bi bi-graph-up-arrow"></i> Progress Tracking:</h5>
+          <p>{{ regime.progressTracking }}</p>
+      </div>
+
+      <!-- Statut -->
+      <div class="regime-section">
+        <h5><i class="bi bi-info-circle"></i> Status:</h5>
+        <span class="status-badge" [ngClass]="{
+            'status-active': regime.status === TypeStatusRegime.Active,
+            'status-completed': regime.status === TypeStatusRegime.Completed,
+            'status-paused': regime.status === TypeStatusRegime.Paused
+        }">
+            {{ regime.status }}
+        </span>
     </div>
-  
-    <!-- Bouton Retour -->
-    
   </div>
-  <div class="button-container mb-4" >
-    <button class="back-button" routerLink="/report">
-        <i class="bi bi-arrow-left"></i> Back to Reports
-    </button>
-    <button (click)="generatePDF()" class="pdf-button">Generate PDF</button>
-</div>
+
+  <!-- Bouton Retour -->
+  
+  <div class="signature-container mt-4 mb-4">
+      <canvas #signatureCanvas width="300" height="100" class="signature-canvas"></canvas>
+  </div>
+  
+  <div class="button-container mb-4"> 
+      <button class="btn btn-secondary back-button" routerLink="/report"> 
+          <i class="bi bi-arrow-left"></i> Back to Reports 
+      </button>
+      
+      <div class="signature-buttons">
+          <button class="btn btn-outline-danger" (click)="clearSignature()">
+              <i class="bi bi-eraser"></i> Clear Signature
+          </button>
+          <button class="btn btn-primary" (click)="generatePDF()">
+              <i class="bi bi-file-earmark-pdf"></i> Generate PDF
+          </button>
+      </div>
+  </div>

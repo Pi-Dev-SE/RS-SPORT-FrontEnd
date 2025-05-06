@@ -1,0 +1,88 @@
+<!-- Coach Detail Container -->
+<div class="coach-detail-container">
+  <!-- Header Section -->
+  <header class="header">
+    <div class="header-content">
+      <h1>Coach Details</h1>
+      <div class="header-actions">
+        <button class="btn-secondary" (click)="onBack()">
+          <i class="fas fa-arrow-left"></i> Back to Coaches
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading-spinner">
+    <div class="spinner"></div>
+    <p>Loading coach details...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="error-container">
+    <div class="error-message">
+      <i class="fas fa-exclamation-circle"></i>
+      <p>{{ errorMessage }}</p>
+    </div>
+    <button class="btn-primary" (click)="onBack()">Return to Coaches List</button>
+  </div>
+
+  <!-- Coach Details -->
+  <div class="content-container" *ngIf="!isLoading && !errorMessage && coach">
+    <div class="coach-profile-card">
+      <!-- Profile Header -->
+      <div class="profile-header">
+        <div class="coach-avatar">
+          <span>{{ coach.firstname.charAt(0) || '' }}</span>
+        </div>
+        <div class="coach-name">
+          <h2>{{ coach.firstname }} {{ coach.lastname }}</h2>
+          <span class="coach-specialization">{{ coach.specializationCoach }}</span>
+        </div>
+      </div>
+
+      <div class="profile-details">
+        <div class="detail-section">
+          <h3>Personal Information</h3>
+          <div class="detail-row">
+            <div class="detail-item">
+              <span class="label">First Name</span>
+              <span class="value">{{ coach.firstname }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Last Name</span>
+              <span class="value">{{ coach.lastname }}</span>
+            </div>
+          </div>
+          <div class="detail-item full-width">
+            <span class="label">Email</span>
+            <span class="value">{{ coach.email }}</span>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>Professional Information</h3>
+          <div class="detail-row">
+            <div class="detail-item">
+              <span class="label">Specialization</span>
+              <span class="value">{{ coach.specializationCoach }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Diplôme</span>
+              <span class="value diploma-badge">{{ coach.diplome }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-actions">
+          <button class="btn-primary" (click)="onEdit()">
+            <i class="fas fa-edit"></i> Edit Coach
+          </button>
+          <button class="btn-danger" (click)="onDelete()">
+            <i class="fas fa-trash"></i> Delete Coach
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../core/auth.service';
 import { Observable, map } from 'rxjs';
@@ -5,7 +6,7 @@ import { Observable, map } from 'rxjs';
 @Component({
   selector: 'app-header-front',
   templateUrl: './header-front.component.html',
-  styleUrls: ['./header-front.component.css']
+  styleUrls: ['./header-front.component.css'],
 })
 export class HeaderFrontComponent implements OnInit {
   isAuthenticated$: Observable<boolean>;

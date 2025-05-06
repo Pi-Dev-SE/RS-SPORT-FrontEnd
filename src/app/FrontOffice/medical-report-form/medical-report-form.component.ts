@@ -1,3 +1,4 @@
+
 import { Component } from '@angular/core';
 import { HealthReport } from '../../Models/HealthReport';
 import { MedicalReportService } from '../../services/medical-report.service';
@@ -15,14 +16,14 @@ export class MedicalReportFormComponent {
   aForm: FormGroup | undefined;
   injuryTypes = ['LOW', 'MODERATE', 'HIGH']; // Liste des types de blessure
   statusList = ['ACTIVE', 'INJURED', 'RECOVERING']; // Liste des statuts de santé
-  
+
   staffList: any[] = [];
   playerList: any[] = [];
   report: HealthReport | null = null;
 
   constructor(private reportService: MedicalReportService, private route: ActivatedRoute,
     private router: Router ) {}
-  
+
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -35,8 +36,8 @@ export class MedicalReportFormComponent {
       injuryType: new FormControl('', Validators.required),
       injurySeverity: new FormControl('', Validators.required),
       diagnosisDate: new FormControl('', Validators.required),
-      expectedRecoveryDate: new FormControl('', Validators.required),
-      recoveryPlan: new FormControl('', Validators.required),
+      expectedRecoveryDate: new FormControl(''),
+      recoveryPlan: new FormControl(''),
       fitnessLevel: new FormControl('', [Validators.required, Validators.pattern(/^(Low|Medium|High)$/)]),
       medicalNotes: new FormControl('', Validators.required),
       status: new FormControl('', Validators.required),
@@ -45,7 +46,7 @@ export class MedicalReportFormComponent {
     },
     { validators: [this.dateValidator] }
   );
-    
+
     this.reportService.getMedicalStaff().subscribe({
       next: (data) => this.staffList = data,
       error: (err) => console.error('Failed to fetch staff:', err)
@@ -65,7 +66,7 @@ export class MedicalReportFormComponent {
       this.staffList = [{id: data.staffId, firstname: data.firstNameMed}]
       console.log(this.aForm!.value);
       console.log(this.aForm!.valid);
-      
+
     });
   }
   dateValidator(control: AbstractControl) {
@@ -80,7 +81,7 @@ export class MedicalReportFormComponent {
   onSubmit() {
     if (this.aForm!.valid) {
       const reportData = this.aForm!.value;
-  
+
       if (this.report?.healthId) {
         this.reportService.updateReport(this.report.healthId, reportData).subscribe({
           next: () => {
@@ -89,7 +90,7 @@ export class MedicalReportFormComponent {
               'updated with success',
               'success'
             )
-            
+
             this.router.navigate(['/report']);
           },
           error: (err) => {
@@ -102,7 +103,7 @@ export class MedicalReportFormComponent {
            // alert(err.error.message || "Une erreur est survenue lors de la mise à jour !");
           }
         });
-        
+
       } else {
         this.reportService.addReport(reportData).subscribe({
           next: () => {
@@ -111,7 +112,7 @@ export class MedicalReportFormComponent {
               'add with success',
               'success'
             )
-            
+
             this.router.navigate(['/report']);
           },
           error: (err) => {
@@ -121,7 +122,7 @@ export class MedicalReportFormComponent {
               'An error occurred while add report.',
               'error'
             );
-            
+
             //alert(err.error.message || "rapport n'est pas ajouté !");
           }
         });

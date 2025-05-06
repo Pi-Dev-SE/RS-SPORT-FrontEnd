@@ -1,3 +1,4 @@
+import { NgChartsModule } from 'ng2-charts';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -15,18 +16,42 @@ import { NavbarBackComponent } from './BackOffice/navbar-back/navbar-back.compon
 import { SidebarBackComponent } from './BackOffice/sidebar-back/sidebar-back.component';
 import { HomeFrontComponent } from './FrontOffice/home-front/home-front.component';
 import { HomeBackComponent } from './BackOffice/home-back/home-back.component';
-import { HttpClientModule } from '@angular/common/http';
+import { AccordionModule } from 'ngx-bootstrap/accordion';
+
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+import { CreatExerciceComponent } from './FrontOffice/module/exercises/creat-exercice/creat-exercice.component';
+import { ConfirmDialogComponent } from './FrontOffice/module/exercises/Component/confirm-dialog/confirm-dialog.component';
+import { TrainingSessionsComponent } from './FrontOffice/module/TrainingSession/training-session/training-session.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatListModule } from '@angular/material/list';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { GenerateTrainingPlanWizardComponent } from './generate-training-plan-wizard/generate-training-plan-wizard.component';
+import { ExerciseComponent } from './FrontOffice/module/exercises/exercise/exercise.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { CalendarComponent } from './FrontOffice/module/calendar/calendar.component';
 import { PrimengModule } from './chat/primeng/primeng.module';
 import { TacticComponent } from './FrontOffice/tactic/tactic.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TacticsBackComponent } from './BackOffice/tactics-back/tactics-back.component';
 import { SignInComponent } from './FrontOffice/sign-in/sign-in.component';
 import { SignUpComponent } from './FrontOffice/sign-up/sign-up.component';
 import { LogoutComponent } from './FrontOffice/logout/logout.component';
 
 import { MatchesComponent } from './FrontOffice/matches/matches.component';
-import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { AddVideoAnalysisComponent } from './FrontOffice/VideoAnalysis/add-video-analysis/add-video-analysis.component';
 
 import { GetAllVideoAnalysisComponent } from './FrontOffice/VideoAnalysis/get-all-video-analysis/get-all-video-analysis.component';
@@ -52,14 +77,20 @@ import { SimulationViewerComponent } from './FrontOffice/simulation-viewer/simul
 import { BodyPartLabelComponent } from './FrontOffice/body-part-label/body-part-label.component';
 import { RecoveryCalendarComponent } from './FrontOffice/recovery-calendar/recovery-calendar.component';
 import { ChatboxComponent } from './FrontOffice/chatbox/chatbox.component';
-import { CommonModule, DatePipe } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { FullCalendarModule } from '@fullcalendar/angular';
+
+import { MedicalArchivesComponent } from './FrontOffice/medical-archives/medical-archives.component';
+import { TeamFormComponent } from './FrontOffice/team-form/team-form.component';
+import { TeamManagementComponent } from './FrontOffice/team-management/team-management.component';
+import { TeamDetailComponent } from './FrontOffice/team-detail/team-detail.component';
+import { TeamComponent } from './FrontOffice/team/team.component';
 
 const FullCalendarPlugins = [ // define plugins array
   dayGridPlugin
 ];
 
+
+const toastrModule = ToastrModule.forRoot();
 
 @NgModule({
   declarations: [ // ✅ Move components here
@@ -73,6 +104,12 @@ const FullCalendarPlugins = [ // define plugins array
     SidebarBackComponent,
     HomeFrontComponent,
     HomeBackComponent,
+    MatchesComponent,
+    ConfirmDialogComponent,
+    GenerateTrainingPlanWizardComponent,
+    TrainingSessionsComponent,
+    ExerciseComponent,
+    CalendarComponent,
     TacticsBackComponent,
     SignInComponent,
     SignUpComponent,
@@ -101,21 +138,44 @@ const FullCalendarPlugins = [ // define plugins array
     BodyPartLabelComponent,
     ChatboxComponent,
     RecoveryCalendarComponent,
+    MedicalArchivesComponent,
+    TeamFormComponent,
+    TeamManagementComponent,
+    TeamDetailComponent,
+    TeamComponent
   ],
   imports: [
-    BrowserModule,
-    AppRoutingModule,
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    BrowserModule,
+    RouterModule,
+    AccordionModule,
+    AppRoutingModule,
     HttpClientModule,
-    PrimengModule,
+    MatIconModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatProgressBarModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatTooltipModule,
+    MatChipsModule,
+    toastrModule,
     BrowserAnimationsModule,
+    FullCalendarModule,
+    DragDropModule,
+    PrimengModule,
     RecaptchaModule,
     RecaptchaFormsModule,
-    AccordionModule.forRoot(),
     NgxPaginationModule,
     CommonModule,
-    FullCalendarModule
+    NgChartsModule
+
+
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

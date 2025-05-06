@@ -1,4 +1,5 @@
 
+
 import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './core/auth.guard';
@@ -7,6 +8,10 @@ import { AllTemplateFrontComponent } from './FrontOffice/all-template-front/all-
 import { AllTemplateBackComponent } from './BackOffice/all-template-back/all-template-back.component';
 import { HomeFrontComponent } from './FrontOffice/home-front/home-front.component';
 import { HomeBackComponent } from './BackOffice/home-back/home-back.component';
+import { ExerciseComponent } from './FrontOffice/module/exercises/exercise/exercise.component';
+import { TrainingSessionService } from './FrontOffice/module/TrainingSession/service/training-session.service';
+import { TrainingSessionsComponent } from './FrontOffice/module/TrainingSession/training-session/training-session.component';
+import { CalendarComponent } from './FrontOffice/module/calendar/calendar.component';
 import { AddVideoAnalysisComponent } from './FrontOffice/VideoAnalysis/add-video-analysis/add-video-analysis.component';
 import { GetAllVideoAnalysisComponent } from './FrontOffice/VideoAnalysis/get-all-video-analysis/get-all-video-analysis.component';
 import { GetVideoAnalysisByIdComponent } from './FrontOffice/VideoAnalysis/get-video-analysis-by-id/get-video-analysis-by-id.component';
@@ -32,14 +37,37 @@ import { TacticsBackComponent } from './BackOffice/tactics-back/tactics-back.com
 import { SignInComponent } from './FrontOffice/sign-in/sign-in.component';
 import { SignUpComponent } from './FrontOffice/sign-up/sign-up.component';
 import { LogoutComponent } from './FrontOffice/logout/logout.component';
+import { MedicalArchivesComponent } from './FrontOffice/medical-archives/medical-archives.component';
+import { TeamDetailComponent } from './FrontOffice/team-detail/team-detail.component';
+import { TeamFormComponent } from './FrontOffice/team-form/team-form.component';
+import { TeamManagementComponent } from './FrontOffice/team-management/team-management.component';
+import { TeamComponent } from './FrontOffice/team/team.component';
 
 const routes: Routes = [
   {
     path:"",
     component: AllTemplateFrontComponent,
     children:[
+      
       {
-        path:"",
+        path:"exercises",
+        component: ExerciseComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path:"training-sessions",
+        component: TrainingSessionsComponent,
+        canActivate: [AuthGuard]
+      },
+      {path:"matches", component: AllTemplateFrontComponent,
+        canActivate: [AuthGuard]},
+     {
+        path: "calendar",
+        component: CalendarComponent,
+        canActivate: [AuthGuard]
+  },
+      
+  { path:"",
         component: HomeFrontComponent
 
       },
@@ -111,7 +139,31 @@ const routes: Routes = [
 
       { path: 'simulation', component: SimulationViewerComponent ,canActivate: [AuthGuard]},
       { path: 'calender', component: RecoveryCalendarComponent ,canActivate: [AuthGuard]},
-
+      { path: 'archives', component: MedicalArchivesComponent ,canActivate: [AuthGuard]},
+      { path: 'team', component: TeamComponent ,canActivate: [AuthGuard]},
+      { path: 'team-form', component: TeamFormComponent ,canActivate: [AuthGuard]},
+      { path: 'team-form/:id', component: TeamFormComponent ,canActivate: [AuthGuard]},
+      { path: 'team-detail/:id/:idclub', component: TeamDetailComponent ,canActivate: [AuthGuard]},
+      { path: 'team-management/:id', component: TeamManagementComponent ,canActivate: [AuthGuard]},
+      {
+        path: 'players',
+        loadChildren: () => import('./FrontOffice/player/player.module').then(m => m.PlayerModule)
+        ,canActivate: [AuthGuard]},
+      {
+        path: 'coaches',
+        loadChildren: () => import('./FrontOffice/coach/coach.module').then(m => m.CoachModule)     ,canActivate: [AuthGuard]},
+      {
+        path: 'club',
+        loadChildren: () => import('./FrontOffice/club/club.module').then(m => m.ClubModule)
+        ,canActivate: [AuthGuard]},
+      {
+        path: 'games',
+        loadChildren: () => import('./FrontOffice/game/game.module').then(m => m.GameModule)
+        ,canActivate: [AuthGuard]},
+      {
+        path: 'game-sheets',
+        loadChildren: () => import('./FrontOffice/game-sheet/game-sheet.module').then(m => m.GameSheetModule)
+        ,canActivate: [AuthGuard]}
     ]
   },
   {

@@ -1,0 +1,145 @@
+<!-- src/app/FrontOffice/module/exercises/exercise/exercise.component.html -->
+<div class="container">
+    <div class="form-card">
+      <h1 class="form-title modern-underline">Create New Exercise</h1>
+      
+      <form [formGroup]="exerciseForm" (ngSubmit)="onSubmit()" class="exercise-form">
+        
+        <!-- Name -->
+        <div class="form-group">
+          <label for="name" class="form-label">Exercise Name *</label>
+          <input 
+            type="text" 
+            id="name" 
+            formControlName="name" 
+            class="form-input"
+            [class.input-error]="isFieldInvalid('name')"
+            placeholder="Enter exercise name">
+          <div *ngIf="isFieldInvalid('name')" class="error-message">
+            <span *ngIf="exerciseForm.get('name')?.errors?.['required']">Name is required</span>
+            <span *ngIf="exerciseForm.get('name')?.errors?.['minlength']">Name must be at least 3 characters</span>
+            <span *ngIf="exerciseForm.get('name')?.errors?.['maxlength']">Name cannot exceed 50 characters</span>
+          </div>
+        </div>
+        
+        <!-- Exercise Type -->
+        <div class="form-group">
+          <label for="exerciseType" class="form-label">Exercise Type *</label>
+          <select 
+            id="exerciseType" 
+            formControlName="exerciseType" 
+            class="form-select">
+            <option *ngFor="let type of exerciseTypes" [value]="type">{{type}}</option>
+          </select>
+        </div>
+        
+        <!-- Description -->
+        <div class="form-group">
+          <label for="description" class="form-label">Description *</label>
+          <textarea 
+            id="description" 
+            formControlName="description" 
+            rows="4" 
+            class="form-textarea"
+            [class.input-error]="isFieldInvalid('description')"
+            placeholder="Describe the exercise"></textarea>
+          <div *ngIf="isFieldInvalid('description')" class="error-message">
+            <span *ngIf="exerciseForm.get('description')?.errors?.['required']">Description is required</span>
+            <span *ngIf="exerciseForm.get('description')?.errors?.['minlength']">Description must be at least 10 characters</span>
+            <span *ngIf="exerciseForm.get('description')?.errors?.['maxlength']">Description cannot exceed 500 characters</span>
+          </div>
+        </div>
+        
+        <!-- Duration -->
+        <div class="form-group">
+          <label for="duration" class="form-label">Duration *</label>
+          <input 
+            type="text" 
+            id="duration" 
+            formControlName="duration" 
+            class="form-input"
+            [class.input-error]="isFieldInvalid('duration')"
+            placeholder="e.g., 30 minutes">
+          <div *ngIf="isFieldInvalid('duration')" class="error-message">
+            Duration is required
+          </div>
+        </div>
+        
+        <!-- Objective -->
+        <div class="form-group">
+          <label for="objectif" class="form-label">Objective *</label>
+          <input 
+            type="text" 
+            id="objectif" 
+            formControlName="objectif" 
+            class="form-input"
+            [class.input-error]="isFieldInvalid('objectif')"
+            placeholder="e.g., Improve stamina">
+          <div *ngIf="isFieldInvalid('objectif')" class="error-message">
+            Objective is required
+          </div>
+        </div>
+        
+        <!-- Image URL -->
+        <div class="form-group">
+          <label for="image" class="form-label">Image URL</label>
+          <input 
+            type="text" 
+            id="image" 
+            formControlName="image" 
+            class="form-input"
+            placeholder="Enter image URL">
+        </div>
+        
+        <!-- Video URL -->
+        <div class="form-group">
+          <label for="videoUrl" class="form-label">Video URL</label>
+          <input 
+            type="text" 
+            id="videoUrl" 
+            formControlName="videoUrl" 
+            class="form-input"
+            placeholder="Enter video URL">
+        </div>
+        
+        <!-- Visibility -->
+        <div class="form-group">
+          <label for="visibility" class="form-label">Visibility *</label>
+          <select 
+            id="visibility" 
+            formControlName="visibility" 
+            class="form-select">
+            <option *ngFor="let option of visibilityOptions" [value]="option">{{option}}</option>
+          </select>
+        </div>
+        
+        <!-- Creation Date -->
+        <div class="form-group">
+          <label for="creationDate" class="form-label">Creation Date *</label>
+          <input 
+            type="date" 
+            id="creationDate" 
+            formControlName="creationDate" 
+            class="form-input">
+        </div>
+        
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button 
+            type="button" 
+            (click)="resetForm()" 
+            class="btn-reset">
+            Reset
+          </button>
+          <button 
+            type="submit" 
+            [disabled]="isSubmitting" 
+            class="btn-submit modern-button"
+            [class.btn-loading]="isSubmitting">
+            <span *ngIf="isSubmitting" class="loader"></span>
+            {{ isSubmitting ? 'Saving...' : 'Save Exercise' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
