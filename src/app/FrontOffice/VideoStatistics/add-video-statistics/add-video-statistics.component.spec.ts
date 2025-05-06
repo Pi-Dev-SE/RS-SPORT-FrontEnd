@@ -11,7 +11,7 @@ describe('AddVideoStatisticsComponent', () => {
       declarations: [AddVideoStatisticsComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(AddVideoStatisticsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

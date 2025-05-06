@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class VideoAnalysisService {
 
-  private apiBasePath ="http://localhost:8089/spr01/api/videos";
+  private apiBasePath ="http://localhost:8088/spr01/api/videos";
 
   constructor(private http:HttpClient) { }
 

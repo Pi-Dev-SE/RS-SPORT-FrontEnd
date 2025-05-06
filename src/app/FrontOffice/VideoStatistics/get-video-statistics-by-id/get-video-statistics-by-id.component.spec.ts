@@ -11,7 +11,7 @@ describe('GetVideoStatisticsByIdComponent', () => {
       declarations: [GetVideoStatisticsByIdComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(GetVideoStatisticsByIdComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

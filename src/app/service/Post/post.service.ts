@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 
 export class PostService {
 
-  private apiBasePath ="http://localhost:8089/spr01/api/posts";
+  private apiBasePath ="http://localhost:8088/spr01/api/posts";
 
   constructor(private http:HttpClient) { }
 

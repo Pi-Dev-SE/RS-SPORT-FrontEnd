@@ -35,57 +35,59 @@ export class CreatePostComponent {
         this.selectedFile = video.target.files[0];
       }
 
-    createPost(): void {
-      if (this.postForm.valid && this.selectedFile) {
-        const formData = new FormData();
-        formData.append('img', this.selectedFile);
+      createPost(): void {
+        if (this.postForm.valid && this.selectedFile) {
+          const formData = new FormData();
+          formData.append('img', this.selectedFile);
 
-        const clubName = this.postForm.get('clubName')?.value;
-        const postedBy = this.postForm.get('postedBy')?.value;
-        const content = this.postForm.get('content')?.value;
-
-
-
-        console.log('Form Values:');
-        console.log('clubName:', clubName);
-        console.log('postedBy:', postedBy);
-        console.log('content:', content);
+          const clubName = this.postForm.get('clubName')?.value;
+          const postedBy = this.postForm.get('postedBy')?.value;
+          const content = this.postForm.get('content')?.value;
 
 
 
-        if (clubName && postedBy && content  ) {
-          formData.append('clubName', clubName);
-          formData.append('postedBy', postedBy);
-          formData.append('content', content);
+          console.log('Form Values:');
+          console.log('clubName:', clubName);
+          console.log('postedBy:', postedBy);
+          console.log('content:', content);
 
 
 
-          console.log('FormData:');
-          console.log(formData);
+          if (clubName && postedBy && content  ) {
+            formData.append('clubName', clubName);
+            formData.append('postedBy', postedBy);
+            formData.append('content', content);
 
-          this.postService.createNewPost(formData).subscribe(() => {
-            //alert("Event added successfully!");
-            this.postForm.reset();
-            this.selectedFile = null;
-            this.router.navigateByUrl('viewallpost')
-           Swal.fire(
-                   'You informations!',
-                   'saved with success',
-                   'success'
-                 )
-          },
-          error => {
-            alert("An error occurred while adding vedio.");
-            console.error(error);
-          });
+
+
+            console.log('FormData:');
+            console.log(formData);
+
+            this.postService.createNewPost(formData).subscribe(() => {
+              //alert("Event added successfully!");
+              this.postForm.reset();
+              this.selectedFile = null;
+              this.router.navigateByUrl('viewallpost')
+             Swal.fire(
+                     'You informations!',
+                     'saved with success',
+                     'success'
+                   )
+            },
+            error => {
+              alert("An error occurred while adding vedio.");
+              console.error(error);
+            });
+          } else {
+            console.error("One or more form values are null.");
+            return;
+          }
         } else {
-          console.error("One or more form values are null.");
-          return;
+          // Error handling for form validation and file selection
         }
-      } else {
-        // Error handling for form validation and file selection
       }
-    }
+
+
 
 
 }

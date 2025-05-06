@@ -11,7 +11,7 @@
           [(ngModel)]="searchText"
           (input)="onSearch()"
         />
-        <button class="btn btn-outline-secondary btn-lg" (click)="startListening()">
+        <button class="btn btn-yellow btn-lg" (click)="startListening()">
           🎙
         </button>
       </div>
@@ -22,7 +22,7 @@
       <div class="col-auto">
         <button
           (click)="openFlashscore()"
-          class="btn btn-success btn-lg shadow"
+          class="btn btn-yellow btn-lg shadow"
         >
           ⚽ See Live Football Results
         </button>
@@ -55,7 +55,7 @@
           <div class="card-footer bg-transparent border-0">
             <a
               [routerLink]="['../viewpost', item.id]"
-              class="btn btn-outline-primary w-100"
+              class="btn btn-yellow w-100"
             >
               View Post
             </a>
@@ -73,7 +73,6 @@
         [directionLinks]="true"
         [autoHide]="false"
       ></pagination-controls>
-
     </div>
 
   </div>
